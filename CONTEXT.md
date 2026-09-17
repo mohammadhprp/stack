@@ -32,6 +32,8 @@ before implementing or changing an adapter.** Formats drift.
   harness (`opencode.go`, `claude.go`, `codex.go`, `cursor.go`).
 - `internal/install/` — plan → diff → apply engine, lockfile, content hashing.
 - `internal/tui/` — bubbletea wizard used by bare `stack`.
+- `tests/` — **every Go test lives here**, mirroring the source tree
+  (`tests/internal/harness/opencode_test.go`, `tests/cmd/install_test.go`).
 - `framework/skills/<id>/SKILL.md` — skill content (frontmatter + body).
 - `framework/mcps/<id>/spec.json` — MCP content. **Minimal by design:** one
   canonical JSON file per MCP, no README/install/troubleshooting markdown and no
@@ -40,6 +42,14 @@ before implementing or changing an adapter.** Formats drift.
 - `install.sh` — curl-able installer that fetches the latest GitHub Release.
 - `.goreleaser.yaml` — cross-platform release build.
 - `.github/workflows/` — CI and release workflows.
+
+## Embedded content
+
+`framework/` stays at the repository root as the editable content root.
+`go:embed` patterns cannot use `..`, so the embed lives in the root package
+(`main.go`: `//go:embed all:framework`) and the resulting `fs.FS`, sub-rooted at
+`framework/`, is passed down to `internal/catalog`. Mirrored tests load the same
+tree with `os.DirFS("../../../framework")`.
 
 ## Harness adapter contract
 
@@ -72,6 +82,25 @@ Adapters render this into their harness's format. `type` is `local` (uses
 `command`/`env`) or `remote` (uses `url`/`headers`). `name` and `description`
 are for `stack list` and the TUI. Keep this file the single source of MCP data.
 
+## Testing
+
+All Go tests live under `tests/`, mirroring the source tree:
+
+- `internal/harness/opencode.go` → `tests/internal/harness/opencode_test.go`
+- `cmd/install.go` → `tests/cmd/install_test.go`
+
+Rules:
+
+- No `_test.go` files inside `internal/` or `cmd/`; tests never sit beside the
+  code they exercise.
+- Test files are **external test packages** (for example `package harness_test`)
+  and import the real package by its module path. They can only use exported
+  identifiers; design the packages with exported seams where tests need them.
+- Fixtures and `testdata/` are mirrored under `tests/` too.
+- `go test ./...` must discover and run the whole mirrored suite.
+- Coverage of the real packages needs `-coverpkg` (the mirrored test packages
+  measure themselves otherwise).
+
 ## Lockfile
 
 Installs write `.stack-lock.json` in the target project recording, per item, the
@@ -103,3 +132,7 @@ goreleaser, then the tag's assets become installable via
 3. Prefer simplicity — minimal dependencies, no speculative abstraction.
 4. Verify before concluding — run the real command and capture output.
 5. Small, reversible changes.
+6. **Comments are the exception, not the norm.** Write no comments by default.
+   Keep one only when it records a non-obvious constraint or *why* the code is
+   shaped that way; never restate code or document obvious fields, methods, or
+   exported identifiers. No narration or section-divider comments.

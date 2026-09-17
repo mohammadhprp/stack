@@ -1,7 +1,3 @@
-# GitHub language bar: show only real source (Go, Python).
-# Content, skill assets, and config are not source code, so they are excluded
-# from Linguist's language statistics. Python scripts under framework/skills/
-# are intentionally left detectable.
 *.md linguist-detectable=false
 *.markdown linguist-detectable=false
 *.html linguist-detectable=false
@@ -14,5 +10,6 @@
 *.toml linguist-detectable=false
 *.txt linguist-detectable=false
 *.sh linguist-detectable=false
+*.py linguist-detectable=false
 LICENSE linguist-detectable=false
 .gitignore linguist-detectable=false

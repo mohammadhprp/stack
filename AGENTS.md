@@ -34,7 +34,15 @@ selection can be wired into every agent the developer uses.
 
 - Package layout: `main.go`, `cmd/` (cobra), `internal/catalog`, `internal/model`,
   `internal/harness`, `internal/install`, `internal/tui`.
+- Tests live under `tests/`, mirroring the source tree, as external `_test`
+  packages; never place `_test.go` files in `internal/` or `cmd/`.
 - One file per harness adapter in `internal/harness/`; register with `init()`.
+- Comments: write **none by default**. Comment only a non-obvious *why* — a
+  constraint, gotcha, or external-format detail the code cannot express (for
+  example the `go:embed` `..` limitation). Never restate the code, document
+  obvious fields or methods, or add section-divider/narration comments. Do not
+  add doc comments to exported identifiers unless the comment carries real
+  information. If a comment would survive only by being obvious, delete it.
 - Never overwrite a target file the user changed without `--force`.
 - Keep the diff minimal; no speculative abstractions.
 - Read `CONTEXT.md` before changing anything.
