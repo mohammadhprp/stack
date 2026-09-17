@@ -1,0 +1,17 @@
+# Build output
+/stack
+/dist/
+*.exe
+
+# Go
+*.test
+*.out
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Team Mate worker scratch
+.teammate-report.md
+.stack-lock.json

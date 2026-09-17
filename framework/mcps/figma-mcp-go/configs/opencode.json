@@ -1,0 +1,9 @@
+{
+  "mcp": {
+    "figma-mcp-go": {
+      "type": "local",
+      "enabled": true,
+      "command": ["npx", "-y", "@vkhanhqui/figma-mcp-go"]
+    }
+  }
+}
