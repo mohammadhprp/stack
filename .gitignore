@@ -13,5 +13,6 @@
 .vscode/
 
 # Team Mate worker scratch
+.agents/
 .teammate-report.md
 .stack-lock.json

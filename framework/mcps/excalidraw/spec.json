@@ -1,0 +1,10 @@
+{
+  "id": "excalidraw",
+  "name": "Excalidraw MCP",
+  "description": "Stream hand-drawn diagrams with interactive editing",
+  "type": "remote",
+  "command": null,
+  "env": {},
+  "url": "https://mcp.excalidraw.com",
+  "headers": {}
+}

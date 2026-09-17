@@ -1,0 +1,10 @@
+{
+  "id": "figma-mcp-go",
+  "name": "Figma MCP Go",
+  "description": "Read/write access to Figma designs via plugin bridge",
+  "type": "local",
+  "command": ["npx", "-y", "@vkhanhqui/figma-mcp-go"],
+  "env": {},
+  "url": null,
+  "headers": {}
+}

@@ -1,0 +1,10 @@
+{
+  "id": "supabase",
+  "name": "Supabase MCP",
+  "description": "Manage Supabase projects, SQL, Edge Functions, Auth, Storage, and Realtime",
+  "type": "remote",
+  "command": null,
+  "env": {},
+  "url": "https://mcp.supabase.com/mcp",
+  "headers": {}
+}

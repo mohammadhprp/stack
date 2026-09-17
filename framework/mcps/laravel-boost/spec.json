@@ -1,0 +1,10 @@
+{
+  "id": "laravel-boost",
+  "name": "Laravel Boost",
+  "description": "Laravel application context and ecosystem docs",
+  "type": "local",
+  "command": ["php", "artisan", "boost:mcp"],
+  "env": {},
+  "url": null,
+  "headers": {}
+}

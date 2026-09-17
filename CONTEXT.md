@@ -33,8 +33,10 @@ before implementing or changing an adapter.** Formats drift.
 - `internal/install/` — plan → diff → apply engine, lockfile, content hashing.
 - `internal/tui/` — bubbletea wizard used by bare `stack`.
 - `framework/skills/<id>/SKILL.md` — skill content (frontmatter + body).
-- `framework/mcps/<id>/` — MCP content: `README.md`, `capabilities.md`,
-  `install.md`, `troubleshooting.md`, and a canonical `spec.json`.
+- `framework/mcps/<id>/spec.json` — MCP content. **Minimal by design:** one
+  canonical JSON file per MCP, no README/install/troubleshooting markdown and no
+  per-harness config directory. If richer docs are ever needed, they belong
+  outside the shipped content.
 - `install.sh` — curl-able installer that fetches the latest GitHub Release.
 - `.goreleaser.yaml` — cross-platform release build.
 - `.github/workflows/` — CI and release workflows.
@@ -48,12 +50,16 @@ unrelated keys, and must be idempotent.
 
 ## MCP canonical spec
 
-Each MCP ships one canonical `framework/mcps/<id>/spec.json`:
+Each MCP is exactly one file: `framework/mcps/<dir>/spec.json`, where `<dir>` is
+the catalog item id. `spec.id` is the MCP **server key** written into harness
+configs (it can differ from the directory name, e.g. `playwright-mcp/` →
+`playwright`).
 
 ```json
 {
   "id": "playwright",
   "name": "Playwright MCP",
+  "description": "Cross-browser automation with accessibility snapshots",
   "type": "local",
   "command": ["npx", "@playwright/mcp@latest"],
   "env": {},
@@ -63,7 +69,8 @@ Each MCP ships one canonical `framework/mcps/<id>/spec.json`:
 ```
 
 Adapters render this into their harness's format. `type` is `local` (uses
-`command`/`env`) or `remote` (uses `url`/`headers`).
+`command`/`env`) or `remote` (uses `url`/`headers`). `name` and `description`
+are for `stack list` and the TUI. Keep this file the single source of MCP data.
 
 ## Lockfile
 

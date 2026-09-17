@@ -1,0 +1,10 @@
+{
+  "id": "playwright",
+  "name": "Playwright MCP",
+  "description": "Cross-browser automation with accessibility snapshots",
+  "type": "local",
+  "command": ["npx", "@playwright/mcp@latest"],
+  "env": {},
+  "url": null,
+  "headers": {}
+}
