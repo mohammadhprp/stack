@@ -16,3 +16,6 @@
 .agents/
 .teammate-report.md
 .stack-lock.json
+
+# Worker scratch (keep evidence inside the project)
+.tmp/
