@@ -1,0 +1,39 @@
+# GoReleaser v2 configuration for stack.
+# Docs: https://goreleaser.com/customization/
+version: 2
+
+project_name: stack
+
+builds:
+  - id: stack
+    main: .
+    binary: stack
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    # cmd.Version (cmd/version.go) is the ldflags override target.
+    ldflags:
+      - -s -w -X github.com/mohammadhprp/stack/cmd.Version={{.Version}}
+
+# Archive names deliberately omit the version so that
+# https://github.com/mohammadhprp/stack/releases/latest/download/<name>
+# stays stable across releases.
+archives:
+  - id: stack
+    formats:
+      - tar.gz
+    name_template: "stack_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums.txt"
+
+release:
+  # Attach the installer to every release so it is fetchable as
+  # https://github.com/mohammadhprp/stack/releases/latest/download/install.sh
+  extra_files:
+    - glob: install.sh
