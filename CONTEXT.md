@@ -26,10 +26,15 @@ before implementing or changing an adapter.** Formats drift.
 
 - `main.go` — entry point; builds the cobra root command.
 - `cmd/` — cobra commands: `root`, `install`, `list`, `doctor`, `version`.
-- `internal/catalog/` — loads embedded `framework/` content into the model.
-- `internal/model/` — `Skill`, `MCP`, `Harness` types.
+- `internal/catalog/` — loads embedded `framework/` content into the models.
+- `internal/models/` — domain types, one file per topic: `skill.go` (`Skill`),
+  `mcp.go` (`MCPSpec`, `MCP`), `harness.go` (`Harness`).
+- `internal/config/` — harness-agnostic config-file I/O: `json.go`
+  (`MergeJSONSection`), `toml.go` (`MergeTOMLTable`). It knows paths and
+  sections, never harnesses.
 - `internal/harness/` — the adapter interface, the registry, and one file per
-  harness (`opencode.go`, `claude.go`, `codex.go`, `cursor.go`).
+  harness (`opencode.go`, `claude.go`, `codex.go`, `cursor.go`); each adapter
+  renders its entries and delegates the file merge to `internal/config`.
 - `internal/install/` — plan → diff → apply engine, lockfile, content hashing.
 - `internal/tui/` — bubbletea wizard used by bare `stack`.
 - `tests/` — **every Go test lives here**, mirroring the source tree

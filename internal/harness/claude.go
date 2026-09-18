@@ -7,7 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/config"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 // Claude Code formats, verified against the official docs on 2026-09-17:
@@ -32,7 +33,7 @@ func (claude) ID() string           { return claudeID }
 func (claude) Name() string         { return claudeName }
 func (claude) SupportsSkills() bool { return true }
 
-func (claude) PlanSkills(_ string, skills []model.Skill, src fs.FS) ([]File, error) {
+func (claude) PlanSkills(_ string, skills []models.Skill, src fs.FS) ([]File, error) {
 	var files []File
 	for _, skill := range skills {
 		if skill.Dir == "" {
@@ -64,7 +65,10 @@ func (claude) PlanSkills(_ string, skills []model.Skill, src fs.FS) ([]File, err
 	return files, nil
 }
 
-func (claude) PlanMCPs(target string, mcps []model.MCP, _ fs.FS) ([]File, error) {
+func (claude) PlanMCPs(target string, mcps []models.MCP, _ fs.FS) ([]File, error) {
+	if len(mcps) == 0 {
+		return nil, nil
+	}
 	entries := make(map[string]any, len(mcps))
 	for _, mcp := range mcps {
 		entry, err := claudeMCPEntry(mcp)
@@ -73,10 +77,19 @@ func (claude) PlanMCPs(target string, mcps []model.MCP, _ fs.FS) ([]File, error)
 		}
 		entries[mcp.ID] = entry
 	}
-	return mergeJSONSection(claudeID, target, claudeConfig, "mcpServers", entries)
+	out, err := config.MergeJSONSection(filepath.Join(target, claudeConfig), "mcpServers", entries)
+	if err != nil {
+		return nil, err
+	}
+	return []File{{
+		Path:    claudeConfig,
+		Content: out,
+		Merge:   true,
+		Source:  "mcps",
+	}}, nil
 }
 
-func claudeMCPEntry(mcp model.MCP) (map[string]any, error) {
+func claudeMCPEntry(mcp models.MCP) (map[string]any, error) {
 	switch mcp.Type {
 	case "local":
 		if len(mcp.Command) == 0 {

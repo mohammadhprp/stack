@@ -3,8 +3,10 @@ package harness
 import (
 	"fmt"
 	"io/fs"
+	"path/filepath"
 
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/config"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 // Cursor's project MCP format, verified against the official docs on
@@ -25,9 +27,12 @@ func (cursor) ID() string           { return cursorID }
 func (cursor) Name() string         { return cursorName }
 func (cursor) SupportsSkills() bool { return false }
 
-func (cursor) PlanSkills(string, []model.Skill, fs.FS) ([]File, error) { return nil, nil }
+func (cursor) PlanSkills(string, []models.Skill, fs.FS) ([]File, error) { return nil, nil }
 
-func (cursor) PlanMCPs(target string, mcps []model.MCP, _ fs.FS) ([]File, error) {
+func (cursor) PlanMCPs(target string, mcps []models.MCP, _ fs.FS) ([]File, error) {
+	if len(mcps) == 0 {
+		return nil, nil
+	}
 	entries := make(map[string]any, len(mcps))
 	for _, mcp := range mcps {
 		entry, err := cursorMCPEntry(mcp)
@@ -36,10 +41,19 @@ func (cursor) PlanMCPs(target string, mcps []model.MCP, _ fs.FS) ([]File, error)
 		}
 		entries[mcp.ID] = entry
 	}
-	return mergeJSONSection(cursorID, target, cursorConfig, "mcpServers", entries)
+	out, err := config.MergeJSONSection(filepath.Join(target, cursorConfig), "mcpServers", entries)
+	if err != nil {
+		return nil, err
+	}
+	return []File{{
+		Path:    cursorConfig,
+		Content: out,
+		Merge:   true,
+		Source:  "mcps",
+	}}, nil
 }
 
-func cursorMCPEntry(mcp model.MCP) (map[string]any, error) {
+func cursorMCPEntry(mcp models.MCP) (map[string]any, error) {
 	switch mcp.Type {
 	case "local":
 		if len(mcp.Command) == 0 {

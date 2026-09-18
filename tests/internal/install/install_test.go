@@ -10,7 +10,7 @@ import (
 	"github.com/mohammadhprp/stack/internal/catalog"
 	"github.com/mohammadhprp/stack/internal/harness"
 	"github.com/mohammadhprp/stack/internal/install"
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 func loadCatalog(t *testing.T) *catalog.Catalog {
@@ -53,8 +53,8 @@ func TestRunInstallsOpenCode(t *testing.T) {
 	if _, err := install.Run(install.Request{
 		Target:   dir,
 		Adapters: []harness.Adapter{opencodeAdapter(t)},
-		Skills:   []model.Skill{skill},
-		MCPs:     []model.MCP{mcp},
+		Skills:   []models.Skill{skill},
+		MCPs:     []models.MCP{mcp},
 		Source:   cat.FS(),
 	}); err != nil {
 		t.Fatalf("Run: %v", err)
@@ -94,8 +94,8 @@ func TestRunInstallsOpenCode(t *testing.T) {
 	second, err := install.Run(install.Request{
 		Target:   dir,
 		Adapters: []harness.Adapter{opencodeAdapter(t)},
-		Skills:   []model.Skill{skill},
-		MCPs:     []model.MCP{mcp},
+		Skills:   []models.Skill{skill},
+		MCPs:     []models.MCP{mcp},
 		Source:   cat.FS(),
 	})
 	if err != nil {
@@ -119,7 +119,7 @@ func TestRunDryRunWritesNothing(t *testing.T) {
 	report, err := install.Run(install.Request{
 		Target:   dir,
 		Adapters: []harness.Adapter{opencodeAdapter(t)},
-		Skills:   []model.Skill{skill},
+		Skills:   []models.Skill{skill},
 		Source:   cat.FS(),
 		DryRun:   true,
 	})
@@ -139,7 +139,7 @@ func TestRunRefusesUserModifiedFileThenForce(t *testing.T) {
 	req := install.Request{
 		Target:   dir,
 		Adapters: []harness.Adapter{opencodeAdapter(t)},
-		Skills:   []model.Skill{skill},
+		Skills:   []models.Skill{skill},
 		Source:   cat.FS(),
 	}
 	if _, err := install.Run(req); err != nil {
@@ -200,7 +200,7 @@ func TestRunMergesExistingConfigPreservingKeys(t *testing.T) {
 	report, err := install.Run(install.Request{
 		Target:   dir,
 		Adapters: []harness.Adapter{opencodeAdapter(t)},
-		MCPs:     []model.MCP{mcp},
+		MCPs:     []models.MCP{mcp},
 		Source:   cat.FS(),
 	})
 	if err != nil {
@@ -235,11 +235,11 @@ func (a testAdapter) ID() string           { return "test" }
 func (a testAdapter) Name() string         { return "Test Harness" }
 func (a testAdapter) SupportsSkills() bool { return a.supportsSkills }
 
-func (a testAdapter) PlanSkills(string, []model.Skill, fs.FS) ([]harness.File, error) {
+func (a testAdapter) PlanSkills(string, []models.Skill, fs.FS) ([]harness.File, error) {
 	return nil, nil
 }
 
-func (a testAdapter) PlanMCPs(string, []model.MCP, fs.FS) ([]harness.File, error) {
+func (a testAdapter) PlanMCPs(string, []models.MCP, fs.FS) ([]harness.File, error) {
 	return []harness.File{{Path: "test.json", Content: []byte("{}\n"), Merge: true, Source: "mcps"}}, nil
 }
 
@@ -252,8 +252,8 @@ func TestRunWarnsAndSkipsSkillsForUnsupportedHarness(t *testing.T) {
 	report, err := install.Run(install.Request{
 		Target:   dir,
 		Adapters: []harness.Adapter{testAdapter{supportsSkills: false}},
-		Skills:   []model.Skill{skill},
-		MCPs:     []model.MCP{mcp},
+		Skills:   []models.Skill{skill},
+		MCPs:     []models.MCP{mcp},
 		Source:   cat.FS(),
 	})
 	if err != nil {

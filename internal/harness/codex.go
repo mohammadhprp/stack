@@ -1,16 +1,12 @@
 package harness
 
 import (
-	"bytes"
-	"errors"
 	"fmt"
 	"io/fs"
-	"os"
 	"path/filepath"
 
-	"github.com/BurntSushi/toml"
-
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/config"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 // Codex project config, verified against the official reference on 2026-09-17:
@@ -31,55 +27,31 @@ func (codex) ID() string           { return codexID }
 func (codex) Name() string         { return codexName }
 func (codex) SupportsSkills() bool { return false }
 
-func (codex) PlanSkills(string, []model.Skill, fs.FS) ([]File, error) { return nil, nil }
+func (codex) PlanSkills(string, []models.Skill, fs.FS) ([]File, error) { return nil, nil }
 
-func (codex) PlanMCPs(target string, mcps []model.MCP, _ fs.FS) ([]File, error) {
+func (codex) PlanMCPs(target string, mcps []models.MCP, _ fs.FS) ([]File, error) {
 	if len(mcps) == 0 {
 		return nil, nil
 	}
 
-	root := map[string]any{}
-	switch data, err := os.ReadFile(filepath.Join(target, filepath.FromSlash(codexConfig))); {
-	case err == nil:
-		if len(bytes.TrimSpace(data)) > 0 {
-			if err := toml.Unmarshal(data, &root); err != nil {
-				return nil, fmt.Errorf("codex: parse %s: %w", codexConfig, err)
-			}
-		}
-	case errors.Is(err, fs.ErrNotExist):
-	default:
-		return nil, fmt.Errorf("codex: read %s: %w", codexConfig, err)
-	}
-
-	servers := map[string]any{}
-	if raw, ok := root["mcp_servers"]; ok {
-		existing, ok := raw.(map[string]any)
-		if !ok {
-			return nil, fmt.Errorf("codex: mcp_servers in %s is not a table", codexConfig)
-		}
-		servers = existing
-	}
+	entries := make(map[string]any, len(mcps))
 	for _, mcp := range mcps {
 		entry, err := codexMCPEntry(mcp)
 		if err != nil {
 			return nil, err
 		}
-		servers[mcp.ID] = entry
+		entries[mcp.ID] = entry
 	}
-	root["mcp_servers"] = servers
 
-	out, err := toml.Marshal(root)
+	out, err := config.MergeTOMLTable(filepath.Join(target, filepath.FromSlash(codexConfig)), "mcp_servers", entries)
 	if err != nil {
-		return nil, fmt.Errorf("codex: encode %s: %w", codexConfig, err)
-	}
-	if len(out) == 0 || out[len(out)-1] != '\n' {
-		out = append(out, '\n')
+		return nil, err
 	}
 
 	return []File{{Path: codexConfig, Content: out, Merge: true, Source: "mcps"}}, nil
 }
 
-func codexMCPEntry(mcp model.MCP) (map[string]any, error) {
+func codexMCPEntry(mcp models.MCP) (map[string]any, error) {
 	switch mcp.Type {
 	case "local":
 		if len(mcp.Command) == 0 {

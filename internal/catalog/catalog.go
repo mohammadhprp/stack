@@ -12,12 +12,12 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 type Catalog struct {
-	skills []model.Skill
-	mcps   []model.MCP
+	skills []models.Skill
+	mcps   []models.MCP
 	fsys   fs.FS
 }
 
@@ -35,36 +35,36 @@ func Load(fsys fs.FS) (*Catalog, error) {
 	return &Catalog{skills: skills, mcps: mcps, fsys: fsys}, nil
 }
 
-func (c *Catalog) Skills() []model.Skill { return c.skills }
+func (c *Catalog) Skills() []models.Skill { return c.skills }
 
-func (c *Catalog) MCPs() []model.MCP { return c.mcps }
+func (c *Catalog) MCPs() []models.MCP { return c.mcps }
 
 func (c *Catalog) FS() fs.FS { return c.fsys }
 
-func (c *Catalog) Skill(id string) (model.Skill, bool) {
+func (c *Catalog) Skill(id string) (models.Skill, bool) {
 	for _, s := range c.skills {
 		if s.ID == id {
 			return s, true
 		}
 	}
-	return model.Skill{}, false
+	return models.Skill{}, false
 }
 
-func (c *Catalog) MCP(slug string) (model.MCP, bool) {
+func (c *Catalog) MCP(slug string) (models.MCP, bool) {
 	for _, m := range c.mcps {
 		if m.Slug == slug {
 			return m, true
 		}
 	}
-	return model.MCP{}, false
+	return models.MCP{}, false
 }
 
-func loadSkills(fsys fs.FS) ([]model.Skill, error) {
+func loadSkills(fsys fs.FS) ([]models.Skill, error) {
 	entries, err := fs.ReadDir(fsys, "skills")
 	if err != nil {
 		return nil, fmt.Errorf("read skills directory: %w", err)
 	}
-	var skills []model.Skill
+	var skills []models.Skill
 	for _, entry := range entries {
 		if !entry.IsDir() {
 			continue
@@ -86,7 +86,7 @@ func loadSkills(fsys fs.FS) ([]model.Skill, error) {
 		if err != nil {
 			return nil, fmt.Errorf("skill %q: %w", id, err)
 		}
-		skills = append(skills, model.Skill{
+		skills = append(skills, models.Skill{
 			ID:          id,
 			Name:        name,
 			Description: description,
@@ -98,12 +98,12 @@ func loadSkills(fsys fs.FS) ([]model.Skill, error) {
 	return skills, nil
 }
 
-func loadMCPs(fsys fs.FS) ([]model.MCP, error) {
+func loadMCPs(fsys fs.FS) ([]models.MCP, error) {
 	entries, err := fs.ReadDir(fsys, "mcps")
 	if err != nil {
 		return nil, fmt.Errorf("read mcps directory: %w", err)
 	}
-	var mcps []model.MCP
+	var mcps []models.MCP
 	for _, entry := range entries {
 		if !entry.IsDir() {
 			continue
@@ -114,7 +114,7 @@ func loadMCPs(fsys fs.FS) ([]model.MCP, error) {
 		if err != nil {
 			return nil, fmt.Errorf("mcp %q: read spec.json: %w", slug, err)
 		}
-		var spec model.MCPSpec
+		var spec models.MCPSpec
 		if err := json.Unmarshal(raw, &spec); err != nil {
 			return nil, fmt.Errorf("mcp %q: parse spec.json: %w", slug, err)
 		}
@@ -124,7 +124,7 @@ func loadMCPs(fsys fs.FS) ([]model.MCP, error) {
 		if spec.Description == "" {
 			spec.Description = spec.Name
 		}
-		mcps = append(mcps, model.MCP{Slug: slug, MCPSpec: spec, Dir: dir})
+		mcps = append(mcps, models.MCP{Slug: slug, MCPSpec: spec, Dir: dir})
 	}
 	sort.Slice(mcps, func(i, j int) bool { return mcps[i].Slug < mcps[j].Slug })
 	return mcps, nil

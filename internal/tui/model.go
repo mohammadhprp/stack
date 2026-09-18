@@ -11,7 +11,7 @@ import (
 	"github.com/mohammadhprp/stack/internal/catalog"
 	"github.com/mohammadhprp/stack/internal/harness"
 	"github.com/mohammadhprp/stack/internal/install"
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 type Stage int
@@ -191,13 +191,13 @@ func (m *Model) runInstall() {
 			adapters = append(adapters, a)
 		}
 	}
-	skills := make([]model.Skill, 0)
+	skills := make([]models.Skill, 0)
 	for _, id := range m.selectedIDs(m.Skills) {
 		if s, ok := m.catalog.Skill(id); ok {
 			skills = append(skills, s)
 		}
 	}
-	mcps := make([]model.MCP, 0)
+	mcps := make([]models.MCP, 0)
 	for _, id := range m.selectedIDs(m.MCPs) {
 		if mcp, ok := m.catalog.MCP(id); ok {
 			mcps = append(mcps, mcp)

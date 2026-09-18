@@ -1,12 +1,4 @@
-package model
-
-type Skill struct {
-	ID          string
-	Name        string
-	Description string
-	Dir         string
-	Files       []string
-}
+package models
 
 type MCPSpec struct {
 	ID          string            `json:"id"`
@@ -23,12 +15,4 @@ type MCP struct {
 	Slug string
 	MCPSpec
 	Dir string
-}
-
-type Harness struct {
-	ID             string
-	Name           string
-	SupportsSkills bool
-	SkillsPath     string
-	MCPConfigPath  string
 }

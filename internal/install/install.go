@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/mohammadhprp/stack/internal/harness"
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 type Action string
@@ -28,8 +28,8 @@ const (
 type Request struct {
 	Target   string
 	Adapters []harness.Adapter
-	Skills   []model.Skill
-	MCPs     []model.MCP
+	Skills   []models.Skill
+	MCPs     []models.MCP
 	// Source is the catalog filesystem, rooted at framework/.
 	Source fs.FS
 	Force  bool
@@ -112,7 +112,7 @@ func Run(req Request) (*Report, error) {
 					fmt.Sprintf("%s does not support skills; skipped %d skill(s)", a.Name(), len(req.Skills)))
 			} else {
 				for _, skill := range req.Skills {
-					files, err := a.PlanSkills(req.Target, []model.Skill{skill}, req.Source)
+					files, err := a.PlanSkills(req.Target, []models.Skill{skill}, req.Source)
 					if err != nil {
 						return report, err
 					}

@@ -8,7 +8,7 @@ import (
 	"io/fs"
 	"sort"
 
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 var ErrNotImplemented = errors.New("adapter not implemented")
@@ -29,9 +29,9 @@ type Adapter interface {
 	ID() string
 	Name() string
 	SupportsSkills() bool
-	PlanSkills(target string, skills []model.Skill, src fs.FS) ([]File, error)
+	PlanSkills(target string, skills []models.Skill, src fs.FS) ([]File, error)
 	// PlanMCPs must preserve unrelated keys in the existing config.
-	PlanMCPs(target string, mcps []model.MCP, src fs.FS) ([]File, error)
+	PlanMCPs(target string, mcps []models.MCP, src fs.FS) ([]File, error)
 }
 
 var registry = map[string]Adapter{}

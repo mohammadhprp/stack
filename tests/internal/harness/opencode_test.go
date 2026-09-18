@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/mohammadhprp/stack/internal/harness"
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 func TestRegistry(t *testing.T) {
@@ -43,9 +43,9 @@ func TestRegistry(t *testing.T) {
 
 func TestOpenCodePlanSkills(t *testing.T) {
 	adapter, _ := harness.Get("opencode")
-	skill := model.Skill{ID: "commit", Dir: "skills/commit"}
+	skill := models.Skill{ID: "commit", Dir: "skills/commit"}
 
-	files, err := adapter.PlanSkills(t.TempDir(), []model.Skill{skill}, os.DirFS("../../../framework"))
+	files, err := adapter.PlanSkills(t.TempDir(), []models.Skill{skill}, os.DirFS("../../../framework"))
 	if err != nil {
 		t.Fatalf("PlanSkills: %v", err)
 	}
@@ -72,10 +72,10 @@ func TestOpenCodePlanSkills(t *testing.T) {
 
 func TestOpenCodePlanMCPsRendersLocalAndRemote(t *testing.T) {
 	adapter, _ := harness.Get("opencode")
-	mcps := []model.MCP{
+	mcps := []models.MCP{
 		{
 			Slug: "playwright-mcp",
-			MCPSpec: model.MCPSpec{
+			MCPSpec: models.MCPSpec{
 				ID:      "playwright",
 				Type:    "local",
 				Command: []string{"npx", "@playwright/mcp@latest"},
@@ -84,7 +84,7 @@ func TestOpenCodePlanMCPsRendersLocalAndRemote(t *testing.T) {
 		},
 		{
 			Slug: "supabase-mcp",
-			MCPSpec: model.MCPSpec{
+			MCPSpec: models.MCPSpec{
 				ID:      "supabase",
 				Type:    "remote",
 				URL:     "https://mcp.supabase.com/mcp",
@@ -134,7 +134,7 @@ func TestOpenCodePlanMCPsRendersLocalAndRemote(t *testing.T) {
 
 func TestOpenCodePlanMCPsRejectsBadSpec(t *testing.T) {
 	adapter, _ := harness.Get("opencode")
-	_, err := adapter.PlanMCPs(t.TempDir(), []model.MCP{{Slug: "bad", MCPSpec: model.MCPSpec{ID: "bad", Type: "telepathy"}}}, nil)
+	_, err := adapter.PlanMCPs(t.TempDir(), []models.MCP{{Slug: "bad", MCPSpec: models.MCPSpec{ID: "bad", Type: "telepathy"}}}, nil)
 	if err == nil {
 		t.Fatal("expected an error for an unknown MCP type")
 	}

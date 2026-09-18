@@ -1,17 +1,14 @@
 package harness
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
 	"fmt"
 	"io/fs"
-	"os"
 	"path"
 	"path/filepath"
 	"strings"
 
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/config"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 // OpenCode's on-disk formats, verified against the official docs on 2026-09-17:
@@ -37,7 +34,7 @@ func (opencode) ID() string           { return opencodeID }
 func (opencode) Name() string         { return opencodeName }
 func (opencode) SupportsSkills() bool { return true }
 
-func (opencode) PlanSkills(_ string, skills []model.Skill, src fs.FS) ([]File, error) {
+func (opencode) PlanSkills(_ string, skills []models.Skill, src fs.FS) ([]File, error) {
 	var files []File
 	for _, skill := range skills {
 		if skill.Dir == "" {
@@ -69,50 +66,24 @@ func (opencode) PlanSkills(_ string, skills []model.Skill, src fs.FS) ([]File, e
 	return files, nil
 }
 
-func (opencode) PlanMCPs(target string, mcps []model.MCP, _ fs.FS) ([]File, error) {
+func (opencode) PlanMCPs(target string, mcps []models.MCP, _ fs.FS) ([]File, error) {
 	if len(mcps) == 0 {
 		return nil, nil
 	}
 
-	configPath := filepath.Join(target, opencodeConfig)
-	root := map[string]json.RawMessage{}
-	switch data, err := os.ReadFile(configPath); {
-	case err == nil:
-		if len(bytes.TrimSpace(data)) > 0 {
-			if err := json.Unmarshal(data, &root); err != nil {
-				return nil, fmt.Errorf("opencode: parse %s: %w", opencodeConfig, err)
-			}
-		}
-	case errors.Is(err, fs.ErrNotExist):
-	default:
-		return nil, fmt.Errorf("opencode: read %s: %w", opencodeConfig, err)
-	}
-
-	section := map[string]json.RawMessage{}
-	if raw, ok := root["mcp"]; ok && len(bytes.TrimSpace(raw)) > 0 {
-		if err := json.Unmarshal(raw, &section); err != nil {
-			return nil, fmt.Errorf("opencode: parse mcp section in %s: %w", opencodeConfig, err)
-		}
-	}
+	entries := make(map[string]any, len(mcps))
 	for _, mcp := range mcps {
 		entry, err := renderOpenCodeMCP(mcp)
 		if err != nil {
 			return nil, err
 		}
-		section[mcp.ID] = entry
+		entries[mcp.ID] = entry
 	}
 
-	rawSection, err := json.Marshal(section)
+	out, err := config.MergeJSONSection(filepath.Join(target, opencodeConfig), "mcp", entries)
 	if err != nil {
-		return nil, fmt.Errorf("opencode: encode mcp section: %w", err)
+		return nil, err
 	}
-	root["mcp"] = rawSection
-
-	out, err := json.MarshalIndent(root, "", "  ")
-	if err != nil {
-		return nil, fmt.Errorf("opencode: encode %s: %w", opencodeConfig, err)
-	}
-	out = append(out, '\n')
 
 	return []File{{
 		Path:    opencodeConfig,
@@ -122,7 +93,7 @@ func (opencode) PlanMCPs(target string, mcps []model.MCP, _ fs.FS) ([]File, erro
 	}}, nil
 }
 
-func renderOpenCodeMCP(mcp model.MCP) (json.RawMessage, error) {
+func renderOpenCodeMCP(mcp models.MCP) (map[string]any, error) {
 	entry := map[string]any{"enabled": true}
 	switch mcp.Type {
 	case "local":
@@ -147,5 +118,5 @@ func renderOpenCodeMCP(mcp model.MCP) (json.RawMessage, error) {
 	default:
 		return nil, fmt.Errorf("opencode: mcp %q has unknown type %q", mcp.Slug, mcp.Type)
 	}
-	return json.Marshal(entry)
+	return entry, nil
 }

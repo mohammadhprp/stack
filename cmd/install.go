@@ -11,7 +11,7 @@ import (
 	"github.com/mohammadhprp/stack/internal/catalog"
 	"github.com/mohammadhprp/stack/internal/harness"
 	"github.com/mohammadhprp/stack/internal/install"
-	"github.com/mohammadhprp/stack/internal/model"
+	"github.com/mohammadhprp/stack/internal/models"
 )
 
 type installOptions struct {
@@ -154,9 +154,9 @@ func availableHarnesses() string {
 	return strings.Join(ids, ", ")
 }
 
-func resolveSelection(cat *catalog.Catalog, opts *installOptions) ([]model.Skill, []model.MCP, error) {
-	var skills []model.Skill
-	var mcps []model.MCP
+func resolveSelection(cat *catalog.Catalog, opts *installOptions) ([]models.Skill, []models.MCP, error) {
+	var skills []models.Skill
+	var mcps []models.MCP
 
 	if opts.all {
 		skills = cat.Skills()
@@ -193,7 +193,7 @@ func resolveSelection(cat *catalog.Catalog, opts *installOptions) ([]model.Skill
 	return skills, mcps, nil
 }
 
-func dedupeSkills(in []model.Skill) []model.Skill {
+func dedupeSkills(in []models.Skill) []models.Skill {
 	seen := map[string]bool{}
 	out := in[:0]
 	for _, skill := range in {
@@ -206,7 +206,7 @@ func dedupeSkills(in []model.Skill) []model.Skill {
 	return out
 }
 
-func dedupeMCPs(in []model.MCP) []model.MCP {
+func dedupeMCPs(in []models.MCP) []models.MCP {
 	seen := map[string]bool{}
 	out := in[:0]
 	for _, mcp := range in {
