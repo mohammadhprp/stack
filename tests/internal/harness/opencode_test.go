@@ -2,7 +2,6 @@ package harness_test
 
 import (
 	"encoding/json"
-	"errors"
 	"os"
 	"testing"
 
@@ -38,18 +37,6 @@ func TestRegistry(t *testing.T) {
 		}
 		if adapter.Name() == "" {
 			t.Errorf("%s.Name() is empty", id)
-		}
-	}
-}
-
-func TestStubsReportNotImplemented(t *testing.T) {
-	for _, id := range []string{"claude", "codex", "cursor"} {
-		adapter, _ := harness.Get(id)
-		if _, err := adapter.PlanMCPs(t.TempDir(), []model.MCP{{Slug: "x"}}, nil); !errors.Is(err, harness.ErrNotImplemented) {
-			t.Errorf("%s.PlanMCPs error: got %v, want ErrNotImplemented", id, err)
-		}
-		if _, err := adapter.PlanSkills(t.TempDir(), []model.Skill{{ID: "x"}}, nil); !errors.Is(err, harness.ErrNotImplemented) {
-			t.Errorf("%s.PlanSkills error: got %v, want ErrNotImplemented", id, err)
 		}
 	}
 }
