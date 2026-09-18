@@ -41,6 +41,14 @@ type MCPConfigReporter interface {
 	MCPConfigNote() string
 }
 
+// MCPRemover is implemented by adapters whose MCP config can be rewritten to
+// exactly the kept servers, dropping the removed ones while preserving
+// unrelated keys. It is optional and discovered by type assertion; adapters
+// never delete files themselves.
+type MCPRemover interface {
+	PlanMCPRemoval(target string, keep, drop []models.MCP, src fs.FS) (rewrites []File, deletes []string, err error)
+}
+
 var registry = map[string]Adapter{}
 
 func Register(a Adapter) {

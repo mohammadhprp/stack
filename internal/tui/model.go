@@ -38,6 +38,8 @@ type Model struct {
 	Harnesses []Option
 	Skills    []Option
 	MCPs      []Option
+	Plan      *install.Report
+	PlanErr   error
 	Summary   string
 	Err       error
 }
@@ -158,6 +160,7 @@ func (m *Model) advance() (tea.Model, tea.Cmd) {
 		m.Stage = StageMCPs
 	case StageMCPs:
 		m.Stage = StageConfirm
+		m.recomputePlan()
 	case StageConfirm:
 		m.runInstall()
 	}
@@ -185,11 +188,41 @@ func (m *Model) back() (tea.Model, tea.Cmd) {
 func (m *Model) runInstall() {
 	m.Stage = StageDone
 
+	req, err := m.request(false)
+	if err != nil {
+		m.Err = err
+		return
+	}
+	report, err := install.Run(req)
+	if err != nil {
+		m.Err = err
+		return
+	}
+	m.Summary = summarize(report, m.target)
+}
+
+func (m *Model) recomputePlan() {
+	m.Plan = nil
+	m.PlanErr = nil
+	req, err := m.request(true)
+	if err != nil {
+		m.PlanErr = err
+		return
+	}
+	report, err := install.Run(req)
+	m.Plan = report
+	m.PlanErr = err
+}
+
+func (m *Model) request(dryRun bool) (install.Request, error) {
 	adapters := make([]harness.Adapter, 0)
 	for _, id := range m.selectedIDs(m.Harnesses) {
 		if a, ok := harness.Get(id); ok {
 			adapters = append(adapters, a)
 		}
+	}
+	if len(adapters) == 0 {
+		return install.Request{}, errors.New("nothing selected; choose at least one harness")
 	}
 	skills := make([]models.Skill, 0)
 	for _, id := range m.selectedIDs(m.Skills) {
@@ -203,24 +236,15 @@ func (m *Model) runInstall() {
 			mcps = append(mcps, mcp)
 		}
 	}
-
-	if len(skills) == 0 && len(mcps) == 0 {
-		m.Err = errors.New("nothing selected; choose at least one skill or MCP")
-		return
-	}
-
-	report, err := install.Run(install.Request{
+	return install.Request{
 		Target:   m.target,
 		Adapters: adapters,
 		Skills:   skills,
 		MCPs:     mcps,
 		Source:   m.catalog.FS(),
-	})
-	if err != nil {
-		m.Err = err
-		return
-	}
-	m.Summary = summarize(report, m.target)
+		DryRun:   dryRun,
+		Prune:    true,
+	}, nil
 }
 
 func (m Model) activeLen() int {
@@ -308,8 +332,35 @@ func (m Model) viewConfirm() string {
 	b.WriteString(fmt.Sprintf("Skills:    %s\n", joinOrNone(m.selectedIDs(m.Skills))))
 	b.WriteString(fmt.Sprintf("MCPs:      %s\n", joinOrNone(m.selectedIDs(m.MCPs))))
 	b.WriteString("\nTarget: " + m.target + "\n")
+
+	if m.PlanErr != nil {
+		b.WriteString("\n" + styleError.Render("Error: "+m.PlanErr.Error()) + "\n")
+	} else if removals := removalLines(m.Plan); len(removals) > 0 {
+		b.WriteString("\n" + styleTitle.Render("Will remove:") + "\n")
+		for _, line := range removals {
+			b.WriteString("  remove  " + line + "\n")
+		}
+	}
 	b.WriteString("\n" + styleHelp.Render("enter install · esc back · q quit"))
 	return b.String()
+}
+
+func removalLines(report *install.Report) []string {
+	if report == nil {
+		return nil
+	}
+	var lines []string
+	for _, c := range report.Changes {
+		if c.Action != install.ActionRemove {
+			continue
+		}
+		if c.Item != "" {
+			lines = append(lines, fmt.Sprintf("%s (%s)", c.Path, c.Item))
+		} else {
+			lines = append(lines, c.Path)
+		}
+	}
+	return lines
 }
 
 func joinOrNone(ids []string) string {
@@ -321,15 +372,25 @@ func joinOrNone(ids []string) string {
 
 func summarize(report *install.Report, target string) string {
 	var b strings.Builder
-	writes := 0
+	writes, removals := 0, 0
 	for _, c := range report.Changes {
-		if c.Action != install.ActionKeep {
+		switch c.Action {
+		case install.ActionCreate, install.ActionUpdate, install.ActionMerge:
 			writes++
+		case install.ActionRemove:
+			removals++
 		}
 	}
 	fmt.Fprintf(&b, "Installed %d file(s) into %s\n", writes, target)
 	for _, c := range report.Changes {
-		fmt.Fprintf(&b, "  %-8s %s\n", c.Action, c.Path)
+		path := c.Path
+		if c.Item != "" {
+			path = fmt.Sprintf("%s (%s)", c.Path, c.Item)
+		}
+		fmt.Fprintf(&b, "  %-8s %s\n", c.Action, path)
+	}
+	if removals > 0 {
+		fmt.Fprintf(&b, "Removed %d item(s)\n", removals)
 	}
 	for _, w := range report.Warnings {
 		fmt.Fprintf(&b, "warning: %s\n", w)

@@ -21,6 +21,7 @@ type installOptions struct {
 	all       bool
 	dryRun    bool
 	force     bool
+	prune     bool
 }
 
 func newInstallCommand(cat *install.Catalog) *cobra.Command {
@@ -44,6 +45,7 @@ func newInstallCommand(cat *install.Catalog) *cobra.Command {
 	flags.BoolVar(&opts.all, "all", false, "install every skill and MCP")
 	flags.BoolVar(&opts.dryRun, "dry-run", false, "print the plan without writing anything")
 	flags.BoolVar(&opts.force, "force", false, "overwrite files that differ from the lockfile")
+	flags.BoolVar(&opts.prune, "prune", false, "remove installed items that are no longer selected")
 	return cmd
 }
 
@@ -69,6 +71,7 @@ func runInstall(cmd *cobra.Command, cat *install.Catalog, opts *installOptions) 
 		Source:   cat.FS(),
 		Force:    opts.force,
 		DryRun:   opts.dryRun,
+		Prune:    opts.prune,
 	})
 
 	out := cmd.OutOrStdout()
@@ -85,6 +88,9 @@ func runInstall(cmd *cobra.Command, cat *install.Catalog, opts *installOptions) 
 		fmt.Fprintln(out, "Dry run: no files written.")
 	} else {
 		fmt.Fprintf(out, "Installed %d file(s) into %s\n", countWrites(report), opts.target)
+		if removed := countRemovals(report); removed > 0 {
+			fmt.Fprintf(out, "Removed %d item(s) from %s\n", removed, opts.target)
+		}
 	}
 	return nil
 }
@@ -103,7 +109,11 @@ func printPlan(out io.Writer, opts *installOptions, report *install.Report) {
 	}
 	fmt.Fprintf(out, "Plan for %s:\n", opts.target)
 	for _, change := range report.Changes {
-		fmt.Fprintf(out, "  %-8s %s\n", change.Action, change.Path)
+		path := change.Path
+		if change.Item != "" {
+			path = fmt.Sprintf("%s (%s)", change.Path, change.Item)
+		}
+		fmt.Fprintf(out, "  %-8s %s\n", change.Action, path)
 	}
 }
 
@@ -113,7 +123,21 @@ func countWrites(report *install.Report) int {
 	}
 	count := 0
 	for _, change := range report.Changes {
-		if change.Action != install.ActionKeep {
+		switch change.Action {
+		case install.ActionCreate, install.ActionUpdate, install.ActionMerge:
+			count++
+		}
+	}
+	return count
+}
+
+func countRemovals(report *install.Report) int {
+	if report == nil {
+		return 0
+	}
+	count := 0
+	for _, change := range report.Changes {
+		if change.Action == install.ActionRemove {
 			count++
 		}
 	}

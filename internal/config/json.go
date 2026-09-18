@@ -54,3 +54,58 @@ func MergeJSONSection(path, section string, entries map[string]any) ([]byte, err
 	out = append(out, '\n')
 	return out, nil
 }
+
+// ReconcileJSONSection sets the named section to exactly keep, removes the drop
+// keys, and preserves every unrelated key. It returns remove=true when the file
+// is left with no content and should be deleted.
+func ReconcileJSONSection(path, section string, keep map[string]any, drop []string) ([]byte, bool, error) {
+	root := map[string]json.RawMessage{}
+	switch data, err := os.ReadFile(path); {
+	case err == nil:
+		if len(bytes.TrimSpace(data)) > 0 {
+			if err := json.Unmarshal(data, &root); err != nil {
+				return nil, false, fmt.Errorf("parse %s: %w", path, err)
+			}
+		}
+	case errors.Is(err, fs.ErrNotExist):
+	default:
+		return nil, false, fmt.Errorf("read %s: %w", path, err)
+	}
+
+	existing := map[string]json.RawMessage{}
+	if raw, ok := root[section]; ok && len(bytes.TrimSpace(raw)) > 0 {
+		if err := json.Unmarshal(raw, &existing); err != nil {
+			return nil, false, fmt.Errorf("parse %s section in %s: %w", section, path, err)
+		}
+	}
+	for _, name := range drop {
+		delete(existing, name)
+	}
+	for name, entry := range keep {
+		raw, err := json.Marshal(entry)
+		if err != nil {
+			return nil, false, fmt.Errorf("encode entry %q: %w", name, err)
+		}
+		existing[name] = raw
+	}
+
+	if len(existing) == 0 {
+		delete(root, section)
+	} else {
+		rawSection, err := json.Marshal(existing)
+		if err != nil {
+			return nil, false, fmt.Errorf("encode %s section: %w", section, err)
+		}
+		root[section] = rawSection
+	}
+	if len(root) == 0 {
+		return nil, true, nil
+	}
+
+	out, err := json.MarshalIndent(root, "", "  ")
+	if err != nil {
+		return nil, false, fmt.Errorf("encode %s: %w", path, err)
+	}
+	out = append(out, '\n')
+	return out, false, nil
+}

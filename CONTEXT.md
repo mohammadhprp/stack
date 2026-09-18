@@ -128,6 +128,22 @@ no lock it falls back to detecting managed files already on disk (planning each
 candidate through its adapter and checking the planned files match), so an
 existing install is review-and-adjust. A fresh target starts empty.
 
+## Removal and pruning
+
+The TUI prunes by default: its prefilled selection is the desired end state, so
+deselecting a harness, skill, or MCP removes it on confirm, after the confirm
+screen lists the removals. The CLI prunes only with `--prune`; without it the CLI
+deletes nothing.
+
+Removal only ever touches lock-managed paths inside the target: a file is
+deleted only while its hash still matches the lock (a user-modified file is kept
+and warned about unless `--force`); shared `.agents/skills/` paths are kept while
+a selected harness still needs them; MCP entries are dropped through the optional
+`harness.MCPRemover` interface, which preserves unrelated config keys and other
+servers and signals a config that becomes empty for deletion; empty directories
+are pruned up to the target root; and removed items are dropped from the lock so
+a later install recreates them cleanly.
+
 ## Build & Test
 
 - `go build ./...`

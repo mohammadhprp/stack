@@ -119,3 +119,35 @@ func TestInstallCommandWritesSkillAndMergesConfig(t *testing.T) {
 		t.Errorf("bad playwright entry: %+v", entry)
 	}
 }
+
+func TestInstallPruneFlagRemovesDeselected(t *testing.T) {
+	dir := t.TempDir()
+	if _, _, err := execute(t, loadCatalog(t), "install",
+		"--harness", "claude,codex", "--skills", "commit", "--target", dir); err != nil {
+		t.Fatalf("first install: %v", err)
+	}
+
+	out, _, err := execute(t, loadCatalog(t), "install",
+		"--harness", "claude", "--skills", "commit", "--target", dir)
+	if err != nil {
+		t.Fatalf("install without --prune: %v", err)
+	}
+	if strings.Contains(out, "remove") {
+		t.Errorf("install without --prune must not remove anything:\n%s", out)
+	}
+	if _, err := os.Stat(filepath.Join(dir, ".agents", "skills", "commit", "SKILL.md")); err != nil {
+		t.Error("codex skill should remain without --prune")
+	}
+
+	out, _, err = execute(t, loadCatalog(t), "install",
+		"--harness", "claude", "--skills", "commit", "--prune", "--target", dir)
+	if err != nil {
+		t.Fatalf("install --prune: %v", err)
+	}
+	if !strings.Contains(out, "remove") || !strings.Contains(out, "Removed") {
+		t.Errorf("--prune output should show removals:\n%s", out)
+	}
+	if _, err := os.Stat(filepath.Join(dir, ".agents", "skills", "commit", "SKILL.md")); !os.IsNotExist(err) {
+		t.Error("codex skill should be removed with --prune")
+	}
+}
