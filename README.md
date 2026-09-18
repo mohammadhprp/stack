@@ -25,12 +25,21 @@ stack doctor     # check what is installed
 
 ## Supported harnesses
 
-| Harness  | Skills | MCP |
-|----------|--------|-----|
-| opencode | yes    | yes |
-| claude   | yes    | yes |
-| codex    | —      | yes |
-| cursor   | —      | yes |
+Every harness supports **skills**; most support **MCP** too.
+
+| Harness  | Skills | MCP config |
+|----------|--------|------------|
+| opencode | yes    | `opencode.json` |
+| claude   | yes    | `.mcp.json` |
+| codex    | yes    | `.codex/config.toml` |
+| cursor   | yes    | `.cursor/mcp.json` |
+| gemini   | yes    | `.gemini/settings.json` |
+| amp      | yes    | `.amp/settings.json` |
+| windsurf | yes    | — (MCP config is user-level only; `stack` won't write outside the project) |
+
+Skills go to the location each harness reads: `.opencode/skills/`,
+`.claude/skills/`, `.gemini/skills/`, `.windsurf/skills/`, and the shared
+`.agents/skills/` used by codex, cursor, and amp.
 
 ## License
 
