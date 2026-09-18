@@ -3,20 +3,27 @@ package harness
 import (
 	"fmt"
 	"io/fs"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/mohammadhprp/stack/internal/config"
 	"github.com/mohammadhprp/stack/internal/models"
 )
 
+// Codex skills, verified against the official docs on 2026-09-18: Codex scans
+// .agents/skills in every directory from the working directory up to the
+// repository root. https://developers.openai.com/codex/skills
+//
 // Codex project config, verified against the official reference on 2026-09-17:
 // .codex/config.toml -> [mcp_servers.<name>]; stdio entries use command/args/
 // env, and a remote entry uses url with http_headers.
 // https://developers.openai.com/codex/config-reference
 const (
-	codexID     = "codex"
-	codexName   = "Codex"
-	codexConfig = ".codex/config.toml"
+	codexID        = "codex"
+	codexName      = "Codex"
+	codexSkillsDir = ".agents/skills"
+	codexConfig    = ".codex/config.toml"
 )
 
 func init() { Register(codex{}) }
@@ -25,9 +32,39 @@ type codex struct{}
 
 func (codex) ID() string           { return codexID }
 func (codex) Name() string         { return codexName }
-func (codex) SupportsSkills() bool { return false }
+func (codex) SupportsSkills() bool { return true }
 
-func (codex) PlanSkills(string, []models.Skill, fs.FS) ([]File, error) { return nil, nil }
+func (codex) PlanSkills(_ string, skills []models.Skill, src fs.FS) ([]File, error) {
+	var files []File
+	for _, skill := range skills {
+		if skill.Dir == "" {
+			return nil, fmt.Errorf("codex: skill %q has no source directory", skill.ID)
+		}
+		err := fs.WalkDir(src, skill.Dir, func(p string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() {
+				return nil
+			}
+			data, err := fs.ReadFile(src, p)
+			if err != nil {
+				return err
+			}
+			rel := strings.TrimPrefix(p, skill.Dir+"/")
+			files = append(files, File{
+				Path:    path.Join(codexSkillsDir, skill.ID, filepath.ToSlash(rel)),
+				Content: data,
+				Source:  skill.Dir,
+			})
+			return nil
+		})
+		if err != nil {
+			return nil, fmt.Errorf("codex: plan skill %q: %w", skill.ID, err)
+		}
+	}
+	return files, nil
+}
 
 func (codex) PlanMCPs(target string, mcps []models.MCP, _ fs.FS) ([]File, error) {
 	if len(mcps) == 0 {

@@ -3,20 +3,28 @@ package harness
 import (
 	"fmt"
 	"io/fs"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/mohammadhprp/stack/internal/config"
 	"github.com/mohammadhprp/stack/internal/models"
 )
 
+// Cursor Agent Skills, verified against the official docs on 2026-09-18: Cursor
+// discovers .agents/skills/ in the project (shared with other agents), so
+// skills are installed there rather than under .cursor/skills.
+// https://cursor.com/docs/skills
+//
 // Cursor's project MCP format, verified against the official docs on
 // 2026-09-17: .cursor/mcp.json -> mcpServers, where a stdio entry uses
 // command/args/env and a remote entry uses url/headers.
 // https://cursor.com/docs/mcp
 const (
-	cursorID     = "cursor"
-	cursorName   = "Cursor"
-	cursorConfig = ".cursor/mcp.json"
+	cursorID        = "cursor"
+	cursorName      = "Cursor"
+	cursorSkillsDir = ".agents/skills"
+	cursorConfig    = ".cursor/mcp.json"
 )
 
 func init() { Register(cursor{}) }
@@ -25,9 +33,39 @@ type cursor struct{}
 
 func (cursor) ID() string           { return cursorID }
 func (cursor) Name() string         { return cursorName }
-func (cursor) SupportsSkills() bool { return false }
+func (cursor) SupportsSkills() bool { return true }
 
-func (cursor) PlanSkills(string, []models.Skill, fs.FS) ([]File, error) { return nil, nil }
+func (cursor) PlanSkills(_ string, skills []models.Skill, src fs.FS) ([]File, error) {
+	var files []File
+	for _, skill := range skills {
+		if skill.Dir == "" {
+			return nil, fmt.Errorf("cursor: skill %q has no source directory", skill.ID)
+		}
+		err := fs.WalkDir(src, skill.Dir, func(p string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() {
+				return nil
+			}
+			data, err := fs.ReadFile(src, p)
+			if err != nil {
+				return err
+			}
+			rel := strings.TrimPrefix(p, skill.Dir+"/")
+			files = append(files, File{
+				Path:    path.Join(cursorSkillsDir, skill.ID, filepath.ToSlash(rel)),
+				Content: data,
+				Source:  skill.Dir,
+			})
+			return nil
+		})
+		if err != nil {
+			return nil, fmt.Errorf("cursor: plan skill %q: %w", skill.ID, err)
+		}
+	}
+	return files, nil
+}
 
 func (cursor) PlanMCPs(target string, mcps []models.MCP, _ fs.FS) ([]File, error) {
 	if len(mcps) == 0 {

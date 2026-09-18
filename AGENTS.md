@@ -6,6 +6,8 @@ multi-harness successor to the older OpenCode-only `system-prompt` CLI.
 
 It supports several harnesses at once (opencode, claude, codex, cursor, gemini,
 windsurf, amp) so one selection can be wired into every agent the developer uses.
+amp, codex, and cursor read skills from the shared `.agents/skills/` project
+location, so selecting them together installs one copy.
 
 ## Stack
 

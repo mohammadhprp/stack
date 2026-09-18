@@ -298,6 +298,43 @@ func TestRunWarnsForGlobalOnlyMCPHarness(t *testing.T) {
 	}
 }
 
+func TestRunSharesAgentsSkillsAcrossCodexCursorAmp(t *testing.T) {
+	cat := loadCatalog(t)
+	skill, _ := cat.Skill("commit")
+	dir := t.TempDir()
+
+	var adapters []harness.Adapter
+	for _, id := range []string{"codex", "cursor", "amp"} {
+		adapter, ok := harness.Get(id)
+		if !ok {
+			t.Fatalf("harness %q not registered", id)
+		}
+		adapters = append(adapters, adapter)
+	}
+
+	report, err := install.Run(install.Request{
+		Target:   dir,
+		Adapters: adapters,
+		Skills:   []models.Skill{skill},
+		Source:   cat.FS(),
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if len(report.Changes) != 2 {
+		t.Fatalf("shared .agents/skills should plan one copy (2 files): got %d changes: %+v", len(report.Changes), report.Changes)
+	}
+	skillItems := 0
+	for _, item := range report.Lock.Items {
+		if item.Kind == install.KindSkill && item.ID == "commit" {
+			skillItems++
+		}
+	}
+	if skillItems != 3 {
+		t.Errorf("lock skill items: got %d, want 3 (one per harness)", skillItems)
+	}
+}
+
 func assertEmptyDir(t *testing.T, dir string) {
 	t.Helper()
 	entries, err := os.ReadDir(dir)

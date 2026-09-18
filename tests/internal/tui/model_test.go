@@ -71,23 +71,23 @@ func TestNewListsEveryHarness(t *testing.T) {
 	}
 }
 
-func TestCodexOnlySkipsSkillStage(t *testing.T) {
+func TestCodexEntersSkillStage(t *testing.T) {
 	// harness.All() is sorted: amp, claude, codex, cursor, gemini, opencode, windsurf.
 	m := tui.New(loadCatalog(t), t.TempDir())
 	m, _ = send(m, "down", "down", " ", "enter")
-	if m.Stage != tui.StageMCPs {
-		t.Fatalf("stage: got %v, want MCPs (skills are not supported by codex)", m.Stage)
+	if m.Stage != tui.StageSkills {
+		t.Fatalf("stage: got %v, want skills (codex supports skills)", m.Stage)
 	}
 }
 
-func TestSkillsStageNotesSkippingHarness(t *testing.T) {
+func TestSkillsStageHasNoSkipNote(t *testing.T) {
 	m := tui.New(loadCatalog(t), t.TempDir())
 	m, _ = send(m, " ", "down", "down", " ", "enter")
 	if m.Stage != tui.StageSkills {
 		t.Fatalf("stage: got %v, want skills", m.Stage)
 	}
-	if !strings.Contains(m.View(), "will be skipped") {
-		t.Errorf("skills view missing the codex/cursor note:\n%s", m.View())
+	if strings.Contains(m.View(), "will be skipped") {
+		t.Errorf("every current harness supports skills; unexpected skip note:\n%s", m.View())
 	}
 }
 

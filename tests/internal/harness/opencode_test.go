@@ -24,8 +24,8 @@ func TestRegistry(t *testing.T) {
 	capabilities := map[string]bool{
 		"amp":      true,
 		"claude":   true,
-		"codex":    false,
-		"cursor":   false,
+		"codex":    true,
+		"cursor":   true,
 		"gemini":   true,
 		"opencode": true,
 		"windsurf": true,

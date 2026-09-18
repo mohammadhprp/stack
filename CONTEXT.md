@@ -12,15 +12,16 @@ intentionally out of scope.
 |----------|--------|-------------------------------------------------------|------------------------|
 | opencode | yes    | `opencode.json` → `mcp`                               | `.opencode/skills/`    |
 | claude   | yes    | `.mcp.json` → `mcpServers`                            | `.claude/skills/`      |
-| codex    | no     | `.codex/config.toml` → `[mcp_servers.<name>]`         | —                      |
-| cursor   | no     | `.cursor/mcp.json` → `mcpServers`                     | —                      |
+| codex    | yes    | `.codex/config.toml` → `[mcp_servers.<name>]`         | `.agents/skills/`      |
+| cursor   | yes    | `.cursor/mcp.json` → `mcpServers`                     | `.agents/skills/`      |
 | gemini   | yes    | `.gemini/settings.json` → `mcpServers`                | `.gemini/skills/`      |
 | windsurf | yes    | — (user-level only)                                   | `.windsurf/skills/`    |
 | amp      | yes    | `.amp/settings.json` → `amp.mcpServers`               | `.agents/skills/`      |
 
-When a harness has no native skill concept, skills are skipped for it (with a
-warning) rather than translated. Codex/Cursor skill adapters are a later
-milestone.
+Every current harness supports skills. When a future adapter reports
+`SupportsSkills` false, skills are skipped for it with a warning rather than
+translated. `amp`, `codex`, and `cursor` all read `.agents/skills/`, so selecting
+them together installs a single copy of each skill.
 
 Windsurf's MCP config is user-level only
 (`~/.codeium/windsurf/mcp_config.json`); it has no project-level file, so
