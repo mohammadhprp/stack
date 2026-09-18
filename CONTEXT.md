@@ -122,6 +122,12 @@ source, target paths, and a SHA-256 of every managed file. It powers idempotent
 re-runs, change detection (`stack doctor`), and safe removal. Ported from the
 `system-prompt` lock schema (version 1) but scoped to skills and mcps.
 
+The TUI prefills its selections from that lockfile: a re-run starts with the
+previously installed harnesses, skills, and MCPs already selected. When there is
+no lock it falls back to detecting managed files already on disk (planning each
+candidate through its adapter and checking the planned files match), so an
+existing install is review-and-adjust. A fresh target starts empty.
+
 ## Build & Test
 
 - `go build ./...`

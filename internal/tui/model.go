@@ -51,18 +51,19 @@ var (
 
 func New(cat *install.Catalog, target string) *Model {
 	m := Model{catalog: cat, target: target, Stage: StageHarness}
+	sel := prefill(cat, target)
 	for _, a := range harness.All() {
 		caps := "mcp"
 		if a.SupportsSkills() {
 			caps = "skills, mcp"
 		}
-		m.Harnesses = append(m.Harnesses, Option{ID: a.ID(), Label: fmt.Sprintf("%s (%s)", a.Name(), caps)})
+		m.Harnesses = append(m.Harnesses, Option{ID: a.ID(), Label: fmt.Sprintf("%s (%s)", a.Name(), caps), Selected: sel.harnesses[a.ID()]})
 	}
 	for _, s := range cat.Skills() {
-		m.Skills = append(m.Skills, Option{ID: s.ID, Label: s.ID})
+		m.Skills = append(m.Skills, Option{ID: s.ID, Label: s.ID, Selected: sel.skills[s.ID]})
 	}
 	for _, mcp := range cat.MCPs() {
-		m.MCPs = append(m.MCPs, Option{ID: mcp.Slug, Label: mcp.Name})
+		m.MCPs = append(m.MCPs, Option{ID: mcp.Slug, Label: mcp.Name, Selected: sel.mcps[mcp.Slug]})
 	}
 	return &m
 }
