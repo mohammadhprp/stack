@@ -123,13 +123,21 @@ func Run(req Request) (*Report, error) {
 			}
 		}
 		if len(req.MCPs) > 0 {
-			files, err := a.PlanMCPs(req.Target, req.MCPs, req.Source)
-			if err != nil {
-				return report, err
+			note := ""
+			if noted, ok := a.(harness.MCPConfigReporter); ok {
+				note = noted.MCPConfigNote()
 			}
-			for _, mcp := range req.MCPs {
-				if err := addFiles(a, KindMCP, mcp.Slug, mcp.Dir, files); err != nil {
+			if note != "" {
+				report.Warnings = append(report.Warnings, fmt.Sprintf("%s: %s", a.Name(), note))
+			} else {
+				files, err := a.PlanMCPs(req.Target, req.MCPs, req.Source)
+				if err != nil {
 					return report, err
+				}
+				for _, mcp := range req.MCPs {
+					if err := addFiles(a, KindMCP, mcp.Slug, mcp.Dir, files); err != nil {
+						return report, err
+					}
 				}
 			}
 		}

@@ -14,10 +14,18 @@ intentionally out of scope.
 | claude   | yes    | `.mcp.json` → `mcpServers`                            | `.claude/skills/`      |
 | codex    | no     | `.codex/config.toml` → `[mcp_servers.<name>]`         | —                      |
 | cursor   | no     | `.cursor/mcp.json` → `mcpServers`                     | —                      |
+| gemini   | yes    | `.gemini/settings.json` → `mcpServers`                | `.gemini/skills/`      |
+| windsurf | yes    | — (user-level only)                                   | `.windsurf/skills/`    |
+| amp      | yes    | `.amp/settings.json` → `amp.mcpServers`               | `.agents/skills/`      |
 
 When a harness has no native skill concept, skills are skipped for it (with a
 warning) rather than translated. Codex/Cursor skill adapters are a later
 milestone.
+
+Windsurf's MCP config is user-level only
+(`~/.codeium/windsurf/mcp_config.json`); it has no project-level file, so
+`stack` plans no Windsurf MCP config and warns instead of writing one. Windsurf
+skills are project-level (`.windsurf/skills/`).
 
 **Always verify a harness's current on-disk format against its official docs
 before implementing or changing an adapter.** Formats drift.

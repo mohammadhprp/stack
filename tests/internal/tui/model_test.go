@@ -53,18 +53,28 @@ func TestNewStartsAtHarnessStage(t *testing.T) {
 	if m.Stage != tui.StageHarness {
 		t.Fatalf("stage: got %v, want harness", m.Stage)
 	}
-	if len(m.Harnesses) != 4 {
-		t.Fatalf("harnesses: got %d, want 4", len(m.Harnesses))
+	if len(m.Harnesses) != 7 {
+		t.Fatalf("harnesses: got %d, want 7", len(m.Harnesses))
 	}
 	if len(m.Skills) == 0 || len(m.MCPs) == 0 {
 		t.Fatal("catalog selections were not populated")
 	}
 }
 
-func TestCodexOnlySkipsSkillStage(t *testing.T) {
-	// harness.All() is sorted: claude, codex, cursor, opencode.
+func TestNewListsEveryHarness(t *testing.T) {
 	m := tui.New(loadCatalog(t), t.TempDir())
-	m, _ = send(m, "down", " ", "enter")
+	view := m.View()
+	for _, want := range []string{"Amp", "Gemini CLI", "Windsurf"} {
+		if !strings.Contains(view, want) {
+			t.Errorf("harness view missing %q:\n%s", want, view)
+		}
+	}
+}
+
+func TestCodexOnlySkipsSkillStage(t *testing.T) {
+	// harness.All() is sorted: amp, claude, codex, cursor, gemini, opencode, windsurf.
+	m := tui.New(loadCatalog(t), t.TempDir())
+	m, _ = send(m, "down", "down", " ", "enter")
 	if m.Stage != tui.StageMCPs {
 		t.Fatalf("stage: got %v, want MCPs (skills are not supported by codex)", m.Stage)
 	}
@@ -72,7 +82,7 @@ func TestCodexOnlySkipsSkillStage(t *testing.T) {
 
 func TestSkillsStageNotesSkippingHarness(t *testing.T) {
 	m := tui.New(loadCatalog(t), t.TempDir())
-	m, _ = send(m, " ", "down", " ", "enter")
+	m, _ = send(m, " ", "down", "down", " ", "enter")
 	if m.Stage != tui.StageSkills {
 		t.Fatalf("stage: got %v, want skills", m.Stage)
 	}
@@ -85,7 +95,7 @@ func TestFullFlowInstalls(t *testing.T) {
 	dir := t.TempDir()
 	m := tui.New(loadCatalog(t), dir)
 
-	m, _ = send(m, "down", "down", "down", " ") // select opencode
+	m, _ = send(m, "down", "down", "down", "down", "down", " ") // select opencode
 	m, _ = send(m, "enter")
 	if m.Stage != tui.StageSkills {
 		t.Fatalf("stage after harness: got %v, want skills", m.Stage)
@@ -150,7 +160,7 @@ func TestRunProgramHeadless(t *testing.T) {
 	go func() { done <- tui.RunProgram(p, &out) }()
 
 	keys := []string{
-		"\x1b[B", "\x1b[B", "\x1b[B", " ", "\r", // select opencode, next
+		"\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", " ", "\r", // select opencode, next
 		" ", "\r", // select first skill, next
 		" ", "\r", // select first MCP, next
 		"\r", // install

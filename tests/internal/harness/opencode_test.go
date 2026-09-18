@@ -11,7 +11,7 @@ import (
 
 func TestRegistry(t *testing.T) {
 	all := harness.All()
-	wantIDs := []string{"claude", "codex", "cursor", "opencode"}
+	wantIDs := []string{"amp", "claude", "codex", "cursor", "gemini", "opencode", "windsurf"}
 	if len(all) != len(wantIDs) {
 		t.Fatalf("registered adapters: got %d, want %d", len(all), len(wantIDs))
 	}
@@ -22,10 +22,13 @@ func TestRegistry(t *testing.T) {
 	}
 
 	capabilities := map[string]bool{
+		"amp":      true,
 		"claude":   true,
 		"codex":    false,
 		"cursor":   false,
+		"gemini":   true,
 		"opencode": true,
+		"windsurf": true,
 	}
 	for id, want := range capabilities {
 		adapter, ok := harness.Get(id)

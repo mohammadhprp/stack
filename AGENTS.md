@@ -4,8 +4,8 @@
 multiple coding-agent harnesses: **skills** and **MCP servers**. It is the
 multi-harness successor to the older OpenCode-only `system-prompt` CLI.
 
-It supports several harnesses at once (opencode, claude, codex, cursor) so one
-selection can be wired into every agent the developer uses.
+It supports several harnesses at once (opencode, claude, codex, cursor, gemini,
+windsurf, amp) so one selection can be wired into every agent the developer uses.
 
 ## Stack
 

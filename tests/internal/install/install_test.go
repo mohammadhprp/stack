@@ -266,6 +266,38 @@ func TestRunWarnsAndSkipsSkillsForUnsupportedHarness(t *testing.T) {
 	}
 }
 
+func TestRunWarnsForGlobalOnlyMCPHarness(t *testing.T) {
+	cat := loadCatalog(t)
+	mcp, _ := cat.MCP("playwright-mcp")
+	adapter, ok := harness.Get("windsurf")
+	if !ok {
+		t.Fatal("windsurf adapter not registered")
+	}
+	dir := t.TempDir()
+
+	report, err := install.Run(install.Request{
+		Target:   dir,
+		Adapters: []harness.Adapter{adapter},
+		MCPs:     []models.MCP{mcp},
+		Source:   cat.FS(),
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if len(report.Warnings) != 1 {
+		t.Fatalf("warnings: got %d, want 1 (%v)", len(report.Warnings), report.Warnings)
+	}
+	if len(report.Changes) != 0 {
+		t.Fatalf("windsurf planned files for a user-level-only MCP config: %v", report.Changes)
+	}
+	if _, err := os.Stat(filepath.Join(dir, ".devin")); !os.IsNotExist(err) {
+		t.Error(".devin must not be written for windsurf")
+	}
+	if _, err := os.Stat(filepath.Join(dir, ".windsurf")); !os.IsNotExist(err) {
+		t.Error("windsurf must not write a project-level MCP file")
+	}
+}
+
 func assertEmptyDir(t *testing.T, dir string) {
 	t.Helper()
 	entries, err := os.ReadDir(dir)

@@ -34,6 +34,13 @@ type Adapter interface {
 	PlanMCPs(target string, mcps []models.MCP, src fs.FS) ([]File, error)
 }
 
+// MCPConfigReporter is implemented by adapters whose MCP config cannot live
+// inside the target (for example a harness with only a user-level config file).
+// The install engine records the note as a warning and plans no MCP files.
+type MCPConfigReporter interface {
+	MCPConfigNote() string
+}
+
 var registry = map[string]Adapter{}
 
 func Register(a Adapter) {
