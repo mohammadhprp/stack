@@ -7,10 +7,10 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/mohammadhprp/stack/internal/catalog"
+	"github.com/mohammadhprp/stack/internal/install"
 )
 
-func Run(cat *catalog.Catalog, target string) error {
+func Run(cat *install.Catalog, target string) error {
 	return RunProgram(tea.NewProgram(New(cat, target), tea.WithAltScreen()), os.Stdout)
 }
 

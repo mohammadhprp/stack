@@ -8,7 +8,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mohammadhprp/stack/internal/catalog"
 	"github.com/mohammadhprp/stack/internal/harness"
 	"github.com/mohammadhprp/stack/internal/install"
 	"github.com/mohammadhprp/stack/internal/models"
@@ -24,7 +23,7 @@ type installOptions struct {
 	force     bool
 }
 
-func newInstallCommand(cat *catalog.Catalog) *cobra.Command {
+func newInstallCommand(cat *install.Catalog) *cobra.Command {
 	opts := &installOptions{}
 	cmd := &cobra.Command{
 		Use:   "install",
@@ -48,7 +47,7 @@ func newInstallCommand(cat *catalog.Catalog) *cobra.Command {
 	return cmd
 }
 
-func runInstall(cmd *cobra.Command, cat *catalog.Catalog, opts *installOptions) error {
+func runInstall(cmd *cobra.Command, cat *install.Catalog, opts *installOptions) error {
 	if strings.TrimSpace(opts.target) == "" {
 		return errors.New("--target must not be empty")
 	}
@@ -154,7 +153,7 @@ func availableHarnesses() string {
 	return strings.Join(ids, ", ")
 }
 
-func resolveSelection(cat *catalog.Catalog, opts *installOptions) ([]models.Skill, []models.MCP, error) {
+func resolveSelection(cat *install.Catalog, opts *installOptions) ([]models.Skill, []models.MCP, error) {
 	var skills []models.Skill
 	var mcps []models.MCP
 

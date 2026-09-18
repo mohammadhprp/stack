@@ -8,7 +8,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/mohammadhprp/stack/internal/catalog"
 	"github.com/mohammadhprp/stack/internal/harness"
 	"github.com/mohammadhprp/stack/internal/install"
 	"github.com/mohammadhprp/stack/internal/models"
@@ -32,7 +31,7 @@ type Option struct {
 }
 
 type Model struct {
-	catalog   *catalog.Catalog
+	catalog   *install.Catalog
 	target    string
 	Stage     Stage
 	Cursor    int
@@ -50,7 +49,7 @@ var (
 	styleError  = lipgloss.NewStyle().Foreground(lipgloss.Color("203"))
 )
 
-func New(cat *catalog.Catalog, target string) *Model {
+func New(cat *install.Catalog, target string) *Model {
 	m := Model{catalog: cat, target: target, Stage: StageHarness}
 	for _, a := range harness.All() {
 		caps := "mcp"

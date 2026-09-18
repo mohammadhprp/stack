@@ -1,6 +1,4 @@
-// Package catalog roots its filesystem at framework/, holding
-// "skills/<id>/SKILL.md" and "mcps/<slug>/spec.json" at the top level.
-package catalog
+package install
 
 import (
 	"encoding/json"

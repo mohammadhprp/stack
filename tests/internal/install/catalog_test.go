@@ -1,20 +1,8 @@
-package catalog_test
+package install_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/mohammadhprp/stack/internal/catalog"
 )
-
-func loadCatalog(t *testing.T) *catalog.Catalog {
-	t.Helper()
-	cat, err := catalog.Load(os.DirFS("../../../framework"))
-	if err != nil {
-		t.Fatalf("catalog.Load: %v", err)
-	}
-	return cat
-}
 
 func TestLoadCountsAndSorting(t *testing.T) {
 	cat := loadCatalog(t)

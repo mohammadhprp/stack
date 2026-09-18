@@ -26,7 +26,6 @@ before implementing or changing an adapter.** Formats drift.
 
 - `main.go` — entry point; builds the cobra root command.
 - `cmd/` — cobra commands: `root`, `install`, `list`, `doctor`, `version`.
-- `internal/catalog/` — loads embedded `framework/` content into the models.
 - `internal/models/` — domain types, one file per topic: `skill.go` (`Skill`),
   `mcp.go` (`MCPSpec`, `MCP`), `harness.go` (`Harness`).
 - `internal/config/` — harness-agnostic config-file I/O: `json.go`
@@ -35,7 +34,8 @@ before implementing or changing an adapter.** Formats drift.
 - `internal/harness/` — the adapter interface, the registry, and one file per
   harness (`opencode.go`, `claude.go`, `codex.go`, `cursor.go`); each adapter
   renders its entries and delegates the file merge to `internal/config`.
-- `internal/install/` — plan → diff → apply engine, lockfile, content hashing.
+- `internal/install/` — catalog loading (`catalog.go`), plan → diff → apply
+  engine, lockfile, content hashing.
 - `internal/tui/` — bubbletea wizard used by bare `stack`.
 - `tests/` — **every Go test lives here**, mirroring the source tree
   (`tests/internal/harness/opencode_test.go`, `tests/cmd/install_test.go`).
@@ -53,7 +53,7 @@ before implementing or changing an adapter.** Formats drift.
 `framework/` stays at the repository root as the editable content root.
 `go:embed` patterns cannot use `..`, so the embed lives in the root package
 (`main.go`: `//go:embed all:framework`) and the resulting `fs.FS`, sub-rooted at
-`framework/`, is passed down to `internal/catalog`. Mirrored tests load the same
+`framework/`, is passed down to `internal/install`. Mirrored tests load the same
 tree with `os.DirFS("../../../framework")`.
 
 ## Harness adapter contract

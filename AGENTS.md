@@ -32,7 +32,7 @@ selection can be wired into every agent the developer uses.
 
 ## Conventions
 
-- Package layout: `main.go`, `cmd/` (cobra), `internal/catalog`, `internal/model`,
+- Package layout: `main.go`, `cmd/` (cobra), `internal/models`, `internal/config`,
   `internal/harness`, `internal/install`, `internal/tui`.
 - Tests live under `tests/`, mirroring the source tree, as external `_test`
   packages; never place `_test.go` files in `internal/` or `cmd/`.

@@ -7,11 +7,11 @@ import (
 	"github.com/charmbracelet/x/term"
 	"github.com/spf13/cobra"
 
-	"github.com/mohammadhprp/stack/internal/catalog"
+	"github.com/mohammadhprp/stack/internal/install"
 	"github.com/mohammadhprp/stack/internal/tui"
 )
 
-func NewRootCommand(cat *catalog.Catalog) *cobra.Command {
+func NewRootCommand(cat *install.Catalog) *cobra.Command {
 	root := &cobra.Command{
 		Use:   "stack",
 		Short: "Install skills and MCP servers for coding-agent harnesses",

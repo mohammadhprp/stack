@@ -10,7 +10,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mohammadhprp/stack/internal/catalog"
 	"github.com/mohammadhprp/stack/internal/install"
 )
 
@@ -22,7 +21,7 @@ const (
 	statusMissing  doctorStatus = "missing"
 )
 
-func newDoctorCommand(cat *catalog.Catalog) *cobra.Command {
+func newDoctorCommand(cat *install.Catalog) *cobra.Command {
 	var target string
 	cmd := &cobra.Command{
 		Use:   "doctor",
@@ -36,7 +35,7 @@ func newDoctorCommand(cat *catalog.Catalog) *cobra.Command {
 	return cmd
 }
 
-func runDoctor(cmd *cobra.Command, cat *catalog.Catalog, target string) error {
+func runDoctor(cmd *cobra.Command, cat *install.Catalog, target string) error {
 	lock, err := install.LoadLock(target)
 	if errors.Is(err, install.ErrNoLock) {
 		fmt.Fprintf(cmd.OutOrStdout(), "No %s in %s; nothing installed.\n", install.LockFile, target)
@@ -80,7 +79,7 @@ func runDoctor(cmd *cobra.Command, cat *catalog.Catalog, target string) error {
 	return nil
 }
 
-func catalogHas(cat *catalog.Catalog, kind, id string) bool {
+func catalogHas(cat *install.Catalog, kind, id string) bool {
 	switch kind {
 	case install.KindSkill:
 		_, ok := cat.Skill(id)

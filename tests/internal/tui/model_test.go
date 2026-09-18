@@ -11,15 +11,15 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/mohammadhprp/stack/internal/catalog"
+	"github.com/mohammadhprp/stack/internal/install"
 	"github.com/mohammadhprp/stack/internal/tui"
 )
 
-func loadCatalog(t *testing.T) *catalog.Catalog {
+func loadCatalog(t *testing.T) *install.Catalog {
 	t.Helper()
-	cat, err := catalog.Load(os.DirFS("../../../framework"))
+	cat, err := install.Load(os.DirFS("../../../framework"))
 	if err != nil {
-		t.Fatalf("catalog.Load: %v", err)
+		t.Fatalf("install.Load: %v", err)
 	}
 	return cat
 }

@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/mohammadhprp/stack/cmd"
-	"github.com/mohammadhprp/stack/internal/catalog"
+	"github.com/mohammadhprp/stack/internal/install"
 )
 
 // go:embed patterns may not use "..", so the embed lives in the root package
@@ -28,7 +28,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	cat, err := catalog.Load(sub)
+	cat, err := install.Load(sub)
 	if err != nil {
 		return err
 	}

@@ -9,19 +9,19 @@ import (
 	"testing"
 
 	"github.com/mohammadhprp/stack/cmd"
-	"github.com/mohammadhprp/stack/internal/catalog"
+	"github.com/mohammadhprp/stack/internal/install"
 )
 
-func loadCatalog(t *testing.T) *catalog.Catalog {
+func loadCatalog(t *testing.T) *install.Catalog {
 	t.Helper()
-	cat, err := catalog.Load(os.DirFS("../../framework"))
+	cat, err := install.Load(os.DirFS("../../framework"))
 	if err != nil {
-		t.Fatalf("catalog.Load: %v", err)
+		t.Fatalf("install.Load: %v", err)
 	}
 	return cat
 }
 
-func execute(t *testing.T, cat *catalog.Catalog, args ...string) (string, string, error) {
+func execute(t *testing.T, cat *install.Catalog, args ...string) (string, string, error) {
 	t.Helper()
 	root := cmd.NewRootCommand(cat)
 	var out, errOut bytes.Buffer

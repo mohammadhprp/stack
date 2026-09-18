@@ -5,10 +5,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mohammadhprp/stack/internal/catalog"
+	"github.com/mohammadhprp/stack/internal/install"
 )
 
-func newListCommand(cat *catalog.Catalog) *cobra.Command {
+func newListCommand(cat *install.Catalog) *cobra.Command {
 	return &cobra.Command{
 		Use:     "list",
 		Short:   "List available skills and MCP servers",
