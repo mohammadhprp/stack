@@ -7,7 +7,7 @@ import (
 func TestLoadCountsAndSorting(t *testing.T) {
 	cat := loadCatalog(t)
 
-	if got, want := len(cat.Skills()), 38; got != want {
+	if got, want := len(cat.Skills()), 39; got != want {
 		t.Errorf("skills: got %d, want %d", got, want)
 	}
 	if got, want := len(cat.MCPs()), 5; got != want {

@@ -37,7 +37,7 @@ func TestListCommandShowsEveryEntry(t *testing.T) {
 	if err != nil {
 		t.Fatalf("list: %v", err)
 	}
-	for _, want := range []string{"Skills (38):", "MCP servers (5):", "playwright-mcp", "Playwright MCP"} {
+	for _, want := range []string{"Skills (39):", "MCP servers (5):", "playwright-mcp", "Playwright MCP"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("list output missing %q", want)
 		}
