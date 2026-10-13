@@ -59,6 +59,18 @@ before implementing or changing an adapter.** Formats drift.
 
 ## Embedded content
 
+The `walkthrough` skill produces `walkthrough.json`, `walkthrough.md`, and self-contained
+`walkthrough.html` under `~/.stack/<project-name>/walkthrough/` for human review
+of PRs, MRs, or local changes. The project name is the Git root basename, falling
+back to the working directory basename outside Git; explicit output paths are supported.
+Its bundled validator checks the content standard and changed-file coverage;
+the renderer generates matching Markdown and responsive, themed HTML from that
+JSON, escaping input and refusing existing outputs without `--force`. It groups related
+implementation, tests, config, and docs by purpose, categorizes each group, and
+uses plain-text Warning, Notice, and Human decision labels without emoji. It
+delivers all sections at once, does not publish or issue an approval verdict,
+and remains separate from the findings-oriented `review` skill.
+
 `framework/` stays at the repository root as the editable content root.
 `go:embed` patterns cannot use `..`, so the embed lives in the root package
 (`main.go`: `//go:embed all:framework`) and the resulting `fs.FS`, sub-rooted at
@@ -145,6 +157,9 @@ are pruned up to the target root; and removed items are dropped from the lock so
 a later install recreates them cleanly.
 
 ## Build & Test
+
+`go test ./...` also runs the walkthrough scripts' Python standard-library
+regression suite under `tests/framework/`; Python 3 and Git must be available.
 
 - `go build ./...`
 - `go test ./...`

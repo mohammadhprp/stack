@@ -46,9 +46,15 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [taste](./taste/SKILL.md) | Unified design-quality skill spanning anti-slop frontend design, image generation and image-to-code, brand kits, minimalist and industrial UI, redesigns, and Google Stitch design systems. | Landing pages, portfolios, redesigns, website/mobile/brand imagery, or any UI that must not look AI-generated. |
 | [tdd](./tdd/SKILL.md) | Drive clear bug fixes with focused failing regression tests. | Explicit TDD and regression-test workflows. |
 | [unslop](./unslop/SKILL.md) | Remove AI writing patterns and restore a natural human voice. | Editing prose to remove generic or artificial phrasing. |
+| [walkthrough](./walkthrough/SKILL.md) | Explain PRs, MRs, and local changes in grouped Markdown and HTML reports with warnings, notices, and human decisions. | Human reviewers who need a categorized reading guide with related changes together. |
 | [why](./why/SKILL.md) | Investigate the evidence and rationale behind code and design decisions. | Historical design-reasoning and motivation investigations. |
 
 ## How Skills Are Organized
+
+The `walkthrough` skill saves its JSON, Markdown, and styled HTML under
+`~/.stack/<project-name>/walkthrough/` by default. Its bundled scripts validate
+content and render both reports consistently; explicit user destinations are
+supported, and overwriting existing reports requires approval and `--force`.
 
 Each skill entry follows this structure:
 

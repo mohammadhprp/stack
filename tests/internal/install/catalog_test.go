@@ -7,7 +7,7 @@ import (
 func TestLoadCountsAndSorting(t *testing.T) {
 	cat := loadCatalog(t)
 
-	if got, want := len(cat.Skills()), 39; got != want {
+	if got, want := len(cat.Skills()), 40; got != want {
 		t.Errorf("skills: got %d, want %d", got, want)
 	}
 	if got, want := len(cat.MCPs()), 5; got != want {
@@ -43,6 +43,26 @@ func TestLoadSkillFrontmatterAndFiles(t *testing.T) {
 	}
 	if len(want) != 0 {
 		t.Errorf("skill files missing: %v", want)
+	}
+}
+
+func TestLoadWalkthroughSkill(t *testing.T) {
+	skill, ok := loadCatalog(t).Skill("walkthrough")
+	if !ok {
+		t.Fatal("skill walkthrough not found")
+	}
+	if skill.Name != "walkthrough" || skill.Description == "" {
+		t.Fatalf("unexpected walkthrough metadata: %+v", skill)
+	}
+	want := map[string]bool{
+		"SKILL.md": true, "examples.md": true, "references/schema.md": true,
+		"scripts/validate_walkthrough_json.py": true, "scripts/render_walkthrough.py": true,
+	}
+	for _, file := range skill.Files {
+		delete(want, file)
+	}
+	if len(want) != 0 {
+		t.Errorf("walkthrough files missing: %v", want)
 	}
 }
 
