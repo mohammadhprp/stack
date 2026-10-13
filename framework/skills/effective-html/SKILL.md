@@ -5,6 +5,10 @@ description: Create or redesign self-contained single-file HTML artifacts, inclu
 
 # Effective HTML
 
+## Generated files
+
+Save generated artifacts in `~/.stack/<project-name>/effective-html/` (`OUTPUT_DIR`). Use the project root's basename (Git root when available, otherwise the working directory); ask if no project is identifiable. Expand `~`, quote paths, and create the directory only when needed. This location overrides artifact paths in references and examples. Keep requested source, tests, configuration, and project-documentation edits in the project; chat-only output needs no file. Honor explicit user destinations, preserve existing files unless overwrite is approved, and return absolute artifact paths.
+
 Build one self-contained HTML file that makes the subject clearer, easier to use, or easier to understand. This skill combines creative direction with specialized workflows for structure, fidelity, planning, and visual explanation. The standard is consistent care, not a consistent look.
 
 ## Route the request first
@@ -58,6 +62,6 @@ Read every reference that materially applies, then give the artifact one coheren
 
 ## Verify and hand off
 
-Write the file to the requested location, or choose a clear filename in the current workspace. When browser tooling is available, inspect wide and narrow viewports, exercise controls, check the console, and fix clipping, overlap, illegible text, broken states, and accidental overflow.
+Write the file to the requested location, or choose a clear filename in `OUTPUT_DIR`. Save verification screenshots there too. When browser tooling is available, inspect wide and narrow viewports, exercise controls, check the console, and fix clipping, overlap, illegible text, broken states, and accidental overflow.
 
 Before delivery, check that the visual direction belongs to the subject rather than a generic neighboring topic. Return the absolute path and a short description of the artifact's visual and interaction choices, including important assumptions and deliberately omitted behavior.

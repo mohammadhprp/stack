@@ -9,6 +9,10 @@ metadata:
 
 # Tech Lead's Club - Spec-Driven Development
 
+## Generated files
+
+Save generated artifacts in `~/.stack/<project-name>/tlc-spec-driven/` (`OUTPUT_DIR`). Use the project root's basename (Git root when available, otherwise the working directory); ask if no project is identifiable. Expand `~`, quote paths, and create the directory only when needed. This location overrides artifact paths in references and examples. Keep requested source, tests, configuration, and project-documentation edits in the project; chat-only output needs no file. Honor explicit user destinations, preserve existing files unless overwrite is approved, and return absolute artifact paths.
+
 Plan and implement features with precision. Granular tasks. Clear dependencies. Right tools. Zero ceremony.
 
 ```
@@ -24,13 +28,13 @@ Plan and implement features with precision. Granular tasks. Clear dependencies. 
 
 **Loading this skill's files.** Reference files live under `references/` in this skill's own directory (where this `SKILL.md` resides). Resolve them relative to the skill directory - never the workspace root - and load them through the active skill by name; never assume a fixed install path. When a step tells you to read a reference, **read it completely (to EOF)** before acting - never act on a partial/truncated read.
 
-**Running this skill's scripts.** Every `scripts/*.py` shipped with this skill lives under that same skill directory. Resolve the skill directory first, then invoke `python3 <skill-dir>/scripts/<name>.py ...`. Never run `python3 scripts/...` from the consuming project root - that looks for a project-local `scripts/` tree that is not this skill. Project data under `.specs/` is still read/written relative to the project root (pass `--root` when the cwd is elsewhere). Below, `<skill-dir>` means the directory that contains this `SKILL.md`.
+**Running this skill's scripts.** Every `scripts/*.py` shipped with this skill lives under that same skill directory. Resolve the skill directory first, then invoke `python3 <skill-dir>/scripts/<name>.py ...`. Never run `python3 scripts/...` from the consuming project root - that looks for a project-local `scripts/` tree that is not this skill. All `.specs/` paths below and in references are relative to `OUTPUT_DIR`, not the source repository. For `validate_spec.py`, `validate_tasks.py`, `validate_state.py`, and `lessons.py`, always pass `--root "$OUTPUT_DIR"` (before the subcommand for `lessons.py`). Run Git, implementation, tests, and source inspection in the source repository instead. Below, `<skill-dir>` means the directory that contains this `SKILL.md`. Leave legacy repository-local `.specs/` files untouched unless migration is requested.
 
 **Execution contract - every task, non-negotiable (holds even if you do not open the reference files):**
 
 1. Tests derive from the spec's acceptance criteria and assert spec-defined outcomes - they never mirror the implementation.
 2. The gate must pass (tests pass) before a task is done - the test runner decides, not self-assessment.
-3. One atomic commit per task. Mark the task complete in `tasks.md` (and update spec traceability when used) **before** that commit, and include those updates in the same commit. Never batch tasks; never weaken, skip, or delete tests to make them pass.
+3. One atomic commit per task. Mark the task complete in the external `tasks.md` (and update spec traceability when used) **before** that commit, then record the commit hash in the task after committing source and tests. Do not stage files from `OUTPUT_DIR`. Never batch tasks; never weaken, skip, or delete tests to make them pass.
 4. After the LAST task, a fresh **Verifier always runs automatically** (author ≠ verifier) - spec-anchored outcome check + discrimination sensor. It is never optional and never prompted. See Sub-Agent Delegation.
 5. **Blast radius:** approving a spec or tasks authorizes local implementation and local commits only. `git push`, force-push, deploy, production DB changes, and other remote / externally visible / destructive operations require an explicit go-ahead for that action.
 
@@ -66,10 +70,10 @@ A non-zero exit means STOP and fix before proceeding. Skip a script only when no
 
 **Safety valve:** Even when Tasks is skipped, Execute ALWAYS starts by listing atomic steps inline (see [implement.md](references/implement.md)). If that listing reveals >5 steps or complex dependencies, STOP and create a formal `tasks.md` - the Tasks phase was wrongly skipped.
 
-## .specs Structure
+## .specs Structure (under OUTPUT_DIR)
 
 ```
-.specs/
+$OUTPUT_DIR/.specs/
 ├── STATE.md            # Project memory: Decisions log (AD-NNN) + Handoff snapshot
 ├── LESSONS.md          # Self-improving lessons playbook (rendered by scripts/lessons.py - do not hand-edit)
 ├── lessons.json        # Canonical lessons state (machine-owned)

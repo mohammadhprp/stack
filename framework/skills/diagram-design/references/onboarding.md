@@ -1,6 +1,6 @@
 # Onboarding — generate your skin from a design source
 
-**Goal:** point the skill at a design source — a website, an installed skill, or a local folder — and have it extract the palette + typography, then rewrite `style-guide.md` so every future diagram inherits that skin.
+**Goal:** point the skill at a design source — a website, an installed skill, or a local folder — and have it extract the palette + typography, then write `$OUTPUT_DIR/style-guide.md` so every future diagram for this project inherits that skin. Read the shipped guide as the baseline; do not overwrite installed references.
 
 Takes about 60 seconds.
 
@@ -47,7 +47,7 @@ future diagrams use your tokens
 Use `agent-browser` (preferred) or a plain `fetch`. If the site has multiple pages worth sampling (landing + blog + product), fetch 2–3 and merge the palette signals.
 
 ```bash
-agent-browser navigate https://example.com --screenshot out.png --html out.html
+agent-browser navigate https://example.com --screenshot "$OUTPUT_DIR/out.png" --html "$OUTPUT_DIR/out.html"
 ```
 
 ---
@@ -124,7 +124,7 @@ Also regenerate the dark variant via the inversion rule (`rgba(11,13,11, X)` →
 
 ## Step 5 — apply
 
-Write the new tokens to `style-guide.md`. Suggest running the `/regenerate-examples` flow (if it exists) or rebuilding one example to verify the new skin reads cleanly.
+Write the new tokens to `$OUTPUT_DIR/style-guide.md`. Rebuild one example in `OUTPUT_DIR` to verify the new skin reads cleanly without changing shipped assets.
 
 After onboarding, the user should:
 

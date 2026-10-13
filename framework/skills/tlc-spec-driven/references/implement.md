@@ -214,12 +214,12 @@ After the gate check passes:
 
    Add the two mapping tables and a one-line adequacy verdict to the Execution Template's Post-Gate section.
 
-### 7. Status + Atomic Commit (same commit)
+### 7. External Status + Atomic Source Commit
 
-After the gate is green, close the task record **before** creating the commit, then commit code and status together. Never leave `tasks.md` still open after a successful task commit - a crash between those steps is how resume redoes finished work.
+After the gate is green, close the external task record **before** creating the commit, then commit source and tests. Record the resulting commit hash in the task. Keep generated `.specs/` files under `OUTPUT_DIR`, outside Git; reconcile their status against source history on resume.
 
 1. Mark the task complete in `tasks.md`. Update requirement traceability in `spec.md` if requirement IDs are used.
-2. Create **one** atomic commit that includes the implementation, its tests, and those status/traceability updates.
+2. Create **one** atomic commit that includes the implementation and its tests, not the external status/traceability files. Record its hash in the task.
 
 Each task gets its own commit immediately after verification. Never batch multiple tasks into one commit.
 
@@ -412,7 +412,7 @@ If you are unsure whether more tasks remain, check `tasks.md`: if every task is 
 - **One task at a time** - Focus prevents errors
 - **Tools matter** - Wrong MCP = wrong approach
 - **Reuses save tokens** - Copy patterns, don't reinvent
-- **Status then commit, same commit** - Mark `tasks.md` complete before the atomic commit and include that update in it
+- **Status then source commit** - Mark external `tasks.md` complete before the atomic source commit, then record its hash; do not stage generated artifacts
 - **Stay surgical** - Touch only what's necessary
 - **Commit per task** - Clean git history enables bisect and rollback
 - **Never "while I'm here"** - Scope creep during implementation is the #1 quality killer

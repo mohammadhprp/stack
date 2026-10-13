@@ -8,6 +8,10 @@ metadata:
 
 # Diagram Design
 
+## Generated files
+
+Save generated artifacts in `~/.stack/<project-name>/diagram-design/` (`OUTPUT_DIR`). Use the project root's basename (Git root when available, otherwise the working directory); ask if no project is identifiable. Expand `~`, quote paths, and create the directory only when needed. This location overrides artifact paths in references and examples. Keep requested source, tests, configuration, and project-documentation edits in the project; chat-only output needs no file. Honor explicit user destinations, preserve existing files unless overwrite is approved, and return absolute artifact paths.
+
 Create visual diagrams as self-contained HTML files with inline SVG and CSS, following an opinionated editorial design system.
 
 Twenty-seven diagram types. One shared design system, complexity budget, and taste gate. Type-specific conventions live in `references/` and are loaded only when you pick a type.
@@ -18,7 +22,7 @@ Twenty-seven diagram types. One shared design system, complexity budget, and tas
 
 **Before generating your first diagram in a new project, verify the style guide has been customized.**
 
-Open [`references/style-guide.md`](references/style-guide.md) and check the default tokens. If they're still the shipped defaults (paper `#faf7f2`, ink `#1c1917`, accent `#b5523a` rust), **pause and ask the user**:
+Use `$OUTPUT_DIR/style-guide.md` when present, otherwise read the shipped [`references/style-guide.md`](references/style-guide.md). Save project-specific customization to `$OUTPUT_DIR/style-guide.md`, not the installed skill. If the tokens are still the shipped defaults (paper `#faf7f2`, ink `#1c1917`, accent `#b5523a` rust), **pause and ask the user**:
 
 > *"This is your first Schematic in this project. The style guide is still at the default (neutral stone + rust). Do you want to customize it to match your brand first? Options: (a) pull from your website URL, (b) extract from an installed skill, (c) extract from a local folder / design-system directory, (d) paste tokens manually, (e) proceed with the default for now."*
 
@@ -140,7 +144,7 @@ Type-specific anti-patterns live in each `references/type-*.md`.
 
 ## 5. Design System
 
-**The design system is skinnable.** All colors, typography, and tokens live in a single source of truth — [`references/style-guide.md`](references/style-guide.md). This file describes semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). The default skin is a cool editorial palette (white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted, silver hairlines); to apply your own brand, either edit `style-guide.md` directly or run the URL-based flow described in [`references/onboarding.md`](references/onboarding.md).
+**The design system is skinnable.** All colors, typography, and tokens come from `$OUTPUT_DIR/style-guide.md` when customized, otherwise the shipped [`references/style-guide.md`](references/style-guide.md). This file describes semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). The default skin is a cool editorial palette (white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted, silver hairlines); to apply your own brand, customize the output-directory copy or run the URL-based flow described in [`references/onboarding.md`](references/onboarding.md).
 
 > When specs below or in type references mention "ink", "accent", "muted", etc., look up the current hex value in `style-guide.md`.
 
@@ -472,7 +476,7 @@ Every diagram ships in three variants (see `assets/`):
 
 ## 11. Output
 
-Always produce a single self-contained `.html` file:
+Always produce a single self-contained `.html` file in `OUTPUT_DIR`:
 
 - Embedded CSS (no external except Google Fonts)
 - Inline SVG (no external images)

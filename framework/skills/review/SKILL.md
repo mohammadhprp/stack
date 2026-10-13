@@ -5,7 +5,11 @@ description: Review local Git changes, GitHub pull requests, or GitLab merge req
 
 # Review Skill
 
-Review the requested change and write the result to `review.json`. The review is
+## Generated files
+
+Save generated artifacts in `~/.stack/<project-name>/review/` (`OUTPUT_DIR`). Use the project root's basename (Git root when available, otherwise the working directory); ask if no project is identifiable. Expand `~`, quote paths, and create the directory only when needed. This location overrides artifact paths in references and examples. Keep requested source, tests, configuration, and project-documentation edits in the project; chat-only output needs no file. Honor explicit user destinations, preserve existing files unless overwrite is approved, and return absolute artifact paths.
+
+Review the requested change and write the result to `$OUTPUT_DIR/review.json`. The review is
 read-only: do not approve, request changes, comment, merge, push, or otherwise
 modify remote repositories.
 
@@ -74,7 +78,7 @@ Keep comments concise, actionable, and limited to changed lines. Use a
 
 ## Output contract
 
-Write exactly one `review.json` with this shape:
+Write exactly one `$OUTPUT_DIR/review.json` with this shape:
 
 ```json
 {
@@ -98,7 +102,7 @@ Before finishing, validate JSON and, when an annotated diff is available, run:
 
 ```sh
 python3 .agents/skills/review/scripts/validate_review_json.py \
-  --review-json review.json --diff pr_diff.txt
+  --review-json "$OUTPUT_DIR/review.json" --diff "$OUTPUT_DIR/pr_diff.txt"
 ```
 
 If that path is unavailable, run the validator from this skill's `scripts/`
@@ -106,8 +110,11 @@ directory. Then render the review for human inspection:
 
 ```sh
 python3 .agents/skills/review/scripts/render_review.py \
-  --review-json review.json --output review.html
+  --review-json "$OUTPUT_DIR/review.json" --output "$OUTPUT_DIR/review.html"
 ```
 
 The renderer creates a self-contained Excalidraw-inspired dark HTML report.
-The final artifacts are `review.json` and `review.html`.
+Save any captured diff to `$OUTPUT_DIR/pr_diff.txt` too. Set `OUTPUT_DIR` to the
+expanded absolute skill output directory before these commands; create it before
+writing and check existing outputs before invoking the renderer. The final
+artifacts are `$OUTPUT_DIR/review.json` and `$OUTPUT_DIR/review.html`.

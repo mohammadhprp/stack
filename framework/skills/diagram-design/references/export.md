@@ -1,6 +1,7 @@
 # Export to PNG / SVG
 
-Convert a generated diagram HTML file into a portable `.svg` and/or `.png` next to it. **Manual only — never run unprompted.**
+Convert a generated diagram HTML file into a portable `.svg` and/or `.png` under
+`~/.stack/<project-name>/diagram-design/` (`OUTPUT_DIR`). **Manual only — never run unprompted.**
 
 ## Trigger
 
@@ -37,7 +38,7 @@ If the user explicitly asks for "a screenshot of the whole page including the ca
      ```
      If the SVG already contains a `<defs>` block, **merge** the `<style>` into it (don't add a second `<defs>`).
 4. Prepend `<?xml version="1.0" encoding="UTF-8"?>\n` so the file is well-formed XML.
-5. Write to `<basename>.svg` next to the source (e.g. `example-architecture.html` → `example-architecture.svg`). Honour an explicit output path if the user provides one.
+5. Write to `$OUTPUT_DIR/<basename>.svg` (e.g. `example-architecture.html` → `$OUTPUT_DIR/example-architecture.svg`), even if the source is elsewhere. Honour an explicit output path if the user provides one.
 
 ### Caveat to surface to the user
 
@@ -68,7 +69,8 @@ Don't auto-install. The user asked for one feature, not a system change.
 
 ### Rasterize
 
-Write the snippet below to a temp file and run it with `python <tmp.py> <src.html> <out.png>`:
+Write the snippet below to `$OUTPUT_DIR/export_png.py` and run it with
+`python "$OUTPUT_DIR/export_png.py" <src.html> "$OUTPUT_DIR/<basename>.png"`:
 
 ```python
 from playwright.sync_api import sync_playwright
@@ -90,7 +92,7 @@ Default `device_scale_factor=2` for crisp output. Accept `1` for compact assets 
 
 ### Output naming
 
-`example-architecture.html` → `example-architecture.png`, written next to the source. Honour explicit user-provided paths.
+`example-architecture.html` → `$OUTPUT_DIR/example-architecture.png`. Honour explicit user-provided paths.
 
 ## Edge cases
 

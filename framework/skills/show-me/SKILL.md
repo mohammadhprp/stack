@@ -5,6 +5,10 @@ description: Help the user understand the current topic visually with concise di
 
 Help the user understand the current topic of conversation visually. Skip the preamble and keep prose brief. Pick the smallest view that makes the key point clear.
 
+## Generated files
+
+Save generated artifacts in `~/.stack/<project-name>/show-me/` (`OUTPUT_DIR`). Use the project root's basename (Git root when available, otherwise the working directory); ask if no project is identifiable. Expand `~`, quote paths, and create the directory only when needed. This location overrides artifact paths in references and examples. Keep requested source, tests, configuration, and project-documentation edits in the project; chat-only output needs no file. Honor explicit user destinations, preserve existing files unless overwrite is approved, and return absolute artifact paths.
+
 - Show logic or an algorithm as pseudocode:
 
 ```text
@@ -117,7 +121,7 @@ function expandSkill(command: string): string {
 - For a visual UI, layout, state comparison, or concept too dense for Mermaid, write one focused HTML file — a diagram, an infographic, or a short slide deck, whichever fits the point. Match the product's colors, type, spacing, and components; use real labels and data; support desktop and mobile. Then open it for the user:
 
 ```
-Bash(open path/to/show-me-{description}.html)
+Bash(open "$OUTPUT_DIR/show-me-{description}.html")
 ```
 
 ### guidance

@@ -20,7 +20,7 @@
 
 `confirmed` lessons are the playbook the agent loads. `candidate` lessons are tracked but NOT trusted until corroborated across `promote_threshold` distinct features (default 2). `quarantined` lessons failed when applied and are ignored.
 
-**Invocation:** resolve `<skill-dir>` as the directory that contains this skill's `SKILL.md`, then run `python3 <skill-dir>/scripts/lessons.py ...`. The store under `.specs/` is still relative to the project root (use `--root` when cwd differs).
+**Invocation:** resolve `<skill-dir>` as the directory that contains this skill's `SKILL.md`, then run `python3 <skill-dir>/scripts/lessons.py --root "$OUTPUT_DIR" ...`. The store under `.specs/` is relative to `OUTPUT_DIR`, not the source repository; put `--root` before the subcommand in every example below.
 
 ---
 
