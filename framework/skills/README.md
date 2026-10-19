@@ -25,6 +25,7 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [grilling](./grilling/SKILL.md) | Grill plans and decisions relentlessly through design-tree rounds until shared understanding is reached. | Stress-testing ideas, surfacing hidden assumptions, and scoping plans before implementation. |
 | [glab](./glab/SKILL.md) | Use the GitLab CLI (glab) to manage merge requests, issues, pipelines, and repositories from the command line. | Any project hosted on GitLab (SaaS or self-hosted). |
 | [humanizer](./humanizer/SKILL.md) | Remove signs of AI-generated writing from text — inflated importance, promotional language, em dash overuse, rule of three, AI vocabulary, and filler phrases. | Editing or reviewing prose to make it sound more natural and human-written. |
+| [implement](./implement/SKILL.md) | Implement a linked Notion task on a task-specific Git branch with focused changes and verification. | Starting or resuming implementation of a Notion task, including tasks prepared by spec. |
 | [how](./how/SKILL.md) | Explain subsystem architecture, runtime flow, ownership, and layering. | Code walkthroughs and architecture questions. |
 | [jira-cli](./jira-cli/SKILL.md) | Use the Jira CLI (jira) to manage issues, sprints, epics, comments, transitions, and worklogs from the command line. | Any project using Jira (Cloud or self-hosted) for issue tracking. |
 | [commit](./commit/SKILL.md) | Create atomic Git commits with conventional messages. | Committing reviewed changes. |
@@ -40,6 +41,7 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [sentry](./sentry/SKILL.md) | Inspect Sentry issues, summarize production errors, and pull health data via the Sentry API (read-only). | Checking production errors, summarizing recent crashes, or pulling a production error report. |
 | [show-me](./show-me/SKILL.md) | Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts. | Explaining logic, control flow, UI structure, file responsibility, or data flow with the smallest useful visual. |
 | [skill-creator](./skill-creator/SKILL.md) | Create new skills, modify and improve existing skills, and measure skill performance. | Designing new skills, optimizing existing skills, or running evals. |
+| [spec](./spec/SKILL.md) | Plan assigned active-sprint Jira tasks and synchronize implementation briefs and sprint plans to Notion. | Personal sprint planning and repeatable Jira-to-Notion synchronization without changing Jira. |
 | [tdd](./tdd/SKILL.md) | Drive clear bug fixes with focused failing regression tests. | Explicit TDD and regression-test workflows. |
 | [unslop](./unslop/SKILL.md) | Remove AI writing patterns and restore a natural human voice. | Editing prose to remove generic or artificial phrasing. |
 | [walkthrough](./walkthrough/SKILL.md) | Explain PRs, MRs, and local changes in grouped Markdown and HTML reports with warnings, notices, and human decisions. | Human reviewers who need a categorized reading guide with related changes together. |

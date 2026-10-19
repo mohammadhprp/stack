@@ -59,6 +59,15 @@ before implementing or changing an adapter.** Formats drift.
 
 ## Embedded content
 
+The `spec` skill plans the user's assigned active-sprint Jira tasks and synchronizes
+managed briefs and sprint plans to Notion through `jira` and `ntn`. Its references
+document environment-only project mappings and CLI usage; sync state tracks
+identities and last-written values to preserve manual edits. Jira stays read-only.
+The companion `implement` skill reads a linked Notion task, confirms repository
+scope, creates a task branch, and implements and verifies focused changes without
+updating service records or committing unless separately requested. Both include
+usage examples and appear in the skill catalog.
+
 The `walkthrough` skill produces `walkthrough.json`, `walkthrough.md`, and self-contained
 `walkthrough.html` under `~/.stack/<project-name>/walkthrough/` for human review
 of PRs, MRs, or local changes. The project name is the Git root basename, falling
