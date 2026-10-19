@@ -185,6 +185,9 @@ Release process: tag `vX.Y.Z`, push the tag, the release workflow runs
 goreleaser, then the tag's assets become installable via
 `https://github.com/mohammadhprp/stack/releases/latest/download/install.sh`.
 
+`v0.1.5` (2026-10-19) adds the `spec` and `implement` skills and removes
+`taste`, `tlc-spec-driven`, `improve`, and `effective-html` from the catalog.
+
 ## Engineering conduct
 
 1. Safety before speed — never overwrite a user-modified file without `--force`.
