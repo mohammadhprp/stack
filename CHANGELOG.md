@@ -4,6 +4,10 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+### Added
+
+- Added GitLab CLI (`glab`) support alongside GitHub CLI (`gh`) in the `before-and-after` and `new-feature` skills.
+
 ## [v0.1.5] - 2026-10-19
 
 ### Added
