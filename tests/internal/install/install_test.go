@@ -146,6 +146,11 @@ func TestRunRefusesUserModifiedFileThenForce(t *testing.T) {
 	}
 
 	dest := filepath.Join(dir, ".opencode", "skills", "commit", "SKILL.md")
+	lockPath := filepath.Join(dir, install.LockFile)
+	lockBefore, err := os.ReadFile(lockPath)
+	if err != nil {
+		t.Fatal(err)
+	}
 	original, err := os.ReadFile(dest)
 	if err != nil {
 		t.Fatal(err)
@@ -160,12 +165,21 @@ func TestRunRefusesUserModifiedFileThenForce(t *testing.T) {
 	}
 	var sawConflict bool
 	for _, change := range report.Changes {
-		if change.Action == install.ActionConflict {
+		if change.Action == install.ActionConflict && change.Path == ".opencode/skills/commit/SKILL.md" {
 			sawConflict = true
 		}
 	}
 	if !sawConflict {
 		t.Error("report did not include a conflict change")
+	}
+	for path, want := range map[string]string{dest: "user edit\n", lockPath: string(lockBefore)} {
+		got, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(got) != want {
+			t.Errorf("refused install modified %s", path)
+		}
 	}
 
 	req.Force = true
@@ -178,6 +192,13 @@ func TestRunRefusesUserModifiedFileThenForce(t *testing.T) {
 	}
 	if string(restored) != string(original) {
 		t.Error("forced run did not restore the managed content")
+	}
+	lock, err := install.LoadLock(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := lock.Validate(dir); err != nil {
+		t.Fatalf("Validate after forced install: %v", err)
 	}
 }
 
@@ -228,6 +249,7 @@ func TestRunMergesExistingConfigPreservingKeys(t *testing.T) {
 // testAdapter exercises engine behaviour without a real harness format.
 type testAdapter struct {
 	supportsSkills bool
+	skillPlans     *int
 }
 
 func (a testAdapter) ID() string           { return "test" }
@@ -235,6 +257,9 @@ func (a testAdapter) Name() string         { return "Test Harness" }
 func (a testAdapter) SupportsSkills() bool { return a.supportsSkills }
 
 func (a testAdapter) PlanSkills(string, []models.Skill, fs.FS) ([]harness.File, error) {
+	if a.skillPlans != nil {
+		*a.skillPlans++
+	}
 	return nil, nil
 }
 
@@ -247,10 +272,11 @@ func TestRunWarnsAndSkipsSkillsForUnsupportedHarness(t *testing.T) {
 	skill, _ := cat.Skill("commit")
 	mcp, _ := cat.MCP("playwright-mcp")
 	dir := t.TempDir()
+	skillPlans := 0
 
 	report, err := install.Run(install.Request{
 		Target:   dir,
-		Adapters: []harness.Adapter{testAdapter{supportsSkills: false}},
+		Adapters: []harness.Adapter{testAdapter{supportsSkills: false, skillPlans: &skillPlans}},
 		Skills:   []models.Skill{skill},
 		MCPs:     []models.MCP{mcp},
 		Source:   cat.FS(),
@@ -261,8 +287,11 @@ func TestRunWarnsAndSkipsSkillsForUnsupportedHarness(t *testing.T) {
 	if len(report.Warnings) != 1 {
 		t.Fatalf("warnings: got %d, want 1", len(report.Warnings))
 	}
-	if _, err := os.Stat(filepath.Join(dir, ".opencode")); !os.IsNotExist(err) {
-		t.Error("skills were written for a harness that does not support them")
+	if skillPlans != 0 {
+		t.Errorf("PlanSkills called %d times for an unsupported harness", skillPlans)
+	}
+	if got, err := os.ReadFile(filepath.Join(dir, "test.json")); err != nil || string(got) != "{}\n" {
+		t.Errorf("MCP config: got %q, err %v", got, err)
 	}
 }
 

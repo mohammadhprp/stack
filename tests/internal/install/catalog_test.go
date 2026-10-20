@@ -1,23 +1,105 @@
 package install_test
 
 import (
+	"io/fs"
+	"os"
+	"reflect"
+	"strings"
 	"testing"
+	"testing/fstest"
+
+	"github.com/mohammadhprp/stack/internal/install"
 )
 
 func TestLoadCountsAndSorting(t *testing.T) {
 	cat := loadCatalog(t)
 
-	if got, want := len(cat.Skills()), 38; got != want {
-		t.Errorf("skills: got %d, want %d", got, want)
-	}
-	if got, want := len(cat.MCPs()), 5; got != want {
-		t.Errorf("mcps: got %d, want %d", got, want)
-	}
-
-	for i := 1; i < len(cat.Skills()); i++ {
-		if cat.Skills()[i-1].ID > cat.Skills()[i].ID {
-			t.Fatalf("skills are not sorted at %d: %q > %q", i, cat.Skills()[i-1].ID, cat.Skills()[i].ID)
+	for _, category := range []string{"skills", "mcps"} {
+		entries, err := fs.ReadDir(os.DirFS("../../../framework"), category)
+		if err != nil {
+			t.Fatal(err)
 		}
+		var want, got []string
+		for _, entry := range entries {
+			if entry.IsDir() {
+				want = append(want, entry.Name())
+			}
+		}
+		if len(want) == 0 {
+			t.Fatalf("%s source catalog is empty", category)
+		}
+		if category == "skills" {
+			for _, skill := range cat.Skills() {
+				got = append(got, skill.ID)
+			}
+		} else {
+			for _, mcp := range cat.MCPs() {
+				got = append(got, mcp.Slug)
+			}
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("%s IDs: got %v, want %v", category, got, want)
+		}
+	}
+}
+
+func TestLoadRejectsMalformedCatalog(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		path string
+		data string
+		want string
+	}{
+		{"missing skill file", "skills/broken/notes.md", "notes", `skill "broken": read SKILL.md`},
+		{"missing frontmatter", "skills/broken/SKILL.md", "body", "missing YAML frontmatter"},
+		{"unterminated frontmatter", "skills/broken/SKILL.md", "---\nname: broken\n", "unterminated YAML frontmatter"},
+		{"invalid yaml", "skills/broken/SKILL.md", "---\nname: [\n---\n", "parse frontmatter"},
+		{"missing spec", "mcps/broken/notes.md", "notes", `mcp "broken": read spec.json`},
+		{"invalid json", "mcps/broken/spec.json", "{", "parse spec.json"},
+		{"invalid mcp type", "mcps/broken/spec.json", `{"id":"broken","type":"other"}`, `invalid type "other"`},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			files := fstest.MapFS{
+				"skills": {Mode: fs.ModeDir},
+				"mcps":   {Mode: fs.ModeDir},
+				tc.path:  {Data: []byte(tc.data)},
+			}
+			_, err := install.Load(files)
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("Load error: got %v, want containing %q", err, tc.want)
+			}
+		})
+	}
+}
+
+func TestLoadNormalizesMetadataAndCollectsNestedFiles(t *testing.T) {
+	files := fstest.MapFS{
+		"skills/example/SKILL.md":            {Data: []byte("---\r\ndescription: >\r\n  First line\r\n  second line\r\n---\r\nBody\r\n")},
+		"skills/example/references/guide.md": {Data: []byte("guide")},
+		"skills/README.md":                   {Data: []byte("not a skill")},
+		"mcps/README.md":                     {Data: []byte("not a server")},
+		"mcps/example-mcp/spec.json":         {Data: []byte(`{"id":"server","name":"Example MCP","type":"remote","url":"https://example.com/mcp"}`)},
+	}
+	cat, err := install.Load(files)
+	if err != nil {
+		t.Fatal(err)
+	}
+	skill, ok := cat.Skill("example")
+	if !ok || len(cat.Skills()) != 1 || skill.Name != "example" || skill.Description != "First line second line" {
+		t.Fatalf("unexpected skill metadata: %+v (found=%v)", skill, ok)
+	}
+	if want := []string{"SKILL.md", "references/guide.md"}; !reflect.DeepEqual(skill.Files, want) {
+		t.Errorf("files: got %v, want %v", skill.Files, want)
+	}
+	mcp, ok := cat.MCP("example-mcp")
+	if !ok || len(cat.MCPs()) != 1 || mcp.ID != "server" || mcp.Description != "Example MCP" {
+		t.Fatalf("unexpected MCP metadata: %+v (found=%v)", mcp, ok)
+	}
+	if _, ok := cat.MCP("server"); ok {
+		t.Error("MCP lookup must use the catalog slug, not the server key")
+	}
+	if _, ok := cat.Skill("missing"); ok {
+		t.Error("missing skill reported as found")
 	}
 }
 

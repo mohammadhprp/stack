@@ -3,6 +3,7 @@ package cmd_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -33,14 +34,59 @@ func execute(t *testing.T, cat *install.Catalog, args ...string) (string, string
 }
 
 func TestListCommandShowsEveryEntry(t *testing.T) {
-	out, _, err := execute(t, loadCatalog(t), "list")
+	cat := loadCatalog(t)
+	out, _, err := execute(t, cat, "list")
 	if err != nil {
 		t.Fatalf("list: %v", err)
 	}
-	for _, want := range []string{"Skills (38):", "walkthrough", "MCP servers (5):", "playwright-mcp", "Playwright MCP"} {
+	wants := []string{
+		fmt.Sprintf("Skills (%d):", len(cat.Skills())),
+		fmt.Sprintf("MCP servers (%d):", len(cat.MCPs())),
+	}
+	for _, skill := range cat.Skills() {
+		wants = append(wants, fmt.Sprintf("  %-28s %s\n", skill.ID, skill.Description))
+	}
+	for _, mcp := range cat.MCPs() {
+		wants = append(wants, fmt.Sprintf("  %-24s %-22s %s [%s]\n", mcp.Slug, mcp.Name, mcp.Description, mcp.Type))
+	}
+	for _, want := range wants {
 		if !strings.Contains(out, want) {
 			t.Errorf("list output missing %q", want)
 		}
+	}
+}
+
+func TestInstallCommandRejectsInvalidSelectionWithoutWriting(t *testing.T) {
+	cat := loadCatalog(t)
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{"missing harness", []string{"--skills", "commit"}, "no harness selected"},
+		{"blank harness", []string{"--harness", " , ", "--skills", "commit"}, "no harness selected"},
+		{"unknown harness", []string{"--harness", "missing", "--skills", "commit"}, `unknown harness "missing"`},
+		{"missing selection", []string{"--harness", "opencode"}, "nothing selected"},
+		{"blank selection", []string{"--harness", "opencode", "--skills", " , ", "--mcp", " , "}, "nothing selected"},
+		{"unknown skill", []string{"--harness", "opencode", "--skills", "commit,missing"}, `unknown skill "missing"`},
+		{"unknown mcp", []string{"--harness", "opencode", "--skills", "commit", "--mcp", "missing"}, `unknown MCP "missing"`},
+		{"positional argument", []string{"--harness", "opencode", "--skills", "commit", "unexpected"}, "unknown command"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			dir := t.TempDir()
+			args := append([]string{"install", "--target", dir}, tc.args...)
+			_, _, err := execute(t, cat, args...)
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("error: got %v, want containing %q", err, tc.want)
+			}
+			entries, err := os.ReadDir(dir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(entries) != 0 {
+				t.Fatalf("invalid request wrote files: %v", entries)
+			}
+		})
 	}
 }
 

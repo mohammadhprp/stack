@@ -136,6 +136,12 @@ Rules:
 - Coverage of the real packages needs `-coverpkg` (the mirrored test packages
   measure themselves otherwise).
 
+Catalog tests compare loaded IDs against the framework directories rather than
+hard-coded counts, with in-memory fixtures covering malformed content and metadata
+normalization. CLI tests check every listed entry and verify invalid selections
+write nothing. Install safety tests assert that conflicts preserve both user edits
+and the lockfile, and that unsupported harnesses never call the skill planner.
+
 ## Lockfile
 
 Installs write `.stack-lock.json` in the target project recording, per item, the
