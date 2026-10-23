@@ -6,12 +6,13 @@ User: "Make this sound less like AI: 'The annual festival stands as a testament 
 
 Good agent behavior:
 
-- Run the draft-to-audit-to-final loop internally.
-- Preserve every fact, cut the significance framing and the rule of three, and avoid copula-substituting verbs like "stands as" and "showcases."
-- Deliver the draft, the "still-AI" bullets, and the final rewrite without any em dashes.
+- Run the draft-to-audit-to-final loop and return its three parts for pasted text.
+- Preserve every supported claim and never invent dates, venues, or organizers.
+- Cut inflated framing without deleting the music, art, or food claim. Do not
+  remove a real three-item list merely because it has three items.
 
 ```text
-The festival runs every July. It includes a music stage, an art market, and food stalls run by local restaurants.
+The annual festival celebrates the town's cultural heritage through music, art, and food.
 ```
 
 ## Edit a file in place

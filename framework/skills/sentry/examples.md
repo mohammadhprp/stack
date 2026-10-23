@@ -7,7 +7,7 @@ User: "Check Sentry for what's broken in prod right now."
 Good agent behavior:
 
 - Confirm `SENTRY_AUTH_TOKEN` is set, and if missing, guide the user to create a read-only token without asking them to paste it in chat.
-- Call the Sentry API using the bundled `sentry_api.py` script with the production environment and a 24h window.
+- Verify the installed `sentry` CLI, confirm the selected project, and use `sentry issue list` with the user's production environment, a 24h window, and JSON output.
 - Return an ordered list with title, short ID, status, counts, and last-seen time.
 - State explicitly when there are no results rather than padding the output.
 
@@ -17,10 +17,10 @@ User: "What's going on with error ABC-123?"
 
 Good agent behavior:
 
-- Resolve the short ID to a numeric issue ID via the list endpoint, then fetch issue detail and events.
+- Use the short ID directly with `sentry issue view ABC-123 --json`, then read its events when needed.
 - Summarize the culprit, timestamp, environment, release, and URL without dumping raw stack traces.
 - Redact PII such as emails and IPs from the output.
-- Note that the API is called directly each time rather than cached.
+- Report the actual CLI results and any unavailable fields; do not run AI jobs or mutate issues.
 
 ## Production error report
 

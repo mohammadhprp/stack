@@ -1,137 +1,193 @@
 ---
 name: before-and-after
-description: Captures before/after screenshots of web pages or elements for visual comparison. Use when user says "take before and after", "screenshot comparison", "visual diff", "PR screenshots", "compare old and new", or needs to document UI changes. Accepts two URLs (file://, http://, https://) or two image paths.
-allowed-tools:
-  - Bash(npx @vercel/before-and-after *)
-  - Bash(before-and-after *)
-  - Bash(which before-and-after)
-  - Bash(npm install -g @vercel/before-and-after)
-  - Bash(*/upload-and-copy.sh *)
-  - Bash(curl -s -o /dev/null -w *)
-  - Bash(gh pr view *)
-  - Bash(gh pr edit *)
-  - Bash(glab mr view *)
-  - Bash(glab mr update *)
-  - Bash(vercel inspect *)
-  - Bash(vercel whoami)
-  - Bash(which vercel)
-  - Bash(which gh)
-  - Bash(which glab)
+license: PolyForm-Shield-1.0.0
+description: Prepare before/after or preview evidence from screenshots and recordings for GitHub pull requests or GitLab merge requests. Use for visual comparisons, PR/MR screenshots, or media attachments. Capture belongs to agent-browser; publishing requires authorization.
 ---
 
-# Before-After Screenshot Skill
+# Add visual media to a PR
 
-> **Package:** `@vercel/before-and-after`
-> Never use `before-and-after` (wrong package).
+Use `agent-browser` to create screenshots or recordings. This skill owns visual
+evidence preparation and native GitHub/GitLab attachment workflows.
 
-## Agent Behavior Rules
+## Stack boundaries and paths
 
-**DO NOT:**
-- Switch branches or stash another task's changes. Use an isolated worktree for
-  any baseline server already authorized by the task.
-- Use `--full` unless user explicitly asks for full page / full scroll capture
+Resolve `SKILL_DIR` to the absolute directory containing this loaded `SKILL.md`.
+Never use a source-checkout path or assume the harness installation directory.
+Resolve `OUTPUT_DIR` to `~/.stack/<project-name>/before-and-after/`, using the Git
+root basename or working directory basename. Honor explicit destinations, expand
+`~`, quote paths, preserve existing files, and return absolute artifact paths.
+Run the examples from `OUTPUT_DIR`, with captures under its `captures/` directory;
+set `REPO` to the explicitly confirmed GitHub repository. Local media must stay
+within that working directory because the formatter enforces that boundary.
 
-**DO:**
-- Use `--markdown` when user wants PR integration or markdown output
-- Use `--mobile` / `--tablet` if user mentions phone, mobile, tablet, responsive, etc.
-- Reuse before captures, baseline URLs, and revision information already
-  established in the task. Confirm that they show the relevant behavior and
-  match the after capture's viewport and starting state.
-- Treat the current state as after only when the task context establishes it.
-  If the before state remains ambiguous after checking available context, ask
-  for the missing baseline. Do not ask again for a URL when a valid image pair
-  or earlier baseline is already available.
+Reuse valid existing captures and task context; ask only if the baseline remains
+ambiguous. Match viewport, state, and revision. Do not switch branches or stash
+user work. Full-page capture needs an explicit request. Local capture/formatting
+does not authorize uploads, PR/MR edits, temporary comments, or cleanup of remote
+records. Review captures for secrets and private data before any authorized upload.
+Never install tools or upload to public third-party storage automatically.
 
-## Capture and delivery
+For GitLab, use [references/gitlab.md](references/gitlab.md), not GitHub attachment
+URLs or `gh`. The old public-upload adapters are superseded by native host uploads.
 
-1. Use an installed `before-and-after` CLI or `npx @vercel/before-and-after`.
-2. For remote URLs, check access when needed. A 401/403 indicates protection.
-   Existing image pairs do not require a URL or deployment access check.
-3. Capture missing images with `before-and-after "<before-url>" "<after-url>"`.
-4. When the task calls for uploaded evidence or PR markdown, run
-   `before-and-after before.png after.png --markdown` once. For local capture
-   requests, deliver the files without uploading them.
-5. Append the markdown to the PR when PR integration is part of the task.
+## Capture
 
-Resolve bundled script paths relative to this skill's directory, not the
-project working directory. Reuse earlier evidence instead of recapturing it.
+1. Load the version-matched core instructions with `agent-browser skills get core --full` and follow them for sessions, navigation, page state, screenshots, and recordings.
+2. If a Vercel URL is protected, load `agent-browser skills get protected-vercel-deployments --full`. Do not reproduce its authentication workflow here.
+3. Save media under `OUTPUT_DIR` with paths that contain no whitespace, for example:
 
-## Quick Reference
+   ```text
+   captures/desktop-before.png
+   captures/desktop-after.png
+   captures/mobile-before.png
+   captures/mobile-after.png
+   ```
 
-```bash
-# Basic usage
-before-and-after <before-url> <after-url>
+The formatter supports PNG, JPEG, GIF, WebP, MP4, MOV, and WebM files. Use an `--after` file without a matching `--before` file for a net-new preview.
 
-# With selector
-before-and-after url1 url2 ".hero-section"
+### Screen recordings
 
-# Different selectors for each
-before-and-after url1 url2 ".old-card" ".new-card"
+`agent-browser record start` creates a fresh browser context. It preserves cookies and local storage, but an origin-scoped header used to open a protected Vercel Preview may not carry into that new context. Before recording a protected Preview:
 
-# Viewports
-before-and-after url1 url2 --mobile    # 375x812
-before-and-after url1 url2 --tablet    # 768x1024
-before-and-after url1 url2 --full      # full scroll
+1. Load `agent-browser skills get protected-vercel-deployments --full`.
+2. Start the recording context on a blank page.
+3. Apply the authentication method from that skill inside the recording context.
+4. Navigate to the Preview only after authentication is active, then trim the navigation lead-in if necessary.
 
-# From existing images
-before-and-after before.png after.png --markdown
+Do not assume that a page which worked before `record start` will remain authenticated after it.
 
-# Via npx (use full package name!)
-npx @vercel/before-and-after url1 url2
-```
+Agent-browser `0.35.2` and `0.36.0` capture at a hardcoded 10 fps with no CLI or environment override. Inspect the installed version and its recording reference rather than assuming this stays true in later releases. Preserve the source cadence when transcoding: changing the container to 30 or 60 fps only duplicates frames and does not make motion smoother. For animation evidence that requires a higher real frame rate, use a genuinely higher-cadence capture path instead of upsampling agent-browser output.
 
-| Flag | Description |
-|------|-------------|
-| `-m, --mobile` | Mobile viewport (375x812) |
-| `-t, --tablet` | Tablet viewport (768x1024) |
-| `--size <WxH>` | Custom viewport |
-| `-f, --full` | Full scrollable page |
-| `-s, --selector` | CSS selector to capture |
-| `-o, --output` | Output directory (default: ~/Downloads) |
-| `--markdown` | Upload images & output markdown table |
-| `--upload-url <url>` | Custom upload endpoint (default: 0x0.st) |
+### Equal-height image pairs
 
-## Image Upload
+GitHub vertically centers a shorter image inside a Markdown table cell. For full-page before/after screenshots, make both files the same pixel height so their top edges align:
+
+1. Open both pages at the same viewport and state.
+2. Read `document.documentElement.scrollHeight` in both sessions.
+3. Append bottom-only space to the shorter page until both scroll heights match, then take both `--full` screenshots.
+
+The padding may be transparent or use the capture tool's default canvas. Never add space above the page. For component or section comparisons, capture the same scoped region instead of padding unrelated page content.
+
+Use raw `agent-browser eval` for this DOM-only adjustment; do not add an image-processing dependency to this skill. Confirm the resulting files have equal pixel dimensions before publishing.
+
+## Format
+
+Pass one `--before` and `--after` pair for each comparison. Repeat `--label` to identify multiple pairs:
 
 ```bash
-# Default (0x0.st - no signup needed)
-./scripts/upload-and-copy.sh before.png after.png --markdown
+node "$SKILL_DIR/scripts/format.mjs" \
+  --before captures/desktop-before.png \
+  --after captures/desktop-after.png \
+  --before captures/mobile-before.png \
+  --after captures/mobile-after.png \
+  --label Desktop \
+  --label Mobile \
+  > "$OUTPUT_DIR/before-and-after.md"
 ```
 
-## Vercel Deployment Protection
-
-If `.vercel.app` URL returns 401/403:
-
-1. Check Vercel CLI: `which vercel && vercel whoami`
-2. If available: `vercel inspect <url>` to get bypass token
-3. If not: Tell user to provide bypass token, take manual screenshots, or disable protection
-
-## PR Integration
-
-Use the CLI for the repository's hosting platform: `gh` for GitHub or `glab`
-for GitLab. Preserve the existing PR/MR description when appending the
-comparison markdown.
+For an after-only preview:
 
 ```bash
-# GitHub
-which gh
-gh pr view --json number,body
-gh pr edit <number> --body-file /path/to/pr-body.md
-
-# GitLab
-which glab
-glab mr view <id> --output json
-glab mr update <id> --description-file /path/to/mr-description.md
+node "$SKILL_DIR/scripts/format.mjs" \
+  --after captures/new-page.png \
+  > "$OUTPUT_DIR/before-and-after.md"
 ```
 
-If the appropriate CLI is unavailable, output markdown and tell the user to
-paste it manually.
+Add `--attribution "<name>"` to prefix the block with a `> Before/after by <name>` line when the PR should credit who produced the evidence.
 
-## Error Reference
+Images render in tables. Local videos initially render on their own lines so `gh --attach` can upload them and expose their final attachment URLs. Before/after video tables use the two-step workflow below because `gh --attach` does not rewrite local references inside `<video src>` attributes.
 
-| Error | Fix |
-|-------|-----|
-| `command not found` | `npm install -g @vercel/before-and-after` |
-| `could not determine executable` | Use `npx @vercel/before-and-after` (full name) |
-| 401/403 on .vercel.app | See Vercel protection section |
-| Element not found | Verify selector exists on page |
+## Place the evidence
+
+Read the existing PR description before inserting a new marked block. Put visual evidence near the top, after the short opening context and an existing Preview or deployment-link section when present, but before implementation-heavy sections such as Details, Changes, Testing, or Notes.
+
+Use this reading order inside the visual evidence:
+
+1. Put the real before/after or Preview evidence that proves the PR first.
+2. Put supplemental formats, alternate states, or demonstrations after the primary evidence.
+3. Label anything that demonstrates this skill rather than the PR itself as a demo, and state material limitations beside it. For example, note the installed agent-browser recorder's current 10 fps limit when motion smoothness matters.
+
+Headings are semantic hints, not required names. Never invent or rewrite prose merely to create an anchor, and never split a paragraph, list, table, code block, or other Markdown structure. If no safe anchor is clear, append the block rather than risking damage. If a marked block already exists, move or replace that whole block only; preserve every byte of unrelated prose.
+
+After publishing, open the rendered PR and confirm the primary evidence appears before supplemental demos and before the implementation details.
+
+## Publish
+
+Preserve the existing PR description and replace only this skill's marked block:
+
+```bash
+PR=123
+gh pr view "$PR" --repo "$REPO" --json body --jq .body > "$OUTPUT_DIR/pr-body.md"
+
+node "$SKILL_DIR/scripts/format.mjs" \
+  --body-file "$OUTPUT_DIR/pr-body.md" \
+  --before captures/desktop-before.png \
+  --after captures/desktop-after.png \
+  > "$OUTPUT_DIR/pr-body-next.md"
+
+ATTACH_ARGS=()
+while IFS= read -r file; do
+  ATTACH_ARGS+=(--attach "$file")
+done < <(
+  node "$SKILL_DIR/scripts/format.mjs" \
+    --attach-list \
+    --before captures/desktop-before.png \
+    --after captures/desktop-after.png
+)
+
+gh pr edit "$PR" --repo "$REPO" --body-file "$OUTPUT_DIR/pr-body-next.md" "${ATTACH_ARGS[@]}"
+```
+
+Run the formatter and `gh` from the same directory. `gh --attach` uploads the local files to GitHub and rewrites their matching local references in the PR body.
+
+After publishing, fetch or open the PR description and confirm that no `./captures/...` references remain inside the marked block and that the evidence appears in the intended reading order.
+
+### Publish a video table
+
+Video comparisons are a first-class two-step publish operation:
+
+1. Upload the local videos in a temporary PR comment using the normal own-line output and `gh pr comment --attach`.
+2. Fetch that comment through `gh api` and collect the stable `https://github.com/user-attachments/assets/...` URLs in before/after order.
+3. Generate the final HTML table from those URLs and replace the marked PR block:
+
+   ```bash
+   node "$SKILL_DIR/scripts/format.mjs" \
+     --body-file "$OUTPUT_DIR/pr-body.md" \
+     --before-video-url https://github.com/user-attachments/assets/BEFORE_ID \
+     --after-video-url https://github.com/user-attachments/assets/AFTER_ID \
+     --label "Desktop hero" \
+     > "$OUTPUT_DIR/pr-body-next.md"
+
+   gh pr edit "$PR" --repo "$REPO" --body-file "$OUTPUT_DIR/pr-body-next.md"
+   ```
+
+4. Fetch the edited PR body before deleting the temporary comment. Confirm both final URLs are present and no local video paths remain, then delete the comment.
+5. Open the rendered PR and confirm both `<video>` elements are inside the comparison table, reach a playable ready state, and show controls.
+
+If URL extraction, formatting, or PR verification fails, keep the temporary comment so its uploaded attachments remain recoverable and retry from the last successful phase. Use own-line videos as the simple fallback.
+
+Do not publish captures containing Vercel OIDC tokens, bypass secrets, authenticated query parameters, or browser state files.
+
+## Script contract
+
+`scripts/format.mjs` is intentionally the only bundled script. It:
+
+- formats existing local media;
+- formats final GitHub video attachment URLs as HTML comparison tables;
+- labels after-only media as `Preview`;
+- emits the exact attachment path list;
+- inserts or replaces `<!-- before-and-after:start/end -->` without changing other PR prose.
+
+Its arguments version with this skill and are not a public library API.
+
+Check `gh pr edit --help` for attachment support before publishing. A partial
+upload failure may still change the PR; re-read its body and reuse successful
+attachments before retrying. Do not duplicate uploads or overwrite unrelated prose.
+
+## Source
+
+Adapted from [vercel-labs/before-and-after](https://github.com/vercel-labs/before-and-after/tree/8306d34f459b6704e08e6adb5829fcddb0dc3557/skill). Stack adds installed-relative paths, output and publishing safety, GitLab support, and byte-preserving marked-block replacement.
+
+The upstream snapshot is distributed under `LICENSE` (PolyForm Shield 1.0.0),
+including a non-compete restriction. This component is not relicensed by Stack's
+MIT license; review those terms before redistribution or release.

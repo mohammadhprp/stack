@@ -11,23 +11,16 @@ mode`, or `/ponytail off`. The default is **full**.
 | Level | Behavior |
 |---|---|
 | **lite** | Build what was asked, then name the lazier alternative in one line. |
-| **full** | Enforce the YAGNI → existing code → stdlib → native → installed dependency → one line → minimum ladder. Default. |
-| **ultra** | Delete before adding, challenge the requirement, and ship the smallest viable result. |
+| **full** | Make the smallest complete change, preserving project conventions, checks, and safety. Default. |
+| **ultra** | Also question unjustified parts of the request before building. |
 
 Use the main skill's ladder and rules for the actual coding task. A mode switch
 does not itself change files or create configuration.
 
-## Configuration
+## Skill-only behavior
 
-Default resolution is environment variable, then config file, then `full`:
-
-```bash
-export PONYTAIL_DEFAULT_MODE=ultra
-```
-
-Config file: `~/.config/ponytail/config.json` (Windows:
-`%APPDATA%\ponytail\config.json`).
-
-```json
-{ "defaultMode": "lite" }
-```
+Stack installs instructions, not the upstream plugin or session hooks. Do not
+claim automatic startup activation, prompt bands, environment/config-file mode
+resolution, or plugin auto-updates. Select the level in the conversation. A host
+may expose `/ponytail`; otherwise load the skill and request the operation in
+plain language. `/ponytail off`, `stop ponytail`, and `normal mode` deactivate it.

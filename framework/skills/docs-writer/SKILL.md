@@ -1,39 +1,206 @@
 ---
 name: docs-writer
-description: Write, review, and edit documentation files with consistent structure, tone, and technical accuracy. Use when creating docs, reviewing markdown files, writing READMEs, updating `/docs` directories, or when user says "write documentation", "review this doc", "improve this README", "create a guide", or "edit markdown". Do NOT use for code comments, inline JSDoc, or API reference generation.
+description: Write, review, and audit documentation with clear language, accurate examples, accessible formatting, and verified links. Use for README, Markdown, documentation pages, and docset audits; not code comments or API generation.
 ---
 
 # `docs-writer` skill instructions
 
-As an expert technical writer and editor, your goal is to produce and refine documentation that is accurate, clear, consistent, and easy for users to understand. You must adhere to the documentation contribution process outlined in `CONTRIBUTING.md`.
+As an expert technical writer and editor for the target project, you produce
+accurate, clear, and consistent documentation. When asked to write, edit, or
+review documentation, you must ensure the content strictly adheres to the
+provided documentation standards and accurately reflects the current codebase.
+Read the target's contribution process, style guide, and formatting commands when
+present. They take precedence over these defaults. Do not assume a particular
+language, `packages/` layout, sidebar file, or npm script.
 
-## Step 1: Understand the goal and create a plan
+Resolve bundled resources relative to the directory containing this loaded
+`SKILL.md`, not the project working directory. The existing
+[`references/style-guide.md`](references/style-guide.md) remains a compact guide;
+the standards below and the audit reference add the upstream workflow.
 
-1. **Clarify the request:** Fully understand the user's documentation request. Identify the core feature, command, or concept that needs work.
-2. **Differentiate the task:** Determine if the request is primarily for **writing** new content or **editing** existing content. If the request is ambiguous (e.g., "fix the docs"), ask the user for clarification.
-3. **Formulate a plan:** Create a clear, step-by-step plan for the required changes.
+## Generated files
 
-## Step 2: Investigate and gather information
+Keep requested documentation edits in the target project. Save audit reports and
+implementation logs under `~/.stack/<project-name>/docs-writer/` (`OUTPUT_DIR`),
+using the Git root basename or working directory basename. Expand `~`, quote
+paths, honor explicit destinations, preserve existing files unless overwrite is
+approved, and return absolute paths. Chat-only guidance needs no files.
 
-1. **Read the code:** Thoroughly examine the relevant codebase, primarily within the `packages/` directory, to ensure your work is backed by the implementation and to identify any gaps.
-2. **Identify files:** Locate the specific documentation files in the `docs/` directory that need to be modified. Always read the latest version of a file before you begin work.
-3. **Check for connections:** Consider related documentation. If you change a command's behavior, check for other pages that reference it. If you add a new page, check if `docs/sidebar.json` needs to be updated. Make sure all links are up to date.
+## Phase 1: Documentation standards
 
-## Step 3: Write or edit the documentation
+Adhering to these principles and standards when writing, editing, and reviewing.
 
-1. **Follow the style guide:** Adhere to the rules in `references/style-guide.md`. Read this file to understand the project's documentation standards.
-2. Ensure the new documentation accurately reflects the features in the code.
-3. **Use `replace` and `write_file`:** Use file system tools to apply your planned changes. For small edits, `replace` is preferred. For new files or large rewrites, `write_file` is more appropriate.
+### Voice and tone
+Adopt a tone that balances professionalism with a helpful, conversational
+approach.
 
-### Sub-step: Editing existing documentation (as clarified in Step 1)
+- **Perspective and tense:** Address the reader as "you." Use active voice and
+  present tense (e.g., "The API returns...").
+- **Tone:** Professional, friendly, and direct.
+- **Clarity:** Use simple vocabulary. Avoid jargon, slang, and marketing hype.
+- **Global Audience:** Write in standard US English. Avoid idioms and cultural
+  references.
+- **Requirements:** Be clear about requirements ("must") vs. recommendations
+  ("we recommend"). Avoid "should."
+- **Word Choice:** Avoid "please" and anthropomorphism (e.g., "the server
+  thinks"). Use contractions (don't, it's).
 
-- **Gaps:** Identify areas where the documentation is incomplete or no longer reflects existing code.
-- **Tone:** Ensure the tone is active and engaging, not passive.
-- **Clarity:** Correct awkward wording, spelling, and grammar. Rephrase sentences to make them easier for users to understand.
-- **Consistency:** Check for consistent terminology and style across all edited documents.
+### Language and grammar
+Write precisely to ensure your instructions are unambiguous.
 
-## Step 4: Verify and finalize
+- **Abbreviations:** Avoid Latin abbreviations; use "for example" (not "e.g.")
+  and "that is" (not "i.e.").
+- **Punctuation:** Use the serial comma. Place periods and commas inside
+  quotation marks.
+- **Dates:** Use unambiguous formats (e.g., "January 22, 2026").
+- **Conciseness:** Use "lets you" instead of "allows you to." Use precise,
+  specific verbs.
+- **Examples:** Use meaningful names in examples; avoid placeholders like
+  "foo" or "bar."
+- **Quota and limit terminology:** For any content involving resource capacity
+   or using the word "quota" or "limit", read
+   [`references/quota-limit-style-guide.md`](references/quota-limit-style-guide.md).
+   Generally, use "quota" for
+  the administrative bucket and "limit" for the numerical ceiling.
 
-1. **Review your work:** After making changes, re-read the files to ensure the documentation is well-formatted, and the content is correct based on existing code.
-2. **Link verification:** Verify the validity of all links in the new content. Verify the validity of existing links leading to the page with the new content or deleted content.
-3. **Offer to run npm format:** Once all changes are complete, offer to run the project's formatting script to ensure consistency by proposing the command: `npm run format`
+### Formatting and syntax
+Apply consistent formatting to make documentation visually organized and
+accessible.
+
+- **Overview paragraphs:** Every heading must be followed by at least one
+  introductory overview paragraph before any lists or sub-headings.
+- **Text wrap:** Wrap text at 80 characters (except long links or tables).
+- **Casing:** Use sentence case for headings, titles, and bolded text.
+- **Naming:** Use the target project's documented product name consistently.
+- **Lists:** Use numbered lists for sequential steps and bulleted lists
+  otherwise. Keep list items parallel in structure.
+- **UI and code:** Use **bold** for UI elements and `code font` for filenames,
+  snippets, commands, and API elements. Focus on the task when discussing
+  interaction.
+- **Accessibility:** Use semantic HTML elements correctly (headings, lists,
+  tables).
+- **Media:** Use lowercase hyphenated filenames. Provide descriptive alt text
+  for all images.
+- **Details section:** Use the `<details>` tag to create a collapsible section.
+  This is useful for supplementary or data-heavy information that isn't critical
+  to the main flow.
+
+  Example:
+
+  <details>
+  <summary>Title</summary>
+
+  - First entry
+  - Second entry
+
+  </details>
+
+- **Callouts**: Use GitHub-flavored markdown alerts to highlight important
+  information. To ensure the formatting is preserved by `npm run format`, place
+  an empty line, then a prettier ignore comment directly before the callout
+  block. Use `<!-- prettier-ignore -->` for standard Markdown files (`.md`) and
+  `{/* prettier-ignore */}` for MDX files (`.mdx`). The callout type (`[!TYPE]`)
+  should be on the first line, followed by a newline, and then the content, with
+  each subsequent line of content starting with `>`. Available types are `NOTE`,
+  `TIP`, `IMPORTANT`, `WARNING`, and `CAUTION`.
+
+  Example (.md):
+
+<!-- prettier-ignore -->
+> [!NOTE]
+> This is an example of a multi-line note that will be preserved
+> by Prettier.
+
+  Example (.mdx):
+
+{/* prettier-ignore */}
+> [!NOTE]
+> This is an example of a multi-line note that will be preserved
+> by Prettier.
+
+### Links
+- **Accessibility:** Use descriptive anchor text; avoid "click here." Ensure the
+  link makes sense out of context, such as when being read by a screen reader.
+- **Use relative links in docs:** Follow the target site's routing conventions.
+  Prefer file-relative links where supported and verify that they resolve from
+  the current page. Do not strip path segments blindly.
+- **When changing headings, check for deep links:** If a user is changing a
+  heading, check for deep links to that heading in other pages and update
+  accordingly.
+
+### Structure
+- **BLUF:** Start with an introduction explaining what to expect.
+- **Experimental features:** If a feature is clearly noted as experimental,
+  add the following note immediately after the introductory paragraph:
+
+<!-- prettier-ignore -->
+> [!NOTE]
+> This is an experimental feature currently under active development.
+(Note: Use `{/* prettier-ignore */}` if editing an `.mdx` file.)
+
+- **Headings:** Use hierarchical headings to support the user journey.
+- **Procedures:**
+  - Introduce lists of steps with a complete sentence.
+  - Start each step with an imperative verb.
+  - Number sequential steps; use bullets for non-sequential lists.
+  - Put conditions before instructions (e.g., "On the Settings page, click...").
+  - Provide clear context for where the action takes place.
+  - Indicate optional steps clearly (e.g., "Optional: ...").
+- **Elements:** Use bullet lists, tables, details, and callouts.
+- **Table of contents:** Follow the project's convention; do not remove an
+  existing table of contents unless the requested change calls for it.
+- **Next steps:** Conclude with a "Next steps" section if applicable.
+
+## Phase 2: Preparation
+Before modifying any documentation, thoroughly investigate the request and the
+surrounding context.
+
+1.  **Clarify:** Understand the core request. Differentiate between writing new
+    content and editing existing content. If the request is ambiguous (e.g.,
+    "fix the docs"), ask for clarification.
+2.  **Investigate:** Examine the implementation paths actually used by the target.
+3.  **Audit:** Read the latest versions of the relevant documentation files.
+4.  **Connect:** Identify all referencing pages if changing behavior. Check if
+    the site's existing navigation or sidebar needs updates.
+5.  **Plan:** Create a step-by-step plan before making changes.
+6.  **Audit Docset:** If asked to audit the documentation, follow the procedural
+    guide in [docs-auditing.md](./references/docs-auditing.md).
+
+## Phase 3: Execution
+Implement your plan by either updating existing files or creating new ones
+using the file-editing tools available in the current host. Preserve unrelated
+user changes and keep the diff scoped to the request.
+
+### Editing existing documentation
+Follow these additional steps when asked to review or update existing
+documentation.
+
+- **Gaps:** Identify areas where the documentation is incomplete or no longer
+  reflects existing code.
+- **Structure:** Apply "Structure (New Docs)" rules (BLUF, headings, etc.) when
+  adding new sections to existing pages.
+- **Headers**: If you change a header, you must check for links that lead to
+  that header and update them.
+- **Tone:** Ensure the tone is active and engaging. Use "you" and contractions.
+- **Clarity:** Correct awkward wording, spelling, and grammar. Rephrase
+  sentences to make them easier for users to understand.
+- **Consistency:** Check for consistent terminology and style across all edited
+  documents.
+
+## Phase 4: Verification and finalization
+Perform a final quality check to ensure that all changes are correctly
+formatted and that all links are functional.
+
+1.  **Accuracy:** Ensure content accurately reflects the implementation and
+  technical behavior.
+2.  **Self-review:** Re-read changes for formatting, correctness, and flow.
+3.  **Link check:** Verify all new and existing links leading to or from
+    modified pages. If you changed a header, ensure that any links that lead to
+    it are updated.
+4.  **Format:** Run the project's documented formatting and documentation checks
+    when authorized and available. Do not assume `npm run format` exists, install
+    dependencies automatically, or claim an unrun check passed. Report blockers.
+
+## Source
+
+Adapted from [google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli/blob/a713410aba5d594594e20d5c822e3aab8f822089/.gemini/skills/docs-writer/SKILL.md), Apache-2.0. Stack generalizes project-specific paths, preserves local documentation conventions, and keeps audit artifacts outside the target by default.

@@ -88,6 +88,16 @@ validators in `scripts/`, and its reports default to
 OS-enforced sandbox; unavailable execution or verification capabilities must be
 reported rather than bypassed. It replaces `security-best-practices` in the catalog.
 
+The upstream refresh also pins sources in the `agent-browser`, `architect`,
+`arena`, `before-and-after`, `diagram-design`, `docs-writer`, `frontend-design`,
+`grilling`, `how`, `humanizer`, `sentry`, `unslop`, and `why` skills. Local additions
+and safety rules remain: host-native delegation uses discovered model IDs,
+diagram branding stays outside the installation, GitLab evidence is supported,
+and Sentry remains read-only by default. Humanizer is 3.1.0; Diagram Design is
+2.6 with 45 types and six packaged extraction/export/check helpers. The media
+formatter preserves bytes outside its marked block. Its upstream PolyForm Shield
+license must be reviewed before release; embedded content is not uniformly MIT.
+
 `framework/` stays at the repository root as the editable content root.
 `go:embed` patterns cannot use `..`, so the embed lives in the root package
 (`main.go`: `//go:embed all:framework`) and the resulting `fs.FS`, sub-rooted at
@@ -184,6 +194,9 @@ a later install recreates them cleanly.
 `go test ./...` also runs the walkthrough scripts' Python standard-library
 regression suite and the security-audit validators' Node.js regression suite under
 `tests/framework/`; Python 3, Git, and Node.js 18+ must be available.
+The refreshed media formatter and diagram helpers are exercised manually, while
+Go tests cover their catalog installation and resource paths. PNG export additionally requires
+Playwright/Chromium, but the required offline suite does not install or use it.
 
 - `go build ./...`
 - `go test ./...`

@@ -13,10 +13,11 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [architect](./architect/SKILL.md) | Sketch architecture and module boundaries before implementation. | Non-trivial design and implementation work. |
 | [arena](./arena/SKILL.md) | Compare parallel candidate solutions and synthesize the strongest result. | Non-trivial artifacts and design alternatives. |
 | [backend-best-practices](./backend-best-practices/SKILL.md) | Consolidated backend engineering practices for API design, architecture, data, security, testing, observability, performance, debugging, and refactoring. | Any backend task that benefits from structured domain guidance across multiple backend disciplines. |
+| [before-and-after](./before-and-after/SKILL.md) | Prepare screenshot and recording comparisons with native GitHub or GitLab attachments. | Local visual evidence or authorized PR/MR media publishing; see its PolyForm Shield license. |
 | [bro](./bro/SKILL.md) | Restate the last message in plain human language without jargon. | Simplifying technical explanations. |
 | [changelog](./changelog/SKILL.md) | Create or update `CHANGELOG.md` entries. | Release notes and unreleased changes. |
 | [commit](./commit/SKILL.md) | Create atomic Git commits with conventional messages. | Committing reviewed changes. |
-| [diagram-design](./diagram-design/SKILL.md) | Create technical and product diagrams as standalone HTML files with inline SVG and an opinionated editorial design system. | Architecture, data, process, and other diagrams that communicate more clearly than prose or tables. |
+| [diagram-design](./diagram-design/SKILL.md) | Create 45 diagram types with semantic patterns, named profiles, source imports, and HTML/SVG/PNG output. | Architecture, data, process, and other diagrams that communicate more clearly than prose or tables. |
 | [docs-writer](./docs-writer/SKILL.md) | Write, review, and edit documentation files with consistent structure, tone, and technical accuracy. | Creating docs, reviewing markdown files, writing READMEs, or updating `/docs` directories. |
 | [docker](./docker/SKILL.md) | Dockerize projects and work across Dockerfiles, Compose, destructive-command safety, Docker Agent, and Docker Sandboxes. | Any Docker task: scaffolding, image builds, Compose wiring/debugging, agent config/run/serve/eval, or `sbx` lifecycle, environments, kits, policy, and credentials. |
 | [find-skills](./find-skills/SKILL.md) | Discover, evaluate, and install skills from the open agent skills ecosystem. | Finding an installable skill for a specialized task or extending an agent's capabilities. |
@@ -37,8 +38,9 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [laravel-best-practices](./laravel-best-practices/SKILL.md) | Apply Laravel PHP patterns for Eloquent, validation, security, testing, caching, and architecture. | Writing, reviewing, or refactoring Laravel PHP code. |
 | [law-of-business](./law-of-business/SKILL.md) | Pressure-test a business, product, plan, pivot, price, or fundraise against the 21 laws of business distilled from 442 startup post-mortems. | Deciding whether to build, diagnosing a struggling business, and pressure-testing a plan, pivot, price, go-to-market, or fundraise. |
 | [perf-web-optimization](./perf-web-optimization/SKILL.md) | Optimize web performance: bundle size, images, caching, lazy loading, and overall page speed. | A slow site, large bundles, layout shifts, poor Time to Interactive, or low Lighthouse scores. |
+| [ponytail](./ponytail/SKILL.md) | Make the smallest complete change, review quality and complexity, and track deliberate shortcuts. | Coding with less unnecessary code; read-only change reviews, repository audits, debt ledgers, and upstream benchmark displays. |
 | [security-audit](./security-audit/SKILL.md) | Review security boundaries with source-grounded evidence, independent validation, and structured reports. | Focused security questions or full codebase audits with bounded, sandboxed local validation. |
-| [sentry](./sentry/SKILL.md) | Inspect Sentry issues, summarize production errors, and pull health data via the Sentry API (read-only). | Checking production errors, summarizing recent crashes, or pulling a production error report. |
+| [sentry](./sentry/SKILL.md) | Inspect issues and production errors with the Sentry CLI, retaining a read-only legacy API fallback. | Checking production errors, summarizing recent crashes, or pulling a production error report. |
 | [show-me](./show-me/SKILL.md) | Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts. | Explaining logic, control flow, UI structure, file responsibility, or data flow with the smallest useful visual. |
 | [skill-creator](./skill-creator/SKILL.md) | Create new skills, modify and improve existing skills, and measure skill performance. | Designing new skills, optimizing existing skills, or running evals. |
 | [spec](./spec/SKILL.md) | Plan assigned active-sprint Jira tasks and synchronize implementation briefs and sprint plans to Notion. | Personal sprint planning and repeatable Jira-to-Notion synchronization without changing Jira. |
@@ -48,6 +50,11 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [why](./why/SKILL.md) | Investigate the evidence and rationale behind code and design decisions. | Historical design-reasoning and motivation investigations. |
 
 ## How Skills Are Organized
+
+Bundled third-party content retains its upstream license. In particular,
+`before-and-after/LICENSE` contains PolyForm Shield terms, including a non-compete
+restriction; review them before redistribution. Stack's MIT license does not
+replace the licenses of embedded skills.
 
 The `walkthrough` skill saves its JSON, Markdown, and styled HTML under
 `~/.stack/<project-name>/walkthrough/` by default. Its bundled scripts validate
