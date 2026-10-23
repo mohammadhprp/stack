@@ -3,6 +3,7 @@
 *.html linguist-detectable=false
 *.htm linguist-detectable=false
 *.css linguist-detectable=false
+*.js linguist-detectable=false
 *.json linguist-detectable=false
 *.jsonc linguist-detectable=false
 *.yaml linguist-detectable=false
