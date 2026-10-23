@@ -80,6 +80,14 @@ uses plain-text Warning, Notice, and Human decision labels without emoji. It
 delivers all sections at once, does not publish or issue an approval verdict,
 and remains separate from the findings-oriented `review` skill.
 
+The `security-audit` skill provides focused security guidance and a six-phase,
+source-first audit workflow with independently verified findings and coverage
+tracking. Its guides and schema live in `references/`, its dependency-free Node.js
+validators in `scripts/`, and its reports default to
+`~/.stack/<project-name>/security-audit/run-<N>/`. Target execution requires an
+OS-enforced sandbox; unavailable execution or verification capabilities must be
+reported rather than bypassed. It replaces `security-best-practices` in the catalog.
+
 `framework/` stays at the repository root as the editable content root.
 `go:embed` patterns cannot use `..`, so the embed lives in the root package
 (`main.go`: `//go:embed all:framework`) and the resulting `fs.FS`, sub-rooted at
@@ -174,7 +182,8 @@ a later install recreates them cleanly.
 ## Build & Test
 
 `go test ./...` also runs the walkthrough scripts' Python standard-library
-regression suite under `tests/framework/`; Python 3 and Git must be available.
+regression suite and the security-audit validators' Node.js regression suite under
+`tests/framework/`; Python 3, Git, and Node.js 18+ must be available.
 
 - `go build ./...`
 - `go test ./...`

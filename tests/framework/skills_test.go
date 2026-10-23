@@ -13,3 +13,14 @@ func TestWalkthroughScripts(t *testing.T) {
 	}
 	t.Log(string(output))
 }
+
+func TestSecurityAuditScripts(t *testing.T) {
+	command := exec.Command("node", "--test",
+		"security-audit/validate-findings.test.cjs",
+		"security-audit/validate-coverage-ledger.test.cjs")
+	output, err := command.CombinedOutput()
+	if err != nil {
+		t.Fatalf("security audit scripts: %v\n%s", err, output)
+	}
+	t.Log(string(output))
+}
