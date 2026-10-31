@@ -35,6 +35,7 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [review](./review/SKILL.md) | Perform comprehensive code quality reviews. | Diff reviews and production-readiness checks. |
 | [changelog](./changelog/SKILL.md) | Create or update `CHANGELOG.md` entries. | Release notes and unreleased changes. |
 | [release](./release/SKILL.md) | Prepare and tag semantic-versioned releases. | Release management. |
+| [rust-best-practices](./rust-best-practices/SKILL.md) | Write, review, and port idiomatic Rust using BeautifulRust's guidance. | Rust development, code reviews, and migrations to Rust. |
 | [laravel-best-practices](./laravel-best-practices/SKILL.md) | Apply Laravel PHP patterns for Eloquent, validation, security, testing, caching, and architecture. | Writing, reviewing, or refactoring Laravel PHP code. |
 | [law-of-business](./law-of-business/SKILL.md) | Pressure-test a business, product, plan, pivot, price, or fundraise against the 21 laws of business distilled from 442 startup post-mortems. | Deciding whether to build, diagnosing a struggling business, and pressure-testing a plan, pivot, price, go-to-market, or fundraise. |
 | [perf-web-optimization](./perf-web-optimization/SKILL.md) | Optimize web performance: bundle size, images, caching, lazy loading, and overall page speed. | A slow site, large bundles, layout shifts, poor Time to Interactive, or low Lighthouse scores. |
