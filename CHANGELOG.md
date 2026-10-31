@@ -4,6 +4,17 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+## [v0.1.7] - 2026-10-31
+
+### Added
+
+- Added `go-best-practices` with guidance for Go development, project structure, concurrency, services, testing, and performance.
+- Added `rust-best-practices`, combining BeautifulRust's writing, review, and porting guidance.
+
+### Fixed
+
+- Removed language statistics.
+
 ## [v0.1.6] - 2026-10-23
 
 ### Added
