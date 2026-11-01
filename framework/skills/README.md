@@ -46,6 +46,7 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [show-me](./show-me/SKILL.md) | Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts. | Explaining logic, control flow, UI structure, file responsibility, or data flow with the smallest useful visual. |
 | [skill-creator](./skill-creator/SKILL.md) | Create new skills, modify and improve existing skills, and measure skill performance. | Designing new skills, optimizing existing skills, or running evals. |
 | [spec](./spec/SKILL.md) | Plan assigned active-sprint Jira tasks and synchronize implementation briefs and sprint plans to Notion. | Personal sprint planning and repeatable Jira-to-Notion synchronization without changing Jira. |
+| [stack-diagram](./stack-diagram/SKILL.md) | Create architecture diagrams with technology logos and grouped service flows. | Self-contained HTML, PNG, or React diagrams of technology stacks and infrastructure. |
 | [tdd](./tdd/SKILL.md) | Drive clear bug fixes with focused failing regression tests. | Explicit TDD and regression-test workflows. |
 | [unslop](./unslop/SKILL.md) | Remove AI writing patterns and restore a natural human voice. | Editing prose to remove generic or artificial phrasing. |
 | [walkthrough](./walkthrough/SKILL.md) | Explain PRs, MRs, and local changes in grouped Markdown and HTML reports with warnings, notices, and human decisions. | Human reviewers who need a categorized reading guide with related changes together. |
