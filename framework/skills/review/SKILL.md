@@ -98,23 +98,22 @@ Write exactly one `$OUTPUT_DIR/review.json` with this shape:
 - Paths are repository-relative. `side` and `start_side` are `LEFT` or
   `RIGHT`; `start_line` is used only for a multi-line range.
 
-Before finishing, validate JSON and, when an annotated diff is available, run:
+Resolve `SKILL_DIR` to the absolute directory containing this installed `SKILL.md`. Before finishing, validate JSON with `python3 -m json.tool "$OUTPUT_DIR/review.json" >/dev/null`. When an annotated diff is available, also run:
 
 ```sh
-python3 .agents/skills/review/scripts/validate_review_json.py \
+python3 "$SKILL_DIR/scripts/validate_review_json.py" \
   --review-json "$OUTPUT_DIR/review.json" --diff "$OUTPUT_DIR/pr_diff.txt"
 ```
 
-If that path is unavailable, run the validator from this skill's `scripts/`
-directory. Then render the review for human inspection:
+Then render the review for human inspection:
 
 ```sh
-python3 .agents/skills/review/scripts/render_review.py \
+python3 "$SKILL_DIR/scripts/render_review.py" \
   --review-json "$OUTPUT_DIR/review.json" --output "$OUTPUT_DIR/review.html"
 ```
 
 The renderer creates a self-contained Excalidraw-inspired dark HTML report.
 Save any captured diff to `$OUTPUT_DIR/pr_diff.txt` too. Set `OUTPUT_DIR` to the
 expanded absolute skill output directory before these commands; create it before
-writing and check existing outputs before invoking the renderer. The final
+writing. The renderer refuses an existing output unless `--force` is passed; use that flag only when overwrite is authorized. The final
 artifacts are `$OUTPUT_DIR/review.json` and `$OUTPUT_DIR/review.html`.

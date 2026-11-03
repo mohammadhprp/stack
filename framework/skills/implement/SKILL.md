@@ -54,6 +54,8 @@ Summarize the intended outcome, material assumptions, and a short implementation
 
 ## 3. Create a task-specific branch
 
+Honor the host's branch/worktree authorization rules and use its documented commands for managed state. This skill does not grant explicit creation permission when the host requires a direct user request. Preserve an existing checkout assigned to this task and use the host's target metadata when it owns the base.
+
 Follow documented repository branch conventions. Otherwise use the prefixes and base fallback below:
 
 - Use the current clean branch's HEAD as the base and state that choice. Honor an explicitly requested base instead. Do not assume `main`, pull, merge, or rebase automatically.

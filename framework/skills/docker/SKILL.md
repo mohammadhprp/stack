@@ -91,11 +91,13 @@ Copy-ready examples, grouped by the reference that uses them.
 
 ## Scripts
 
-Bundled verification scripts, run from the skill root (or by the path shown) with `--help` for usage and exit-status details:
+Resolve `SKILL_DIR` to the absolute directory containing this installed `SKILL.md`.
+Run these scripts from the target project's root, using their absolute paths; they
+inspect the current directory. Use `--help` for usage and exit-status details:
 
-- `bash scripts/project-foundations/verify-setup.sh [--help]` — checks `.dockerignore`, `Dockerfile`, and `compose.yaml`, then validates the Compose configuration.
-- `bash scripts/build-strategies/verify-build.sh [--help] [IMAGE_NAME]` — builds the image and reports its size and configured user.
-- `bash scripts/compose-patterns/verify-compose.sh [--help]` — validates `compose.yaml` with `docker compose config --quiet`.
+- `bash "$SKILL_DIR/scripts/project-foundations/verify-setup.sh" [--help]` — checks `.dockerignore`, `Dockerfile`, and `compose.yaml`, then validates the Compose configuration.
+- `bash "$SKILL_DIR/scripts/build-strategies/verify-build.sh" [--help] [IMAGE_NAME]` — builds the image and reports its size and configured user.
+- `bash "$SKILL_DIR/scripts/compose-patterns/verify-compose.sh" [--help]` — validates `compose.yaml` with `docker compose config --quiet`.
 
 ## Checks
 

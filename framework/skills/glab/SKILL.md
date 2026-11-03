@@ -8,6 +8,12 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Provides guidance for using `glab`, the official GitLab CLI, to perform GitLab operations from the terminal.
 
+Inspection is read-only by default. Pushes, comments, approvals, merges, issue
+changes, pipeline retries or cancellations, and other remote mutations require
+clear user authorization; a request to review does not authorize posting or
+approving. Honor authorization already given without asking again. Never print
+tokens or credential-bearing config files.
+
 ## When to Use This Skill
 
 Invoke when the user needs to:
@@ -69,10 +75,10 @@ glab mr list --reviewer=@me
 # 2. Checkout MR locally to test
 glab mr checkout <mr-number>
 
-# 3. After testing, approve
+# 3. Approve only when the user requested an approval
 glab mr approve <mr-number>
 
-# 4. Add review comments
+# 4. Post comments only when requested
 glab mr note <mr-number> -m "Please update tests"
 ```
 
@@ -93,7 +99,7 @@ glab issue list --assignee=@me
 
 ```bash
 # Watch pipeline in progress
-glab pipeline ci view
+glab ci view
 
 # Check pipeline status
 glab ci status
@@ -177,7 +183,7 @@ glab api --method POST projects/:id/issues --field title="Bug" --field descripti
 - `glab issue close <number>` - Close issue
 
 **CI/CD:**
-- `glab pipeline ci view` - Watch pipeline
+- `glab ci view` - Watch pipeline
 - `glab ci status` - Check status
 - `glab ci lint` - Validate .gitlab-ci.yml
 - `glab ci retry` - Retry failed pipeline

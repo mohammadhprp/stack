@@ -8,6 +8,9 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Use the official `gh` CLI for GitHub operations instead of manually constructing API requests or browser workflows when a supported command exists.
 
+A request to review authorizes inspection, not posting comments or submitting an
+approval. Submit reviews only when the user requested that remote action.
+
 ## When to Use This Skill
 
 Invoke when the user needs to:
@@ -65,9 +68,11 @@ gh pr view 123 --comments
 git push -u origin HEAD
 gh pr create --base main --title "Add feature" --body "Summary and testing notes"
 
-# Review a PR
+# Inspect a PR
 gh pr checkout 123
 gh pr diff 123
+
+# Submit an approval only when requested
 gh pr review 123 --approve
 
 # Merge only after the user has explicitly approved the merge

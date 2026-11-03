@@ -5,11 +5,13 @@ description: Isolate repository edits in a Git worktree before starting a featur
 
 # New Feature
 
-Each editing task gets its own worktree and branch, created from the latest
-`origin/main` unless the user specifies a different base. Read-only work can
+When creation is authorized, each editing task gets its own worktree and branch,
+created from the resolved base below. Read-only work can
 use the existing checkout. Never build on `main` or reuse another task's work.
 
 ## Check existing isolation first
+
+Follow the host's documented worktree/branch workflow and authorization rules before changing managed state. If creation requires an explicit user request, this skill's automatic trigger does not grant it. Continue in an already assigned checkout when permitted; otherwise report the isolation blocker before creating anything. Resolve the base from an explicit request or host target metadata, then repository guidance; use `origin/main` only as the fallback when none of those supplies a base.
 
 Inspect `git worktree list`, `git status --short`, the current branch, and the
 session's task assignment. If the environment already created a worktree for
@@ -38,7 +40,7 @@ prefix alone. Otherwise follow all steps.
 
    ```bash
    git worktree add <worktrees-dir>/<task-name> \
-     -b <branch-prefix>/<task-name> origin/main
+     -b <branch-prefix>/<task-name> <resolved-base-ref>
    ```
 
    Use a directory outside the checkout, or a **gitignored** directory inside
@@ -67,8 +69,9 @@ prefix alone. Otherwise follow all steps.
 
   ```bash
   git worktree remove <worktrees-dir>/<task-name>
-  git branch -D <branch-prefix>/<task-name>
+   git branch -d <branch-prefix>/<task-name>
   ```
 
-  `-D` is expected: after a squash- or rebase-merge, `-d` refuses even
-  though the work is merged.
+  Run cleanup only when requested. After a squash- or rebase-merge, `-d`
+  may refuse; verify the work was preserved and obtain authorization before
+  force-deleting the branch. Use the host's cleanup workflow for managed worktrees.

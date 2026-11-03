@@ -151,7 +151,7 @@ jira issue move ISSUE-1 "In Progress"
 jira issue move ISSUE-1 Done -RFixed -a$(jira me) --comment "Completed"
 ```
 
-The status name must match the workflow exactly (case-sensitive). Run `jira issue move` with no arguments to pick from valid transitions interactively.
+The status name must match the workflow exactly (case-sensitive). In an interactive terminal, run `jira issue move ISSUE-1` without a target status to choose from that issue's transitions. For automation, resolve the exact status before running the command.
 
 ## Issue View
 

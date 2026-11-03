@@ -7,6 +7,16 @@ description: Create new skills, modify and improve existing skills, and measure 
 
 A skill for creating new skills and iteratively improving them.
 
+Resolve `SKILL_DIR` to the absolute directory containing this installed `SKILL.md`.
+Resolve bundled paths relative to it. Keep the target project as the working
+directory when evaluating triggers; module commands below set `PYTHONPATH` so
+they can find this skill's scripts without changing project discovery. Use
+absolute paths for skill folders, workspaces, and output destinations. The
+validator and packager require PyYAML; use an existing environment with it or
+report the missing dependency. Description optimization uses
+the authenticated `claude` CLI and evaluates Claude's triggering, even when
+this skill is invoked from another harness.
+
 At a high level, the process of creating a skill goes like this:
 
 - Decide what you want the skill to do and roughly how it should do it
@@ -224,9 +234,9 @@ Once all runs are done:
 
 1. **Grade each run** — spawn a grader subagent (or grade inline) that reads `agents/grader.md` and evaluates each assertion against the outputs. Save results to `grading.json` in each run directory. The grading.json expectations array must use the fields `text`, `passed`, and `evidence` (not `name`/`met`/`details` or other variants) — the viewer depends on these exact field names. For assertions that can be checked programmatically, write and run a script rather than eyeballing it — scripts are faster, more reliable, and can be reused across iterations.
 
-2. **Aggregate into benchmark** — run the aggregation script from the skill-creator directory:
+2. **Aggregate into benchmark** — run the bundled aggregation module:
    ```bash
-   python -m scripts.aggregate_benchmark <workspace>/iteration-N --skill-name <name>
+   PYTHONPATH="$SKILL_DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -m scripts.aggregate_benchmark <workspace>/iteration-N --skill-name <name>
    ```
    This produces `benchmark.json` and `benchmark.md` with pass_rate, time, and tokens for each configuration, with mean ± stddev and the delta. If generating benchmark.json manually, see `references/schemas.md` for the exact schema the viewer expects.
 Put each with_skill version before its baseline counterpart.
@@ -379,15 +389,15 @@ Tell the user: "This will take some time — I'll run the optimization loop in t
 Save the eval set to the workspace, then run in the background:
 
 ```bash
-python -m scripts.run_loop \
+PYTHONPATH="$SKILL_DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -m scripts.run_loop \
   --eval-set <path-to-trigger-eval.json> \
   --skill-path <path-to-skill> \
-  --model <model-id-powering-this-session> \
+  --model <verified-Claude-model-id> \
   --max-iterations 5 \
   --verbose
 ```
 
-Use the model ID from your system prompt (the one powering the current session) so the triggering test matches what the user actually experiences.
+Use a Claude model supported by the installed `claude` CLI and authorized by the user. Do not pass another provider's current-session model ID. If the user has not chosen a Claude model, ask before starting the paid optimization loop; skip it when the CLI or authentication is unavailable.
 
 While it runs, periodically tail the output to give the user updates on which iteration it's on and what the scores look like.
 
@@ -410,7 +420,7 @@ Take `best_description` from the JSON output and update the skill's SKILL.md fro
 Check whether you have access to the `present_files` tool. If you don't, skip this step. If you do, package the skill and present the .skill file to the user:
 
 ```bash
-python -m scripts.package_skill <path/to/skill-folder>
+PYTHONPATH="$SKILL_DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -m scripts.package_skill <path/to/skill-folder>
 ```
 
 After packaging, direct the user to the resulting `.skill` file path so they can install it.
@@ -433,7 +443,7 @@ In Claude.ai, the core workflow is the same (draft → test → review → impro
 
 **Blind comparison**: Requires subagents. Skip it.
 
-**Packaging**: The `package_skill.py` script works anywhere with Python and a filesystem. On Claude.ai, you can run it and the user can download the resulting `.skill` file.
+**Packaging**: The `package_skill.py` script requires Python, PyYAML, and a filesystem. On Claude.ai, you can run it and the user can download the resulting `.skill` file.
 
 **Updating an existing skill**: The user might be asking you to update an existing skill, not create a new one. In this case:
 - **Preserve the original name.** Note the skill's directory name and `name` frontmatter field -- use them unchanged. E.g., if the installed skill is `research-helper`, output `research-helper.skill` (not `research-helper-v2`).
@@ -450,7 +460,7 @@ If you're in Cowork, the main things to know are:
 - You don't have a browser or display, so when generating the eval viewer, use `--static <output_path>` to write a standalone HTML file instead of starting a server. Then proffer a link that the user can click to open the HTML in their browser.
 - For whatever reason, the Cowork setup seems to disincline Claude from generating the eval viewer after running the tests, so just to reiterate: whether you're in Cowork or in Claude Code, after running tests, you should always generate the eval viewer for the human to look at examples before revising the skill yourself and trying to make corrections, using `generate_review.py` (not writing your own boutique html code). Sorry in advance but I'm gonna go all caps here: GENERATE THE EVAL VIEWER *BEFORE* evaluating inputs yourself. You want to get them in front of the human ASAP!
 - Feedback works differently: since there's no running server, the viewer's "Submit All Reviews" button will download `feedback.json` as a file. You can then read it from there (you may have to request access first).
-- Packaging works — `package_skill.py` just needs Python and a filesystem.
+- Packaging works with Python, PyYAML, and a filesystem.
 - Description optimization (`run_loop.py` / `run_eval.py`) should work in Cowork just fine since it uses `claude -p` via subprocess, not a browser, but please save it until you've fully finished making the skill and the user agrees it's in good shape.
 - **Updating an existing skill**: The user might be asking you to update an existing skill, not create a new one. Follow the update guidance in the claude.ai section above.
 

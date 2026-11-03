@@ -64,18 +64,17 @@ def request_json(url, token, retries=1):
                 data = json.loads(body) if body else None
                 return data, resp.headers
         except HTTPError as err:
-            body = err.read().decode("utf-8", "ignore")
             if attempt < retries and (err.code >= 500 or err.code == 429):
                 attempt += 1
                 time.sleep(1)
                 continue
-            raise RuntimeError(f"HTTP {err.code} for {url}: {body or 'request failed'}") from err
+            raise RuntimeError(f"Sentry request failed (HTTP {err.code})") from err
         except URLError as err:
             if attempt < retries:
                 attempt += 1
                 time.sleep(1)
                 continue
-            raise RuntimeError(f"Network error for {url}: {err.reason}") from err
+            raise RuntimeError("Sentry request failed (network error)") from err
 
 
 def build_url(base_url, path, params=None):

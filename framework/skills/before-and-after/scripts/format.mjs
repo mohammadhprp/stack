@@ -5,7 +5,7 @@
  * deterministic attachment markup and marker replacement contract.
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { extname, relative, resolve } from "node:path";
 import { parseArgs } from "node:util";
 
@@ -157,6 +157,8 @@ function validateFiles(pairs, cwd) {
   for (const file of pairs.flatMap((pair) => [pair.before, pair.after]).filter(Boolean)) {
     const absolute = resolve(cwd, file);
     if (!existsSync(absolute)) throw new Error(`Media file does not exist: "${file}"`);
+    if (!statSync(absolute).isFile()) throw new Error(`Media path is not a file: "${file}"`);
+    localRef(realpathSync(absolute), realpathSync(cwd));
     mediaKind(file);
     localRef(file, cwd);
   }

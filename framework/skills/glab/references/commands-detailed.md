@@ -190,7 +190,7 @@ glab issue unsubscribe 456
 ### Viewing Pipelines
 ```bash
 # Watch pipeline in progress (interactive)
-glab pipeline ci view
+glab ci view
 
 # List recent pipelines
 glab ci list

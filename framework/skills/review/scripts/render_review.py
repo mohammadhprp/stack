@@ -83,12 +83,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--review-json", default="review.json")
     parser.add_argument("--output", default="review.html")
+    parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
     review = json.loads(Path(args.review_json).read_text(encoding="utf-8"))
     data = json.dumps(review, ensure_ascii=False, separators=(",", ":"))
     data = data.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
     html = PAGE.replace("__REVIEW_DATA__", data)
-    Path(args.output).write_text(html, encoding="utf-8")
+    with Path(args.output).open("w" if args.force else "x", encoding="utf-8") as output:
+        output.write(html)
 
 
 if __name__ == "__main__":

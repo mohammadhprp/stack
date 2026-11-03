@@ -28,7 +28,7 @@ Common `jira` CLI error scenarios and solutions.
 **Symptom:** API errors like `GET .../myself: 401 Unauthorized` or 403 on every command.
 
 **Fix:**
-1. Verify the token is exported: `echo "${JIRA_API_TOKEN:?not set}"`
+1. Check token presence without printing it: `test -n "${JIRA_API_TOKEN:-}" && echo 'Token is set' || echo 'Token is missing'`
 2. Jira Cloud: use an API token from https://id.atlassian.com/manage-profile/security/api-tokens (your email is the login; basic auth is the default)
 3. On-premises with a Personal Access Token: set `JIRA_AUTH_TYPE=bearer`
 4. On-premises with login credentials: export the password as `JIRA_API_TOKEN` (basic auth, the default)
@@ -52,7 +52,7 @@ Common `jira` CLI error scenarios and solutions.
 
 **Fix:**
 1. Add `--plain` (or `--table`, `--raw`, `--csv`) to list commands
-2. Add `--no-input` and all required flags to create/edit/move/assign commands
+2. Add `--no-input` to commands that support it, such as create/edit, and supply all required arguments. Check each command's `--help`; move/assign do not support that flag.
 3. Pipe bodies via stdin instead of letting them prompt: `echo "Body" | jira issue create -s"Summary" -tTask --no-input`
 
 ## Transition errors
@@ -61,7 +61,7 @@ Common `jira` CLI error scenarios and solutions.
 
 **Fix:**
 1. Status names are case-sensitive and must match the workflow exactly (e.g. `"In Progress"`, not `in progress`)
-2. Run `jira issue move` with no arguments to list valid transitions for the issue
+2. In an interactive terminal, run `jira issue move ISSUE-1` without a target status to choose from that issue's transitions. For automation, resolve the exact status first rather than launching the prompt.
 3. If a workflow field (comment, resolution, assignee) is rejected during a move, the Jira workflow does not allow it on that transition — drop the flag or ask an admin to enable it
 
 ## Empty or wrong issue lists

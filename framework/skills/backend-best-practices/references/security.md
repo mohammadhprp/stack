@@ -43,7 +43,6 @@ Use this when the task involves authentication, authorization, secrets, encrypti
 - Do not hide breaking changes in refactors.
 - Do not weaken authorization, validation, transaction safety, or error handling to make implementation easier.
 - Keep public contracts, migrations, and operational changes explicit in the deliverable.
-- Reference related standards: references/standards/security.md.
 
 ## Deliverables
 

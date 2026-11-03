@@ -3,11 +3,11 @@
 Skill Packager - Creates a distributable .skill file of a skill folder
 
 Usage:
-    python utils/package_skill.py <path/to/skill-folder> [output-directory]
+    python -m scripts.package_skill <path/to/skill-folder> [output-directory]
 
 Example:
-    python utils/package_skill.py skills/public/my-skill
-    python utils/package_skill.py skills/public/my-skill ./dist
+    python -m scripts.package_skill skills/public/my-skill
+    python -m scripts.package_skill skills/public/my-skill ./dist
 """
 
 import fnmatch
@@ -86,11 +86,20 @@ def package_skill(skill_path, output_dir=None):
 
     skill_filename = output_path / f"{skill_name}.skill"
 
+    files = [file_path for file_path in skill_path.rglob('*')
+             if file_path.is_file()
+             and file_path.resolve() != skill_filename
+             and not should_exclude(file_path.relative_to(skill_path.parent))]
+    for file_path in files:
+        if not file_path.resolve().is_relative_to(skill_path):
+            print(f"Error: file resolves outside the skill directory: {file_path}")
+            return None
+
     # Create the .skill file (zip format)
     try:
-        with zipfile.ZipFile(skill_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        with zipfile.ZipFile(skill_filename, 'x', zipfile.ZIP_DEFLATED) as zipf:
             # Walk through the skill directory, excluding build artifacts
-            for file_path in skill_path.rglob('*'):
+            for file_path in files:
                 if not file_path.is_file():
                     continue
                 arcname = file_path.relative_to(skill_path.parent)
@@ -110,10 +119,10 @@ def package_skill(skill_path, output_dir=None):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python utils/package_skill.py <path/to/skill-folder> [output-directory]")
+        print("Usage: python -m scripts.package_skill <path/to/skill-folder> [output-directory]")
         print("\nExample:")
-        print("  python utils/package_skill.py skills/public/my-skill")
-        print("  python utils/package_skill.py skills/public/my-skill ./dist")
+        print("  python -m scripts.package_skill skills/public/my-skill")
+        print("  python -m scripts.package_skill skills/public/my-skill ./dist")
         sys.exit(1)
 
     skill_path = sys.argv[1]

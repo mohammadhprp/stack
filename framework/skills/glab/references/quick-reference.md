@@ -51,7 +51,7 @@ glab issue close 456               # Close issue
 
 ```bash
 # Pipelines
-glab pipeline ci view              # Watch pipeline
+glab ci view              # Watch pipeline
 glab ci list                       # List pipelines
 glab ci status                     # Pipeline status
 glab ci trace                      # View logs

@@ -86,8 +86,8 @@ style guide violations and technical inaccuracies.
           instruction.
         - **Element Misuse:** Identify the incorrect or inappropriate use of
           special elements (e.g., Notes, Warnings, Cautions).
-        - **Table of Contents:** Identify the presence of a dynamically
-          generated or manually included table of contents.
+        - **Table of Contents:** Check that the existing table of contents
+          matches the project's convention and resolves to current headings.
         - **Missing Next Steps:** Check for procedural documents that lack a
           "Next steps" section (if applicable).
     - **Verify Code Accuracy (if applicable):**

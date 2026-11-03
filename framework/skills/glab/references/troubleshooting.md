@@ -306,7 +306,7 @@ cannot merge: pipeline must succeed
 
 2. View pipeline details:
    ```bash
-   glab pipeline ci view
+   glab ci view
    ```
 
 3. Fix pipeline failures and retry:
@@ -596,10 +596,13 @@ failed to load config
 ```
 
 **Solutions:**
-1. Check config file:
+1. Locate the config file without printing credentials:
    ```bash
-   cat ~/.config/glab-cli/config.yml
+   glab config path
    ```
+
+   Inspect it locally in an editor; do not copy token values into tool output,
+   logs, or reports. Use the reported path if it differs from the examples below.
 
 2. Backup and recreate:
    ```bash

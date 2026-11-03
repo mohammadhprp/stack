@@ -1,6 +1,6 @@
 ---
 name: perf-web-optimization
-description: 'Optimize web performance: bundle size, images, caching, lazy loading, and overall page speed. Use when site is slow, reducing bundle size, fixing layout shifts, improving Time to Interactive, or optimizing for Lighthouse scores. Triggers on: web performance, bundle size, page speed, slow site, lazy loading. Do NOT use for Core Web Vitals-specific fixes (use core-web-vitals), running Lighthouse audits (use perf-lighthouse), or Astro-specific optimization (use perf-astro).'
+description: 'Optimize web performance: bundle size, images, caching, lazy loading, Core Web Vitals, and overall page speed. Use when a site is slow, reducing bundle size, fixing layout shifts, or improving Lighthouse scores.'
 ---
 
 # Web Performance Optimization
@@ -123,7 +123,7 @@ Cache-Control: private, max-age=0, must-revalidate
 
 ## Measurement
 
-For running audits, reading reports, and setting budgets, use the **perf-lighthouse** skill.
+Use the project's existing performance tools to capture a baseline and compare after the change. For LCP, CLS, and INP, read `references/core-web-vitals.md`. Use another specialized audit skill only if it is installed.
 
 ## Checklist
 

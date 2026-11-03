@@ -199,7 +199,7 @@ Type-specific anti-patterns live in each type reference linked in the guide.
 
 ## 5. Design System
 
-**The design system is skinnable.** [`references/style-guide.md`](references/style-guide.md) is the single source of truth for colors, typography, tokens, and the default palette; this file names semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). To apply a brand, edit `style-guide.md` or run the URL-based flow in [`references/onboarding.md`](references/onboarding.md).
+**The design system is skinnable.** [`references/style-guide.md`](references/style-guide.md) supplies immutable defaults for colors, typography, tokens, and the palette; this file names semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). To apply a brand, edit the project's `$OUTPUT_DIR/style-guide.md` copy or run the URL-based flow in [`references/onboarding.md`](references/onboarding.md). Resolve roles from that project copy when present, otherwise from the shipped defaults.
 
 > When specs below or in type references mention "ink", "accent", "muted", etc., look up the current hex value in `style-guide.md`.
 
@@ -321,7 +321,7 @@ Run before producing any diagram.
 - [ ] **§6 rule 4:** a distinct attach point per connector on a shared edge, 12px or more apart, none hiding another?
 - [ ] **§6 rule 5:** no transit behind a non-endpoint box, except the unavoidable case (dashed, label at the visible end)?
 - [ ] **§6 rule 6:** no label mask overlapping a node drawn after it? (From a repository checkout, run `python3 <repo-root>/scripts/verify-geometry.py <file>`.)
-- [ ] Every arrow label has an opaque `fill="#f5f5f5"` rect behind it?
+- [ ] Every arrow label has an opaque rect in the active `paper` color behind it?
 - [ ] Legend is a horizontal bottom strip, not floating?
 - [ ] No vertical `writing-mode` text?
 - [ ] `viewBox` expanded for the legend strip (~60px)?

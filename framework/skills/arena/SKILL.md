@@ -16,8 +16,8 @@ If delegation is unavailable, explain the limitation and offer sequential
 alternatives; do not claim independent parallel judging occurred.
 
 Named principles below describe the discipline in the text, not dependencies on
-separately installed skills. Keep candidates isolated in task-specific worktrees
-or scratch directories. Do not commit, publish, delete user work, or start
+separately installed skills. Keep candidates isolated in explicitly authorized task-specific worktrees
+or separate scratch directories. Do not commit, publish, delete user work, or start
 implementation outside the requested scope.
 
 Open a todolist with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.
@@ -29,7 +29,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 1. State the artifact each candidate is producing.
 2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
 3. Pick the runners using the host's available capabilities. Honor explicitly configured user choices only when supported; `auto` or `inherit-parent` means omit the model override. If a chosen model is rejected, report it and use the parent default rather than guessing another ID. Use distinct model families when available and requested; otherwise disclose that independent candidates share a model. Select reasoning effort and speed only through supported host settings.
-4. Give each candidate its own output location: a task worktree where available, otherwise an approved scratch directory per candidate. No shared writable output.
+4. Give each candidate its own output location: an explicitly authorized task worktree, otherwise a separate scratch directory per candidate. No shared writable output.
 
 ## Phase B: Fan out
 

@@ -42,7 +42,6 @@ Use this when the task involves modeling entities such as users, products, order
 - Do not hide breaking changes in refactors.
 - Do not weaken authorization, validation, transaction safety, or error handling to make implementation easier.
 - Keep public contracts, migrations, and operational changes explicit in the deliverable.
-- Reference related standards: references/standards/database.md, references/standards/performance.md.
 
 ## Deliverables
 

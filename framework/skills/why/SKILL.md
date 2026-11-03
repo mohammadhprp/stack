@@ -33,7 +33,7 @@ If the target is vague ("why do we do it this way?" with no clear referent), mak
 
 ## Step 2. Establish the Code Anchor
 
-Before spawning investigators, build the seed context inline: file paths and line ranges, key symbols (functions, classes, constants), the last few commits touching the target, PR numbers from merge commits (pattern `(#1234)` in the subject line), and any linked ticket IDs. Run `git blame -L <start>,<end> <file>` for last-touch commits, `git log --follow -p -- <file>` for full history with patches through renames, `git log --oneline -20 -- <file>` for recent commits with PR numbers visible, and `git log -1 --format=%B <commit>` to extract PR numbers. Then pull the PR bodies and discussion for any substantive commit: `gh pr view <number> --json title,body,author,createdAt,mergedAt,labels,closingIssuesReferences,comments,reviews`. This anchor goes to every investigator and to the synthesizer.
+Before spawning investigators, build the seed context inline: file paths and line ranges, key symbols (functions, classes, constants), the last few commits touching the target, PR numbers from merge commits (pattern `(#1234)` in the subject line), and any linked ticket IDs. Run `git blame -L <start>,<end> <file>` for last-touch commits, `git log --follow -p -- <file>` for full history with patches through renames, `git log --oneline -20 -- <file>` for recent commits with PR numbers visible, and `git log -1 --format=%B <commit>` to extract PR numbers. Identify the repository host before retrieving review discussion. For GitHub, use the `gh` skill and `gh pr view <number> --json title,body,author,createdAt,mergedAt,labels,closingIssuesReferences,comments,reviews`; for GitLab, use the `glab` skill to inspect the corresponding MR. If remote access is unavailable, retain the local Git evidence and report that gap. This anchor goes to every investigator and to the synthesizer.
 
 ## Step 3. Spawn Parallel Investigators
 
@@ -53,14 +53,15 @@ Map each available MCP to one evidence category:
 6. Error / exception tracking
 7. Product analytics warehouse
 
-Source control is always available through git and `gh`. For the other six, classify using the MCP name, server instructions, tool names, and resource descriptors. If an MCP could fit more than one category, choose the one matching its primary evidence. Record ambiguous cases in the coverage map.
+Use local Git history when available and the repository host's supported client for remote review discussion; report absent tools, authentication, or history as coverage gaps. For the other six, classify using the MCP name, server instructions, tool names, and resource descriptors. If an MCP could fit more than one category, choose the one matching its primary evidence. Record ambiguous cases in the coverage map.
 
-Spawn one investigator per category that has a matching MCP, concurrently when
-supported, each owning exactly one tool or MCP. Do not ask one agent to cover
+Spawn a source-control investigator when local repository evidence is available,
+plus one investigator per other category that has a matching MCP, concurrently
+when supported, each owning one evidence category. Do not ask one agent to cover
 multiple MCPs. Use supported user-selected investigator models or parent defaults.
 
 Each investigator's prompt is `references/investigator-prompt.md` filled in, plus:
-- the category playbook `references/sources/<source>.md` for the selected MCP, adapted from the examples in `references/source-playbook.md`
+- the matching bundled category playbook from `references/sources/`, or `references/source-playbook.md` adapted to the discovered service when no matching playbook exists; do not invent a reference filename
 - `references/sources/incident-postmortem.md` **if the target code looks defensive** (null checks, retry logic, timeout handling, rate limiting, feature flags, egress guards, OOM handlers)
 - the code anchor and the user's original question
 
@@ -72,7 +73,7 @@ tool names or assuming that a server's presence grants access.
 
 Each category below is uniquely positioned to surface one shape of "why", shown after "Best at". Use it to know what to expect back, to name a gap when a category returns empty, and, only in the rare provably-irrelevant case, to justify a skip.
 
-1. **Source control** (git history, `gh` for PRs, code comments, tests). Always spawn, the only guaranteed source. Best at *implementation-time rationale captured during review*.
+1. **Source control** (git history, the repository host's review client, code comments, tests). Include when repository evidence is available; report missing history or remote access. Best at *implementation-time rationale captured during review*.
 2. **Issue / ticket tracker** (e.g. Linear, Jira, GitHub Issues, Plane, Shortcut MCP). Best at *the product or business forcing function*. Strongest when the why is external to engineering.
 3. **Long-form documents** (e.g. Notion, Confluence, Google Docs, Coda MCP). Best at *long-form design rationale*, written out before it becomes code.
 4. **Real-time team chat** (e.g. Slack, Discord, Microsoft Teams, Mattermost MCP). Best at *real-time deliberation that never reached a doc*. Especially important when the source control, ticket, and doc paper trail is thin.

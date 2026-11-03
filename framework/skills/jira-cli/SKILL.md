@@ -190,7 +190,7 @@ In the default TUI: `v` view issue, `m` transition, `ENTER` open in browser, `c`
 ## Best Practices
 
 1. **Verify setup first**: `jira me` confirms auth and config are working
-2. **Always pass `--no-input` with explicit flags** in scripts; interactive prompts will hang
+2. **Use `--no-input` where supported**, such as create/edit, and supply all required arguments in scripts. Check each command's `--help`; move/assign do not support that flag.
 3. **Use `$(jira me)`** for self-assignment and self-filtering
 4. **Use `--plain --columns ... --no-headers`** for any output you intend to parse
 5. **Match transition names exactly** to the Jira workflow; list interactively first if unsure
@@ -245,7 +245,7 @@ Load these references when:
 
 **List command hangs in a script** - The default output is an interactive TUI; add `--plain`
 
-**"Transition not found" or move fails** - Status name must match the workflow exactly; run `jira issue move` without arguments to see valid transitions
+**"Transition not found" or move fails** - Status name must match the workflow exactly; in an interactive terminal, run `jira issue move ISSUE-1` without a target status to choose from that issue's transitions
 
 **Empty issue lists** - Verify the project/board chosen during `jira init`; try `-p PROJECT_KEY`
 

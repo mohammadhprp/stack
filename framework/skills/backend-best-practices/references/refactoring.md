@@ -27,7 +27,7 @@ Use this when the task involves removing duplication, simplifying code, reducing
 
 1. Identify the improvement goal: reduce duplication, simplify logic, improve naming, extract module.
 2. Verify existing test coverage. If coverage is weak, add characterization tests first.
-3. Make one conceptual change at a time. Commit or stage after each safe step.
+3. Make one conceptual change at a time and inspect the diff after each safe step. Stage or commit only when the user requests it.
 4. Preserve external behavior: same inputs produce same outputs, same errors, same side effects.
 5. Run the full test suite after each change step.
 6. Compare before and after: verify the improvement did not introduce subtle behavioral differences.
@@ -41,7 +41,6 @@ Use this when the task involves removing duplication, simplifying code, reducing
 - Do not hide breaking changes in refactors.
 - Do not weaken authorization, validation, transaction safety, or error handling to make implementation easier.
 - Keep public contracts, migrations, and operational changes explicit in the deliverable.
-- Reference related standards: references/standards/naming.md, references/standards/testing.md.
 
 ## Deliverables
 

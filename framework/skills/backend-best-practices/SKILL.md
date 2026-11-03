@@ -6,7 +6,7 @@ version: 0.1.0
 
 # Backend Best Practices
 
-Consolidated best practices for backend engineering, organized by domain. Each section links to a detailed reference file. For exact API or framework syntax, verify with search-docs.
+Consolidated best practices for backend engineering, organized by domain. Each section links to a detailed reference file. For exact API or framework syntax, verify against current official documentation using an available documentation or search tool.
 
 ## Consistency First
 
@@ -114,7 +114,7 @@ Check sibling files, related controllers, models, or tests for established patte
 1. Identify the domain your task falls into (API, database, security, etc.) and open the corresponding reference file.
 2. Check sibling files for existing patterns — follow those first per Consistency First.
 3. When a task spans multiple domains (e.g., a new endpoint touches API design, database design, security, and testing), consult all relevant reference files.
-4. Verify syntax with search-docs where applicable.
+4. Verify syntax against current official documentation using available tools where applicable.
 
 ## Rules
 

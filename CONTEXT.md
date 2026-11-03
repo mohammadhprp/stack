@@ -194,8 +194,12 @@ a later install recreates them cleanly.
 `go test ./...` also runs the walkthrough scripts' Python standard-library
 regression suite and the security-audit validators' Node.js regression suite under
 `tests/framework/`; Python 3, Git, and Node.js 18+ must be available.
-The refreshed media formatter and diagram helpers are exercised manually, while
-Go tests cover their catalog installation and resource paths. PNG export additionally requires
+The media formatter and skill helpers have regression tests under `tests/framework/`,
+including output preservation, path containment, error privacy, and HTML escaping.
+Packaging tests require PyYAML and skip when it is unavailable; run them explicitly
+with `uv run --no-project --with pyyaml python -B tests/framework/skill_helpers_test.py`.
+Diagram helpers are exercised manually; Go tests cover catalog installation and
+resource paths. PNG export additionally requires
 Playwright/Chromium, but the required offline suite does not install or use it.
 
 - `go build ./...`

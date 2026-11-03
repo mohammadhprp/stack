@@ -13,7 +13,7 @@ Explorers and explainers are read-only roles using the host's actual delegation
 tool and supported parameters. Inherit the parent model unless the user explicitly
 selects a model that the host lists as available. `auto` and `inherit-parent` mean
 omit the override. Report rejected model choices and inherit rather than guessing
-IDs. If the host has no delegation tool, run the roles sequentially yourself and
+IDs. If delegation is unavailable or disallowed by the host, run the roles sequentially yourself and
 disclose that they were not independent. Do not edit source or publish findings.
 
 ## 1. Assess complexity
