@@ -4,6 +4,20 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+## [v0.1.8] - 2026-11-03
+
+### Added
+
+- Added `stack-diagram` for architecture diagrams with bundled fonts, icons, HTML generation, and optional PNG export.
+- Added regression coverage for media path containment, report preservation, sensitive error output, viewer HTML escaping, and skill packaging.
+
+### Fixed
+
+- Corrected commands, resource paths, tool assumptions, and conflicting instructions across 27 bundled skills.
+- Preserved preparation-only intent and existing authorization in commit, pull request, merge request, and release workflows; resolved target branches instead of hardcoding them.
+- Prevented unintended report and archive overwrites, external media and package symlink inclusion, and script injection in the skill evaluation viewer.
+- Removed sensitive response bodies and query details from Sentry errors and credential-printing troubleshooting instructions.
+
 ## [v0.1.7] - 2026-10-31
 
 ### Added
