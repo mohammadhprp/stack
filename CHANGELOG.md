@@ -4,6 +4,10 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+### Added
+
+- Added `merge-risk` for assessing pull request merge risk and `resolve-merge-conflicts` with a compact conflict-context helper.
+
 ## [v0.1.8] - 2026-11-03
 
 ### Added
