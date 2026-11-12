@@ -4,9 +4,12 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+## [v0.1.9] - 2026-11-12
+
 ### Added
 
 - Added `merge-risk` for assessing pull request merge risk and `resolve-merge-conflicts` with a compact conflict-context helper.
+- Added `untangle-codebase` for reducing coupling and complexity in a codebase.
 
 ## [v0.1.8] - 2026-11-03
 
