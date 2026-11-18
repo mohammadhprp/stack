@@ -109,14 +109,14 @@ func mustNotExist(t *testing.T, path string) {
 
 func TestRunPruneRemovesDeselectedItems(t *testing.T) {
 	dir := t.TempDir()
-	runInstall(t, dir, []string{"claude", "codex"}, []string{"commit", "why"}, []string{"playwright-mcp"}, false, false, false)
+	runInstall(t, dir, []string{"claude", "codex"}, []string{"commit", "adhd"}, []string{"playwright-mcp"}, false, false, false)
 
 	report := runInstall(t, dir, []string{"claude"}, []string{"commit"}, nil, true, false, false)
 	if !hasRemove(report) {
 		t.Error("prune reported no removals")
 	}
 
-	for _, rel := range []string{".codex/config.toml", ".mcp.json", ".agents/skills", ".claude/skills/why"} {
+	for _, rel := range []string{".codex/config.toml", ".mcp.json", ".agents/skills", ".claude/skills/adhd"} {
 		mustNotExist(t, filepath.Join(dir, filepath.FromSlash(rel)))
 	}
 	mustExist(t, filepath.Join(dir, ".claude", "skills", "commit", "SKILL.md"))
@@ -194,8 +194,8 @@ func TestRunPruneKeepsModifiedItemWholeThenForce(t *testing.T) {
 
 func TestRunPruneRemovesUnchangedButKeepsModifiedItem(t *testing.T) {
 	dir := t.TempDir()
-	runInstall(t, dir, []string{"claude"}, []string{"commit", "why"}, nil, false, false, false)
-	whySkill := filepath.Join(dir, ".claude", "skills", "why", "SKILL.md")
+	runInstall(t, dir, []string{"claude"}, []string{"commit", "adhd"}, nil, false, false, false)
+	whySkill := filepath.Join(dir, ".claude", "skills", "adhd", "SKILL.md")
 	if err := os.WriteFile(whySkill, []byte("user edit\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -204,13 +204,13 @@ func TestRunPruneRemovesUnchangedButKeepsModifiedItem(t *testing.T) {
 
 	mustNotExist(t, filepath.Join(dir, ".claude", "skills", "commit"))
 	mustExist(t, whySkill)
-	mustExist(t, filepath.Join(dir, ".claude", "skills", "why", "examples.md"))
+	mustExist(t, filepath.Join(dir, ".claude", "skills", "adhd", "examples.md"))
 
 	lock, err := install.LoadLock(dir)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !lockedItem(lock, "claude", install.KindSkill, "why") {
+	if !lockedItem(lock, "claude", install.KindSkill, "adhd") {
 		t.Error("the modified item must remain locked")
 	}
 	if lockedItem(lock, "claude", install.KindSkill, "commit") {
@@ -299,12 +299,12 @@ func TestRunPruneMCPEmptiedConfigDeleted(t *testing.T) {
 
 func TestRunPruneSharedAgentsSkillsKeepsNeeded(t *testing.T) {
 	dir := t.TempDir()
-	runInstall(t, dir, []string{"codex", "amp"}, []string{"commit", "why"}, nil, false, false, false)
+	runInstall(t, dir, []string{"codex", "amp"}, []string{"commit", "adhd"}, nil, false, false, false)
 
 	runInstall(t, dir, []string{"codex"}, []string{"commit"}, nil, true, false, false)
 
 	mustExist(t, filepath.Join(dir, ".agents", "skills", "commit", "SKILL.md"))
-	mustNotExist(t, filepath.Join(dir, ".agents", "skills", "why"))
+	mustNotExist(t, filepath.Join(dir, ".agents", "skills", "adhd"))
 }
 
 func TestRunPruneNeverDeletesOutsideTarget(t *testing.T) {
@@ -335,11 +335,11 @@ func TestRunPruneNeverDeletesOutsideTarget(t *testing.T) {
 
 func TestRunPruneThenReinstallRecreates(t *testing.T) {
 	dir := t.TempDir()
-	runInstall(t, dir, []string{"claude"}, []string{"commit", "why"}, nil, false, false, false)
+	runInstall(t, dir, []string{"claude"}, []string{"commit", "adhd"}, nil, false, false, false)
 	runInstall(t, dir, []string{"claude"}, []string{"commit"}, nil, true, false, false)
-	runInstall(t, dir, []string{"claude"}, []string{"commit", "why"}, nil, true, false, false)
+	runInstall(t, dir, []string{"claude"}, []string{"commit", "adhd"}, nil, true, false, false)
 
-	mustExist(t, filepath.Join(dir, ".claude", "skills", "why", "SKILL.md"))
+	mustExist(t, filepath.Join(dir, ".claude", "skills", "adhd", "SKILL.md"))
 	lock, err := install.LoadLock(dir)
 	if err != nil {
 		t.Fatal(err)

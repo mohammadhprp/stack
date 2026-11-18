@@ -63,10 +63,6 @@ The `spec` skill plans the user's assigned active-sprint Jira tasks and synchron
 managed briefs and sprint plans to Notion through `jira` and `ntn`. Its references
 document environment-only project mappings and CLI usage; sync state tracks
 identities and last-written values to preserve manual edits. Jira stays read-only.
-The companion `implement` skill reads a linked Notion task, confirms repository
-scope, creates a task branch, and implements and verifies focused changes without
-updating service records or committing unless separately requested. Both include
-usage examples and appear in the skill catalog.
 
 The `walkthrough` skill produces `walkthrough.json`, `walkthrough.md`, and self-contained
 `walkthrough.html` under `~/.stack/<project-name>/walkthrough/` for human review
@@ -88,9 +84,9 @@ validators in `scripts/`, and its reports default to
 OS-enforced sandbox; unavailable execution or verification capabilities must be
 reported rather than bypassed. It replaces `security-best-practices` in the catalog.
 
-The upstream refresh also pins sources in the `agent-browser`, `architect`,
-`arena`, `before-and-after`, `diagram-design`, `docs-writer`, `frontend-design`,
-`grilling`, `how`, `humanizer`, `sentry`, `unslop`, and `why` skills. Local additions
+The upstream refresh also pins sources in the `agent-browser`, `before-and-after`,
+`diagram-design`, `docs-writer`, `frontend-design`, `grilling`, `humanizer`,
+`sentry`, and `unslop` skills. Local additions
 and safety rules remain: host-native delegation uses discovered model IDs,
 diagram branding stays outside the installation, GitLab evidence is supported,
 and Sentry remains read-only by default. Humanizer is 3.1.0; Diagram Design is

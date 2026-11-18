@@ -18,7 +18,7 @@ its checksum, and installs `stack` to `~/.local/bin`.
 ```sh
 stack            # interactive TUI: pick harnesses, skills, and MCPs
 stack list       # list available skills and MCPs
-stack install --harness opencode,claude --skills commit,why --mcp playwright-mcp
+stack install --harness opencode,claude --skills commit,find-docs --mcp playwright-mcp
 stack install --all --harness claude
 stack doctor     # check what is installed
 ```

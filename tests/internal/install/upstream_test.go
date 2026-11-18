@@ -16,9 +16,8 @@ func TestUpdatedSkillsInstallWithPortableResources(t *testing.T) {
 	cat := loadCatalog(t)
 	var skills []models.Skill
 	for _, id := range []string{
-		"agent-browser", "architect", "arena", "before-and-after", "diagram-design",
-		"docs-writer", "frontend-design", "grilling", "how", "humanizer", "sentry",
-		"unslop", "why",
+		"agent-browser", "before-and-after", "diagram-design", "docs-writer",
+		"frontend-design", "grilling", "humanizer", "sentry", "unslop",
 	} {
 		skill, ok := cat.Skill(id)
 		if !ok {

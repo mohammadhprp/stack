@@ -4,6 +4,16 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+## [v0.1.10] - 2026-11-18
+
+### Added
+
+- Added `find-docs` for retrieving current library documentation and code examples through Context7.
+
+### Removed
+
+- Removed the `architect`, `arena`, `bro`, `how`, `implement`, and `why` skills from the embedded catalog.
+
 ## [v0.1.9] - 2026-11-12
 
 ### Added
