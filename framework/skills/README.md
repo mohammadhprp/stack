@@ -10,25 +10,21 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | --- | --- | --- |
 | [adhd](./adhd/SKILL.md) | Shape output for ADHD readers: action first, numbered steps, restated state, no tangents. | Any task where the response must be immediately actionable without preamble or recap. |
 | [agent-browser](./agent-browser/SKILL.md) | Automate browser and Electron workflows for navigation, testing, screenshots, and data extraction. | Website interaction, browser automation, exploratory testing, QA, and Electron desktop app workflows. |
-| [architect](./architect/SKILL.md) | Sketch architecture and module boundaries before implementation. | Non-trivial design and implementation work. |
-| [arena](./arena/SKILL.md) | Compare parallel candidate solutions and synthesize the strongest result. | Non-trivial artifacts and design alternatives. |
 | [backend-best-practices](./backend-best-practices/SKILL.md) | Consolidated backend engineering practices for API design, architecture, data, security, testing, observability, performance, debugging, and refactoring. | Any backend task that benefits from structured domain guidance across multiple backend disciplines. |
 | [before-and-after](./before-and-after/SKILL.md) | Prepare screenshot and recording comparisons with native GitHub or GitLab attachments. | Local visual evidence or authorized PR/MR media publishing; see its PolyForm Shield license. |
-| [bro](./bro/SKILL.md) | Restate the last message in plain human language without jargon. | Simplifying technical explanations. |
 | [changelog](./changelog/SKILL.md) | Create or update `CHANGELOG.md` entries. | Release notes and unreleased changes. |
 | [commit](./commit/SKILL.md) | Create atomic Git commits with conventional messages. | Committing reviewed changes. |
 | [diagram-design](./diagram-design/SKILL.md) | Create 45 diagram types with semantic patterns, named profiles, source imports, and HTML/SVG/PNG output. | Architecture, data, process, and other diagrams that communicate more clearly than prose or tables. |
 | [docs-writer](./docs-writer/SKILL.md) | Write, review, and edit documentation files with consistent structure, tone, and technical accuracy. | Creating docs, reviewing markdown files, writing READMEs, or updating `/docs` directories. |
 | [docker](./docker/SKILL.md) | Dockerize projects and work across Dockerfiles, Compose, destructive-command safety, Docker Agent, and Docker Sandboxes. | Any Docker task: scaffolding, image builds, Compose wiring/debugging, agent config/run/serve/eval, or `sbx` lifecycle, environments, kits, policy, and credentials. |
 | [find-skills](./find-skills/SKILL.md) | Discover, evaluate, and install skills from the open agent skills ecosystem. | Finding an installable skill for a specialized task or extending an agent's capabilities. |
+| [find-docs](./find-docs/SKILL.md) | Retrieve current documentation, API references, and code examples for developer technologies through Context7. | Library-specific API, configuration, migration, setup, and debugging questions. |
 | [founder](./founder/SKILL.md) | Business strategy, go-to-market and launch planning, product/competitor intelligence, PRDs, pricing, SOPs, and marketing, brand, outreach, and social copy. | Founder or small-business growth work: growth plans, launch and market entry, competitor analysis, PRDs, pricing tiers, campaigns, landing-page audits, ads, outreach, and LinkedIn/X posts. |
 | [frontend-design](./frontend-design/SKILL.md) | Distinctive, intentional visual design for new UI or reshaping existing UI — aesthetic direction, typography, and choices that don't read as templated defaults. | Building new interfaces, reshaping existing UI, or escaping generic AI-generated design looks. |
 | [go-best-practices](./go-best-practices/SKILL.md) | Apply idiomatic Go guidance for APIs, errors, concurrency, services, tests, and performance. | Writing, reviewing, debugging, or porting Go code. |
 | [grilling](./grilling/SKILL.md) | Grill plans and decisions relentlessly through design-tree rounds until shared understanding is reached. | Stress-testing ideas, surfacing hidden assumptions, and scoping plans before implementation. |
 | [glab](./glab/SKILL.md) | Use the GitLab CLI (glab) to manage merge requests, issues, pipelines, and repositories from the command line. | Any project hosted on GitLab (SaaS or self-hosted). |
 | [humanizer](./humanizer/SKILL.md) | Remove signs of AI-generated writing from text — inflated importance, promotional language, em dash overuse, rule of three, AI vocabulary, and filler phrases. | Editing or reviewing prose to make it sound more natural and human-written. |
-| [implement](./implement/SKILL.md) | Implement a linked Notion task on a task-specific Git branch with focused changes and verification. | Starting or resuming implementation of a Notion task, including tasks prepared by spec. |
-| [how](./how/SKILL.md) | Explain subsystem architecture, runtime flow, ownership, and layering. | Code walkthroughs and architecture questions. |
 | [jira-cli](./jira-cli/SKILL.md) | Use the Jira CLI (jira) to manage issues, sprints, epics, comments, transitions, and worklogs from the command line. | Any project using Jira (Cloud or self-hosted) for issue tracking. |
 | [commit](./commit/SKILL.md) | Create atomic Git commits with conventional messages. | Committing reviewed changes. |
 | [pull-request](./pull-request/SKILL.md) | Create or update GitHub pull requests (PRs). | GitHub contribution workflows. |
@@ -51,7 +47,6 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [untangle-codebase](./untangle-codebase/SKILL.md) | Refactor structural coupling in a Laravel backend. | Untangling a Laravel backend or a specified area while preserving behavior. |
 | [unslop](./unslop/SKILL.md) | Remove AI writing patterns and restore a natural human voice. | Editing prose to remove generic or artificial phrasing. |
 | [walkthrough](./walkthrough/SKILL.md) | Explain PRs, MRs, and local changes in grouped Markdown and HTML reports with warnings, notices, and human decisions. | Human reviewers who need a categorized reading guide with related changes together. |
-| [why](./why/SKILL.md) | Investigate the evidence and rationale behind code and design decisions. | Historical design-reasoning and motivation investigations. |
 
 ## How Skills Are Organized
 
