@@ -123,7 +123,9 @@ Cache-Control: private, max-age=0, must-revalidate
 
 ## Measurement
 
-Use the project's existing performance tools to capture a baseline and compare after the change. For LCP, CLS, and INP, read `references/core-web-vitals.md`. Use another specialized audit skill only if it is installed.
+Use the project's existing performance tools to capture a baseline and compare after the change. For LCP, CLS, and INP, read `references/core-web-vitals.md`. For running Lighthouse audits, interpreting reports, or setting budgets, use `perf-lighthouse` if installed; otherwise use the project's available audit tooling.
+
+Source: [Tech Leads Club agent skills](https://github.com/tech-leads-club/agent-skills/tree/e899fd33f93c6e1eefb8222cb1c737682e69adfc/packages/skills-catalog/skills/%28performance%29/perf-web-optimization), MIT.
 
 ## Checklist
 
