@@ -4,6 +4,8 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+## [v0.2.0] - 2026-11-19
+
 ### Added
 
 - Added `yolo`, an approval-gated session mode for taking a coding task from intake to verified submission, with task records under `~/.stack/yolo/`.
