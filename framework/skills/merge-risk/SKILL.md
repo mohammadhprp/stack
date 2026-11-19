@@ -5,7 +5,7 @@ metadata:
   credits:
     skill: pr
     author: Matt Pocock
-    url: "https://github.com/mattpocock/skills/blob/main/skills/engineering/pr/SKILL.md"
+    url: "https://github.com/mattpocock/skills/blob/e484a8095543718ced436b9b49a8160ed4554000/skills/engineering/pr/SKILL.md"
 ---
 Output format:
 
@@ -21,6 +21,7 @@ Output format:
 These are the **categories** and **verdicts** that affect risk, with descriptions of what "low risk" means:
 
 - **Alignment (poor ⚠️ / decent 👀 / good ✅):** Code aligns with the description and source issue, when present. Behavior assumptions and drive-bys must be documented.
+  - Use the project's domain terms from `GLOSSARY.md` if present, so risk descriptions name the right concepts and boundaries.
 - **Impact (large ⚠️ / medium 👀 / small ✅):** Scope is contained and away from sensitive code paths.
   - Consider blast radius: potential impact or scope of the changes introduced by this PR. Consider all possibilities. Examples are layout shift, breakages for consumers, mobile responsiveness, etc.
   - Sensitive areas carry outsized risk regardless of diff size: auth, permissions, payments, PII, secrets, data migrations, dependency bumps, and infra or config changes. Flag any that are touched, and call out anything that widens access, weakens validation, or logs sensitive data.
