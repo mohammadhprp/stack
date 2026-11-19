@@ -32,7 +32,7 @@
   --font-body: "Hiragino Sans", "Yu Gothic UI", "Noto Sans CJK JP", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px;
-  --radius-card: 10px; --radius-tile: 8px;
+  --radius-card: 10px; --radius-tile: 12px;
   /* translucent veil behind node label text: matches paper on plain canvas, blends into
      group tints instead of punching an off-color rectangle through them */
   --color-veil: oklch(98.5% 0.004 250 / .78);
@@ -114,6 +114,18 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 
 .group.aws.vpc { border-color:#8C4FFF; }
 .group.aws.private { border-color:#00A4A6; }
 .group.aws.public { border-color:#7AA116; }
+.group.gcp { border:1.5px solid #4285F4; border-radius:6px; }
+.group.azure { border:1.5px solid #0078D4; border-radius:6px; }
+.group.gcp > .g-label, .group.azure > .g-label { gap:8px; color: var(--color-ink); }
+.group.gcp > .g-label img, .group.azure > .g-label img { width:20px; height:20px; }
+.group.gcp.region, .group.azure.region { border-color: var(--color-rule-2); background: var(--color-paper-2); }
+.group.gcp.vpc { border:1.5px dashed var(--color-ink-2); }
+.group.gcp.subnet { border:1px dashed var(--color-neutral); }
+.group.gcp.zone { border-color:#34A853; }
+.group.azure.rg { border:1.5px dashed #0096D7; }
+.group.azure.vnet { border:1.5px solid #A4CBFB; }
+.group.azure.subnet { border:1px solid #A4CBFB; }
+.group.azure.zone { border-color:#FFD965; }
 
 .node { position:absolute; width:132px; text-align:center; }
 .tile { width:60px; height:60px; margin:0 auto; border-radius: var(--radius-tile);
@@ -176,6 +188,8 @@ path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
            <img class="lt" src="%%ICON_<name>%%" alt=""><img class="dk" src="%%ICON_<name>_dark%%" alt="">
          no dark variant but the mark has black parts: <img class="plate" ...>
          AWS groups: "group aws" (AWS Cloud), or add region | az | vpc | private | public
+         Google Cloud groups: "group gcp", or add region | vpc | subnet | zone
+         Azure groups: "group azure", or add rg | region | vnet | subnet | zone
          geometry rules: references/geometry.md -->
     <div class="group ga" style="left:252px; top:60px; width:325px; height:210px;">
       <div class="g-label"><img src="%%ICON_vendor%%" alt="">Vendor Cloud</div>
