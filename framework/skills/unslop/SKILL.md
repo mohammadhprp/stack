@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Edit text to remove AI patterns and add human voice.
 
+Rule numbers are stable. The pstack clarity rules numbered 32–33 upstream remain 47–48 here so they do not displace Stack's existing rules.
+
 ## Process
 
 1. Scan for the patterns below.
@@ -57,7 +59,7 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 13. **Em dash overuse.** Avoid em dashes entirely. Use periods or commas only (no parentheses, no en dashes, no hyphen-as-dash substitutes). Em dashes are an AI tell, and reaching for parentheses instead just trades one tell for another. If a thought needs separation, end the sentence or use a comma.
 14. **Colon overuse.** Colons are fine before a list or example. Not as mid-sentence connectors. "If you're coming from traditional automation: instead of registering event handlers, you describe conditions" adds nothing with the colon. Rewrite to let the point stand on its own without comparison framing. "Describing when the scheduler should fire works best as plain English." Same meaning, no crutch punctuation.
 15. **Boldface overuse.** Don't bold every proper noun or acronym.
-16. **Inline-header lists.** The tell is a bold label and colon that restates the line: "**Performance:** Performance improved...". Convert those to prose. A bold lead-in that ends in a period, names the item, and is followed by genuinely new detail ("**Schema in TypeScript.** Tables live in one file.") is fine, not a tell.
+16. **Inline-header lists.** Drop bold labels that restate their lines. A bold lead-in that ends in a period and adds new detail is fine: "**Schema in TypeScript.** Tables live in one file."
 17. **Title case headings.** Use sentence case.
 18. **Decorative emojis.** Remove from headings and bullets.
 19. **Curly quotes.** Replace with straight quotes.
@@ -121,5 +123,5 @@ metadata, and link targets when editing a file unless the user requests otherwis
 
 Patterns 32–46, detect mode, and `references/eval.md` adapted from [no-ai-slop](https://github.com/petergyang/no-ai-slop) by Peter Yang, MIT License.
 
-The pstack rules were reviewed at [e44668c](https://github.com/backnotprop/pstack/blob/e44668c2aad92eacf4e84df47984121fefb11b82/skills/unslop/SKILL.md).
+The current, shorter pstack rule set was reviewed at [427e37b](https://github.com/backnotprop/pstack/blob/427e37b2903f8ab2c8c836b79af7c785c90f70d2/skills/unslop/SKILL.md). Stack retains the fuller explanations, named examples, and numbered supplements.
 The no-ai-slop supplement was reviewed at [000650b](https://github.com/petergyang/no-ai-slop/tree/000650b156983f5159695b441477f4e63b25dc85).
