@@ -2,7 +2,7 @@
 
 ## Use `LazilyRefreshDatabase` Over `RefreshDatabase`
 
-`RefreshDatabase` migrates once per process and wraps each test in a rolled-back transaction. `LazilyRefreshDatabase` skips even that first migration if the schema is already up to date.
+`LazilyRefreshDatabase` defers the work of `RefreshDatabase` until the test first uses a database connection. It is useful when some tests never use the database. It is not a schema-freshness check or a reason to skip database isolation.
 
 ## Use Model Assertions Over Raw Database Assertions
 

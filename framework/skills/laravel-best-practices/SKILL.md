@@ -10,6 +10,8 @@ metadata:
 
 Best practices for Laravel, organized as an index of reference files. Each reference file teaches what to do and why. For exact API syntax, verify with `search-docs`.
 
+Adapted from [Laravel Boost](https://github.com/laravel/boost/tree/6004f09e71fe199880a671df6dc34a6e731ba1ea/.ai/laravel/skill), MIT. Stack keeps testing and package-specific guidance bundled as references and does not require Boost to render the materials.
+
 ## Consistency First
 
 Before applying any reference, check what the application already does. Laravel offers multiple valid approaches, and the best choice is the one the codebase already uses, even if another pattern would be theoretically better. Inconsistency is worse than a suboptimal pattern.
