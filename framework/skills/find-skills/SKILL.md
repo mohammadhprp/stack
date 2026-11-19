@@ -70,6 +70,8 @@ For example:
 2. **Source** — Verify the repository and publisher. Install counts, stars, and an official-looking name are discovery signals, not proof of safety or quality.
 3. **Fit** — Check that the skill supports the user's harness and requested workflow. Report anything you could not inspect.
 
+Adapted from [Vercel's find-skills](https://github.com/vercel-labs/skills/blob/773fb2c7bbf16781670a3520affc4abd0c6151ae/skills/find-skills/SKILL.md). Stack requires source inspection and defaults to project-local installation.
+
 ### Step 5: Present Options to the User
 
 When you find relevant skills, present them to the user with:
