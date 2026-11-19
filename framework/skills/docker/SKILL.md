@@ -76,7 +76,8 @@ Every reference file below starts from the container/agent/sandbox semantics its
 | **Docker Sandboxes** | |
 | Sandbox lifecycle — `sbx run/create/ls/stop/rm/prune`, workspace bind mount vs `--clone`, `exec`/`cp`/`ports` | [`references/sandboxes-lifecycle.md`](references/sandboxes-lifecycle.md) |
 | `sbxenv.yaml` — declarative environments, host lifecycle hooks, args, merge layers, `secrets`/`registries`/`bindings` | [`references/sandboxes-env.md`](references/sandboxes-env.md) |
-| Kits (`spec.yaml`, schemaVersion 2) — authoring, validation, composition, and distribution | [`references/sandboxes-kits.md`](references/sandboxes-kits.md) |
+| Sandbox kits — v3 OCI descriptors, capabilities, and validation | [`references/sandboxes-kits-v3.md`](references/sandboxes-kits-v3.md) |
+| Existing v2 `spec.yaml` kits — legacy authoring and composition | [`references/sandboxes-kits.md`](references/sandboxes-kits.md) |
 | Network policy and credentials — `sbx policy`, `sbx secret`, registry pull credentials, deny-over-allow precedence | [`references/sandboxes-network-credentials.md`](references/sandboxes-network-credentials.md) |
 
 ## Assets
@@ -114,3 +115,7 @@ Manual verification runbooks and checklists, one per reference:
 - [`checks/sandboxes-env.md`](checks/sandboxes-env.md)
 - [`checks/sandboxes-kits.md`](checks/sandboxes-kits.md)
 - [`checks/sandboxes-network-credentials.md`](checks/sandboxes-network-credentials.md)
+
+## Source
+
+Adapted from [Docker's skill catalog](https://github.com/docker/skills/tree/caeee2024f7527d890a29dd1732b62a112f56d0e/skills), Apache-2.0. Stack groups the workflows under one skill and retains v2 references for existing projects.
