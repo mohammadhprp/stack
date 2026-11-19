@@ -89,6 +89,11 @@ codebase, updates `GLOSSARY.md` as terms settle, and offers ADRs for decisions
 that are hard to reverse, surprising without context, and real trade-offs. Its
 interview and domain-modeling workflows ship as references, not separate skills.
 
+The `yolo` skill is an explicit on/off session mode for coding tasks. Every
+phase ends at a user approval checkpoint, including a separate approval for
+the exact submission action. Its records live under
+`~/.stack/yolo/<project-slug>/<task-slug>/`; upstream workflows ship as references.
+
 The upstream refresh also pins sources in the `agent-browser`, `before-and-after`,
 `diagram-design`, `docs-writer`, `frontend-design`, `humanizer`,
 `sentry`, and `unslop` skills. Local additions

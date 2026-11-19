@@ -4,6 +4,10 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+### Added
+
+- Added `yolo`, an approval-gated session mode for taking a coding task from intake to verified submission, with task records under `~/.stack/yolo/`.
+
 ### Changed
 
 - Refreshed source-backed skills, including Humanizer 4.0.0, Diagram Design 2.6.168 with PlantUML import, and Stack Diagram with more official icon sets. Retained Stack's install paths, review safeguards, and local-only delivery defaults.

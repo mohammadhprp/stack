@@ -49,6 +49,7 @@ See the [upstream review](UPSTREAM.md) for source repositories and refresh decis
 | [untangle-codebase](./untangle-codebase/SKILL.md) | Refactor structural coupling in a Laravel backend. | Untangling a Laravel backend or a specified area while preserving behavior. |
 | [unslop](./unslop/SKILL.md) | Remove AI writing patterns and restore a natural human voice. | Editing prose to remove generic or artificial phrasing. |
 | [walkthrough](./walkthrough/SKILL.md) | Explain PRs, MRs, and local changes in grouped Markdown and HTML reports with warnings, notices, and human decisions. | Human reviewers who need a categorized reading guide with related changes together. |
+| [yolo](./yolo/SKILL.md) | Run a coding task from intake to submission with user approval at each phase. | Session-scoped, evidence-based delivery with records under `~/.stack/yolo/<project-slug>/<task-slug>/`. |
 
 ## How Skills Are Organized
 

@@ -20,7 +20,7 @@ func TestUpdatedSkillsInstallWithPortableResources(t *testing.T) {
 		"find-docs", "find-skills", "frontend-design", "grill-with-docs", "humanizer",
 		"laravel-best-practices", "merge-risk", "perf-web-optimization", "ponytail",
 		"resolve-merge-conflicts", "sentry", "show-me",
-		"stack-diagram", "tdd", "unslop",
+		"stack-diagram", "tdd", "unslop", "yolo",
 	} {
 		skill, ok := cat.Skill(id)
 		if !ok {
@@ -50,6 +50,10 @@ func TestUpdatedSkillsInstallWithPortableResources(t *testing.T) {
 			"diagram-design/scripts/plantuml_extract.py",
 			"diagram-design/scripts/verify_geometry.py",
 			"stack-diagram/scripts/fetch_icons.py",
+			"yolo/licenses/mattpocock-skills.txt",
+			"yolo/licenses/ponytail.txt",
+			"yolo/licenses/pstack.txt",
+			"yolo/licenses/superpowers.txt",
 		} {
 			if _, err := os.Stat(filepath.Join(target, prefix, "skills", filepath.FromSlash(file))); err != nil {
 				t.Errorf("%s missing bundled resource %s: %v", prefix, file, err)

@@ -1,0 +1,14 @@
+# Upstream sources
+
+These are adapted reference documents, not standalone skill registrations. YOLO's phase approvals and artifact rules take precedence over upstream workflows.
+
+| Local reference | Pinned upstream material |
+| --- | --- |
+| Session mode in `SKILL.md` | Ponytail: [ponytail](https://github.com/DietrichGebert/ponytail/blob/96608e078b2d5ea607c5c3b8b5a54d1c1fba6846/skills/ponytail/SKILL.md) |
+| `task-and-plan.md` | Matt Pocock: [implement](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/implement/SKILL.md); Superpowers: [writing-plans](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/writing-plans/SKILL.md) |
+| `implement-and-test.md` | Matt Pocock: [tdd](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/tdd/SKILL.md); Superpowers: [test-driven-development](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/test-driven-development/SKILL.md); pstack: [sequence verifiable units](https://github.com/cursor/plugins/blob/e58dd043600587dbaf58ba315e7f2b38373eeb43/pstack/skills/principle-sequence-verifiable-units/SKILL.md), [test behavior, not implementation](https://github.com/cursor/plugins/blob/e58dd043600587dbaf58ba315e7f2b38373eeb43/pstack/skills/principle-test-behavior-not-implementation/SKILL.md) |
+| `diagnose.md` | Matt Pocock: [diagnosing-bugs](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/diagnosing-bugs/SKILL.md); pstack: [figure-it-out](https://github.com/cursor/plugins/blob/e58dd043600587dbaf58ba315e7f2b38373eeb43/pstack/skills/figure-it-out/SKILL.md) |
+| `verify-and-review.md` | Superpowers: [verification-before-completion](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/verification-before-completion/SKILL.md); Matt Pocock: [code-review](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/code-review/SKILL.md); pstack: [blast-radius](https://github.com/cursor/plugins/blob/e58dd043600587dbaf58ba315e7f2b38373eeb43/pstack/skills/blast-radius/SKILL.md) |
+| `submit.md` | Superpowers: [finishing-a-development-branch](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/finishing-a-development-branch/SKILL.md); Matt Pocock: [pr](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/pr/SKILL.md) |
+
+YOLO does not inherit automatic commits, external publishing, required subagents, plugin hooks, task scripts, or any rule to skip user approval. See the bundled MIT notices for [Matt Pocock Skills](../licenses/mattpocock-skills.txt), [Superpowers](../licenses/superpowers.txt), [pstack](../licenses/pstack.txt), and [Ponytail](../licenses/ponytail.txt).
