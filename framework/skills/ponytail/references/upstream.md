@@ -1,9 +1,9 @@
 # Upstream source
 
 - Repository: https://github.com/DietrichGebert/ponytail
-- Version: 5.3.2 (`package.json`)
-- Reviewed revision: `09c434ab73ca43761c5d8b0c5d341926c2fba710`
-- Snapshot: https://github.com/DietrichGebert/ponytail/tree/09c434ab73ca43761c5d8b0c5d341926c2fba710
+- Version: 5.3.3 (`package.json`); the bundled workflows did not change from 5.3.2.
+- Reviewed revision: `96608e078b2d5ea607c5c3b8b5a54d1c1fba6846`
+- Snapshot: https://github.com/DietrichGebert/ponytail/tree/96608e078b2d5ea607c5c3b8b5a54d1c1fba6846
 - License: MIT; the upstream notice is included in `../LICENSE`.
 
 ## Source mapping
