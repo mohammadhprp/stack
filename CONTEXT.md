@@ -94,8 +94,8 @@ The upstream refresh also pins sources in the `agent-browser`, `before-and-after
 `sentry`, and `unslop` skills. Local additions
 and safety rules remain: host-native delegation uses discovered model IDs,
 diagram branding stays outside the installation, GitLab evidence is supported,
-and Sentry remains read-only by default. Humanizer is 3.1.0; Diagram Design is
-2.6 with 45 types and six packaged extraction/export/check helpers. The media
+and Sentry remains read-only by default. Humanizer is 4.0.0; Diagram Design is
+2.6.168 with 51 types and eight packaged extraction/export/check helpers. The media
 formatter preserves bytes outside its marked block. Its upstream PolyForm Shield
 license must be reviewed before release; embedded content is not uniformly MIT.
 

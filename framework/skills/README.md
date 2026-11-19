@@ -4,6 +4,8 @@ A curated catalog of task-specific procedures for AI coding agents.
 
 This catalog is framework-agnostic: each skill defines when to activate, a step-by-step workflow, and the engineering judgment expected of the agent.
 
+See the [upstream review](UPSTREAM.md) for source repositories and refresh decisions.
+
 ## Available Skills
 
 | Skill | Purpose | Best fit |
@@ -14,7 +16,7 @@ This catalog is framework-agnostic: each skill defines when to activate, a step-
 | [before-and-after](./before-and-after/SKILL.md) | Prepare screenshot and recording comparisons with native GitHub or GitLab attachments. | Local visual evidence or authorized PR/MR media publishing; see its PolyForm Shield license. |
 | [changelog](./changelog/SKILL.md) | Create or update `CHANGELOG.md` entries. | Release notes and unreleased changes. |
 | [commit](./commit/SKILL.md) | Create atomic Git commits with conventional messages. | Committing reviewed changes. |
-| [diagram-design](./diagram-design/SKILL.md) | Create 45 diagram types with semantic patterns, named profiles, source imports, and HTML/SVG/PNG output. | Architecture, data, process, and other diagrams that communicate more clearly than prose or tables. |
+| [diagram-design](./diagram-design/SKILL.md) | Create 51 diagram types with semantic patterns, named profiles, source imports including PlantUML, and HTML/SVG/PNG output. | Architecture, data, process, and other diagrams that communicate more clearly than prose or tables. |
 | [docs-writer](./docs-writer/SKILL.md) | Write, review, and edit documentation files with consistent structure, tone, and technical accuracy. | Creating docs, reviewing markdown files, writing READMEs, or updating `/docs` directories. |
 | [docker](./docker/SKILL.md) | Dockerize projects and work across Dockerfiles, Compose, destructive-command safety, Docker Agent, and Docker Sandboxes. | Any Docker task: scaffolding, image builds, Compose wiring/debugging, agent config/run/serve/eval, or `sbx` lifecycle, environments, kits, policy, and credentials. |
 | [find-skills](./find-skills/SKILL.md) | Discover, evaluate, and install skills from the open agent skills ecosystem. | Finding an installable skill for a specialized task or extending an agent's capabilities. |

@@ -6,6 +6,7 @@ Notable changes to `stack` are recorded here.
 
 ### Changed
 
+- Refreshed source-backed skills, including Humanizer 4.0.0, Diagram Design 2.6.168 with PlantUML import, and Stack Diagram with more official icon sets. Retained Stack's install paths, review safeguards, and local-only delivery defaults.
 - Replaced `grilling` with `grill-with-docs`, bundling its interview and domain-modeling workflows as references rather than separate skills.
 
 ## [v0.1.10] - 2026-11-18

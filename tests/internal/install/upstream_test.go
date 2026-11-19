@@ -16,8 +16,11 @@ func TestUpdatedSkillsInstallWithPortableResources(t *testing.T) {
 	cat := loadCatalog(t)
 	var skills []models.Skill
 	for _, id := range []string{
-		"agent-browser", "before-and-after", "diagram-design", "docs-writer",
-		"frontend-design", "grill-with-docs", "humanizer", "sentry", "unslop",
+		"adhd", "agent-browser", "before-and-after", "diagram-design", "docker", "docs-writer",
+		"find-docs", "find-skills", "frontend-design", "grill-with-docs", "humanizer",
+		"laravel-best-practices", "merge-risk", "perf-web-optimization", "ponytail",
+		"resolve-merge-conflicts", "sentry", "show-me",
+		"stack-diagram", "tdd", "unslop",
 	} {
 		skill, ok := cat.Skill(id)
 		if !ok {
@@ -40,9 +43,16 @@ func TestUpdatedSkillsInstallWithPortableResources(t *testing.T) {
 	}
 	links := regexp.MustCompile(`\]\(([^)\s]+)\)`)
 	for _, prefix := range []string{".opencode", ".claude", ".agents", ".gemini", ".windsurf"} {
-		for _, file := range []string{"glossary-format.md", "adr-format.md"} {
-			if _, err := os.Stat(filepath.Join(target, prefix, "skills", "grill-with-docs", "references", file)); err != nil {
-				t.Errorf("%s/grill-with-docs missing bundled format %s: %v", prefix, file, err)
+		for _, file := range []string{
+			"grill-with-docs/references/glossary-format.md",
+			"grill-with-docs/references/adr-format.md",
+			"diagram-design/assets/sample-sequence.puml",
+			"diagram-design/scripts/plantuml_extract.py",
+			"diagram-design/scripts/verify_geometry.py",
+			"stack-diagram/scripts/fetch_icons.py",
+		} {
+			if _, err := os.Stat(filepath.Join(target, prefix, "skills", filepath.FromSlash(file))); err != nil {
+				t.Errorf("%s missing bundled resource %s: %v", prefix, file, err)
 			}
 		}
 		for _, skill := range skills {
