@@ -6,14 +6,16 @@ disable-model-invocation: true
 
 # TDD Bug Fix
 
+See [Matt Pocock's TDD reference](https://github.com/mattpocock/skills/tree/3f599139104dfceabc7754eeb91319802f85e042/skills/engineering/tdd) for the broader test-first workflow. This skill stays focused on bug fixes.
+
 When fixing a bug with a clear, cheap test path, make the broken behavior executable before changing production code. The goal is a focused regression test that fails before the fix and passes after it.
 
 Do not force a test when it would be impractical. If the available test would require broad harness setup, brittle mocks, slow end-to-end infrastructure, production-only state, vague reproduction steps, or large unrelated fixture churn, skip adding a new test and use the closest useful verification instead.
 
 ## Workflow
 
-1. **Understand the bug.** Identify the intended behavior, current behavior, affected path, and smallest observable reproduction.
-2. **Choose the narrowest executable check.** Prefer the closest unit, component, integration, or regression test already used for that codepath. If no practical test path is obvious, do not create one from scratch just to satisfy the workflow.
+1. **Understand the bug.** Identify the intended behavior, current behavior, affected path, and smallest observable reproduction. Use the applicable glossary and ADRs to align the test with the project's vocabulary and decisions.
+2. **Choose the narrowest executable check.** Prefer the closest existing test layer that can observe the bug through a stable public interface. If there is no practical test path, do not create one just to satisfy the workflow.
 3. **Write the failing test first.** Add the smallest focused test that would have caught the bug. The test should encode intended behavior, not mirror the current implementation.
 4. **Run the new test before fixing.** Confirm it fails for the intended reason. If it passes or fails for an unrelated reason, correct the test or reproduction before editing the implementation.
 5. **Fix the bug.** Make the smallest production change that satisfies the intended behavior while preserving nearby contracts.
@@ -29,6 +31,7 @@ Prefer no new test over a bad test. A bad test is one that mostly tests mocks, e
 ## Guardrails
 
 - Do not change tests merely to match a wrong implementation.
+- Derive expected values from the requirement or a worked example, not by repeating the production calculation in the assertion.
 - Do not weaken existing assertions unless the expected behavior has genuinely changed and the reason is clear.
 - Keep the regression test focused on the bug; avoid broad fixture churn or unrelated coverage expansion.
 - Do not add tests when the practical signal is weak; use manual or scripted verification and say why.
