@@ -5,6 +5,8 @@ description: Resolve Git merge conflicts by extracting only unresolved paths, co
 
 # Resolve Merge Conflicts
 
+Adapted from [Warp's common skills](https://github.com/warpdotdev/common-skills/tree/dd42246f13c5f41c8b88d478e403c8a989fe0d22/.agents/skills/resolve-merge-conflicts), MIT. Stack keeps the helper path portable and requires authorization before discarding worktree edits.
+
 ## Overview
 
 Resolve conflicts without opening full files unless the compact view is insufficient. Start with a summary, then inspect one conflicted file at a time.
