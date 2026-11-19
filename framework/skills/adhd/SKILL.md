@@ -1,6 +1,8 @@
 ---
 name: adhd
 description: 'Shape output for a reader with ADHD: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Invoke with /adhd; stays on until "stop adhd mode".'
+disable-model-invocation: true
+license: MIT
 ---
 
 # adhd
@@ -30,7 +32,7 @@ Five facts drive every rule below:
 The first line is something the reader can do. Not context. Not a plan. The action.
 
 Bad: "Let's think about this. Your auth flow has a few moving pieces..."
-Good: "Run `npm install jsonwebtoken`, then edit `src/auth.ts:42`."
+Good: "Edit `src/auth.ts:42` to update the token validation."
 
 If the answer is a command, path, or snippet, it goes first. Prose comes after, if at all.
 
@@ -138,4 +140,4 @@ If yes, send.
 
 ## Source
 
-Adapted from [i-have-adhd](https://github.com/ayghri/i-have-adhd) by Ayoub Ghriss, MIT License.
+Adapted from [i-have-adhd](https://github.com/ayghri/i-have-adhd/blob/1ecea1993b7fce257ffbd686c070948b5e07eda6/skills/i-have-adhd/SKILL.md) by Ayoub Ghriss, MIT License. Stack keeps the `/adhd` name and shows all relevant items when completeness matters.
