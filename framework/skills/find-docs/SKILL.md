@@ -83,7 +83,7 @@ Each result includes:
    - Name similarity to the query (exact matches prioritized)
    - Description relevance to the query's intent
    - Documentation coverage (prioritize libraries with higher Code Snippet counts)
-   - Source reputation (High or Medium is more authoritative)
+   - Source reputation (consider libraries with High or Medium reputation more authoritative)
    - Benchmark score (higher is better, 100 is the maximum)
 3. If multiple good matches exist, acknowledge this but proceed with the most relevant one
 4. If no good matches exist, clearly state this and suggest query refinements
@@ -162,5 +162,9 @@ Do not silently fall back to training data — always tell the user why Context7
 - Library IDs require a `/` prefix — `/reactjs/react.dev` not `reactjs/react.dev`
 - Always run `npx ctx7@latest library` first — `npx ctx7@latest docs react "hooks"` will fail without a valid ID
 - Use descriptive queries, not single words — `"React useEffect cleanup function"` not `"hooks"`
-- One topic per query — split `"routing and auth and caching"` into a separate `docs` command per concept, unless the question is about how the concepts interact
+- One topic per query — split `"routing and auth and caching"` into a separate `docs` command per concept, unless the question is about how they interact
 - Do not include sensitive information (API keys, passwords, credentials) in queries
+
+## Source
+
+Adapted from [Context7's find-docs](https://github.com/upstash/context7/blob/018a603bc99d4cd21feaac1021501185d092ac09/skills/find-docs/SKILL.md).
