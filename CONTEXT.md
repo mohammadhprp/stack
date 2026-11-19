@@ -84,8 +84,13 @@ validators in `scripts/`, and its reports default to
 OS-enforced sandbox; unavailable execution or verification capabilities must be
 reported rather than bypassed. It replaces `security-best-practices` in the catalog.
 
+The `grill-with-docs` skill replaces `grilling`: it checks plans against the
+codebase, updates `GLOSSARY.md` as terms settle, and offers ADRs for decisions
+that are hard to reverse, surprising without context, and real trade-offs. Its
+interview and domain-modeling workflows ship as references, not separate skills.
+
 The upstream refresh also pins sources in the `agent-browser`, `before-and-after`,
-`diagram-design`, `docs-writer`, `frontend-design`, `grilling`, `humanizer`,
+`diagram-design`, `docs-writer`, `frontend-design`, `humanizer`,
 `sentry`, and `unslop` skills. Local additions
 and safety rules remain: host-native delegation uses discovered model IDs,
 diagram branding stays outside the installation, GitLab evidence is supported,

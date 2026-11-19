@@ -1,6 +1,6 @@
 # Grilling Skill — Example Outputs
 
-Realistic examples of how the `grilling` skill stress-tests thinking through design-tree rounds.
+Examples of how `grill-with-docs` stress-tests a plan through design-tree rounds and records settled vocabulary.
 
 ## Example 1: New feature plan (frontier round, recommendations, wait)
 
@@ -32,7 +32,7 @@ Then waits. Q3 (TTL values) stays out of this round — it depends on Q1's answe
 
 **What the agent does:**
 
-Settled decisions push the frontier outward. Q3 (TTL per query) is now askable. But "which queries are actually hot" is a fact, not a decision — dispatches a sub-agent to check access logs and slow-query stats instead of asking the user. Asks the rest of the frontier now (eviction policy, invalidation trigger); only the TTL question waits for the sub-agent's report.
+Settled decisions push the frontier outward. To prepare Q3 (TTL per query), the agent checks access logs and slow-query stats instead of asking the user which queries are hot. Asks the rest of the frontier now (eviction policy, invalidation trigger); only the TTL question waits for the evidence.
 
 **Result:** Facts looked up, decisions put to the user, no blocking on exploration.
 
@@ -44,4 +44,12 @@ Settled decisions push the frontier outward. Q3 (TTL per query) is now askable. 
 
 Frontier is empty — every branch visited (scope, hosting, TTLs, eviction, invalidation). States the shared understanding back in one summary and asks for confirmation. Does not write any code or config until the user confirms.
 
-**Result:** Nothing silently assumed, no action before confirmed understanding.
+**Result:** Nothing silently assumed, no implementation before confirmed understanding.
+
+## Example 4: Resolve terminology and write it immediately
+
+**User:** “The customer can cancel one item without cancelling the entire order.”
+
+**What the agent does:** The glossary defines “Cancellation” for a whole Order, and the code currently agrees. The agent asks whether this change introduces a distinct “Line Cancellation,” recommending that the existing term retain its meaning. When the user agrees, the agent adds “Line Cancellation” to the applicable `GLOSSARY.md` before the next round.
+
+**Result:** The glossary records the meaning of the term, not how cancellation is implemented. No ADR is written unless a later decision clears all three gates and the user agrees to record it.

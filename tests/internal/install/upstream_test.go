@@ -17,7 +17,7 @@ func TestUpdatedSkillsInstallWithPortableResources(t *testing.T) {
 	var skills []models.Skill
 	for _, id := range []string{
 		"agent-browser", "before-and-after", "diagram-design", "docs-writer",
-		"frontend-design", "grilling", "humanizer", "sentry", "unslop",
+		"frontend-design", "grill-with-docs", "humanizer", "sentry", "unslop",
 	} {
 		skill, ok := cat.Skill(id)
 		if !ok {
@@ -40,6 +40,11 @@ func TestUpdatedSkillsInstallWithPortableResources(t *testing.T) {
 	}
 	links := regexp.MustCompile(`\]\(([^)\s]+)\)`)
 	for _, prefix := range []string{".opencode", ".claude", ".agents", ".gemini", ".windsurf"} {
+		for _, file := range []string{"glossary-format.md", "adr-format.md"} {
+			if _, err := os.Stat(filepath.Join(target, prefix, "skills", "grill-with-docs", "references", file)); err != nil {
+				t.Errorf("%s/grill-with-docs missing bundled format %s: %v", prefix, file, err)
+			}
+		}
 		for _, skill := range skills {
 			dir := filepath.Join(target, prefix, "skills", skill.ID)
 			body, err := os.ReadFile(filepath.Join(dir, "SKILL.md"))

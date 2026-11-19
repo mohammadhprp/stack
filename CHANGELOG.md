@@ -4,6 +4,10 @@ Notable changes to `stack` are recorded here.
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced `grilling` with `grill-with-docs`, bundling its interview and domain-modeling workflows as references rather than separate skills.
+
 ## [v0.1.10] - 2026-11-18
 
 ### Added
